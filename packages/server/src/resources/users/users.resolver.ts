@@ -1,5 +1,7 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MyContext } from '../../types/context.type';
+import { AuthGuard } from '../auth/auth.guard';
 import { ChangePasswordInput } from './dto/change-password.input';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
@@ -39,6 +41,7 @@ export class UsersResolver {
     return this.usersService.remove(id);
   }
 
+  @UseGuards(AuthGuard)
   @Mutation(() => UserResponse)
   async changePassword(
     @Args('input') input: ChangePasswordInput,

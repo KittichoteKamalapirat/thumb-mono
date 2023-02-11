@@ -13,7 +13,7 @@ import { typeormConfigNest } from './config/typeorm-nest.config';
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       cors: {
-        origin: ['http://localhost:5174'],
+        origin: ['http://localhost:5173'],
         credentials: true,
       },
       driver: ApolloDriver,
