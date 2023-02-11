@@ -31,13 +31,9 @@ export class UsersResolver {
     return this.usersService.findOne(id);
   }
 
+  @UseGuards(AuthGuard)
   @Mutation(() => User)
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput.id, updateUserInput);
-  }
-
-  @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
+  removeUser(@Args('id') id: string) {
     return this.usersService.remove(id);
   }
 

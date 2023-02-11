@@ -3,10 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { AppService } from '../../app.service';
+import BooleanResponse from '../../types/boolean-response.input';
 import { RequestWithSession } from '../../types/context.type';
+import { validateRegister } from '../../utils/validateRegister';
 import { ChangePasswordInput } from './dto/change-password.input';
 import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
 import UserResponse from './dto/user-response';
 import { User } from './entities/user.entity';
 
@@ -22,7 +23,7 @@ export class UsersService {
     data: CreateUserInput,
     req: RequestWithSession,
   ): Promise<UserResponse> {
-    const errors = this.validateRegister(data);
+    const errors = validateRegister(data);
     if (errors) {
       // if no error, return null as defined
       return { errors };
@@ -43,16 +44,6 @@ export class UsersService {
 
       return { user };
     } catch (error) {
-      // if (error.detail.includes('username')) {
-      //   return {
-      //     errors: [
-      //       {
-      //         field: 'username',
-      //         message: 'username already taken',
-      //       },
-      //     ],
-      //   };
-      // }
       if (error.detail.includes('email')) {
         return {
           errors: [
@@ -63,52 +54,11 @@ export class UsersService {
           ],
         };
       }
-      if (error.detail.includes('phonenumber')) {
-        return {
-          errors: [
-            {
-              field: 'phonenumber',
-              message: 'phonenumber already taken',
-            },
-          ],
-        };
-      }
     }
     // automatically logged in after register
     // set a cookie on the user
     req.session.userId = user.id;
   }
-
-  validateRegister = (data: CreateUserInput) => {
-    // if (data.username.length <= 2) {
-    //   return [
-    //     {
-    //       field: 'username',
-    //       message: 'Length must be greater than 2',
-    //     },
-    //   ];
-    // }
-
-    if (!data.email.includes('@')) {
-      return [
-        {
-          field: 'email',
-          message: 'email must include an @',
-        },
-      ];
-    }
-
-    if (data.password.length <= 2) {
-      return [
-        {
-          field: 'password',
-          message: 'Length must be greater than 2',
-        },
-      ];
-    }
-    // if there is not errors, return null
-    return null;
-  };
 
   findAll() {
     return `This action returns all users`;
@@ -118,20 +68,25 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { id } });
   }
 
-  // findByUsername(username: string) {
-  //   return this.usersRepository.findOne({ where: { username } });
-  // }
-
   findByEmail(email: string) {
     return this.usersRepository.findOne({ where: { email } });
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
-  }
+  async remove(id: string): Promise<BooleanResponse> {
+    try {
+      const user = await this.findOne(id);
+      if (!user)
+        return {
+          errors: [{ field: 'user', message: 'Cannot find the user ' }],
+        };
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+      await this.usersRepository.delete(id);
+      return { value: true };
+    } catch (error) {
+      return {
+        errors: [{ field: 'user', message: 'An error occured' }],
+      };
+    }
   }
 
   async changePassword(userId: string, input: ChangePasswordInput) {

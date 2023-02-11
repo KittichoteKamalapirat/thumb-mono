@@ -26,8 +26,7 @@ type Query {
 
 type Mutation {
   register(input: CreateUserInput!): UserResponse!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
+  removeUser(id: String!): User!
   changePassword(input: ChangePasswordInput!): UserResponse!
   login(input: LoginInput!): UserResponse!
   logout: Boolean!
@@ -36,12 +35,6 @@ type Mutation {
 input CreateUserInput {
   email: String!
   password: String!
-}
-
-input UpdateUserInput {
-  email: String
-  password: String
-  id: Int!
 }
 
 input ChangePasswordInput {

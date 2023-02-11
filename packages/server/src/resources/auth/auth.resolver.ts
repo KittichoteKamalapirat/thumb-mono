@@ -14,8 +14,6 @@ export class AuthResolver {
     private usersService: UsersService,
   ) {}
 
-  //   @UseGuards(LocalAuthGuard)
-  //   @UseGuards(GqlAuthGuard)
   @Mutation(() => UserResponse)
   async login(
     @Args('input') input: LoginInput,
@@ -26,9 +24,6 @@ export class AuthResolver {
 
   @Query(() => User, { nullable: true })
   me(@Context() { req }: MyContext): Promise<User | null> {
-    // Destructure the parameter array to req
-    console.log('my session', req.session);
-
     if (!req.session.userId) {
       return null;
     }

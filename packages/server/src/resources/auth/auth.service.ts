@@ -61,7 +61,6 @@ export class AuthService {
           secure: IS_PROD,
         });
         if (err) {
-          // console.log(err);
           resolve(false);
           return;
         }
