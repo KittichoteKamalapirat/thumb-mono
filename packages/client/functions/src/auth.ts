@@ -21,7 +21,26 @@ const getChannelId = async () => {
     part: ["snippet"],
     mine: true,
   });
+
   console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+  console.log("get channel id 3");
+
+  console.log("resulttttttt", result);
 
   const channelId = result.data.items?.[0].id;
 

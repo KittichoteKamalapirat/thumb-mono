@@ -13,11 +13,39 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateTime: any;
 };
 
 export type ChangePasswordInput = {
   newPassword: Scalars['String'];
   oldPassword: Scalars['String'];
+};
+
+export type Channel = {
+  __typename?: 'Channel';
+  channelId: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  testings: Array<Testing>;
+  token: Token;
+  updatedAt: Scalars['DateTime'];
+  userConnections: Array<UserChannel>;
+};
+
+export type ChannelResponse = {
+  __typename?: 'ChannelResponse';
+  channel?: Maybe<Channel>;
+  errors?: Maybe<Array<FieldError>>;
+};
+
+export type CreateChannelInput = {
+  channelId: Scalars['String'];
+  refresh_token: Scalars['String'];
+};
+
+export type CreateUserChannelInput = {
+  /** Example field (placeholder) */
+  exampleField: Scalars['Int'];
 };
 
 export type CreateUserInput = {
@@ -39,15 +67,38 @@ export type LoginInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
+  createAndSaveTokens: ChannelResponse;
+  createChannel: Channel;
+  createUserChannel: UserChannel;
+  getAuthURL: Scalars['String'];
   login: UserResponse;
   logout: Scalars['Boolean'];
   register: UserResponse;
+  removeChannel: Channel;
   removeUser: User;
+  removeUserChannel: UserChannel;
+  updateChannel: Channel;
+  updateUserChannel: UserChannel;
 };
 
 
 export type MutationChangePasswordArgs = {
   input: ChangePasswordInput;
+};
+
+
+export type MutationCreateAndSaveTokensArgs = {
+  code: Scalars['String'];
+};
+
+
+export type MutationCreateChannelArgs = {
+  createChannelInput: CreateChannelInput;
+};
+
+
+export type MutationCreateUserChannelArgs = {
+  createUserChannelInput: CreateUserChannelInput;
 };
 
 
@@ -61,15 +112,44 @@ export type MutationRegisterArgs = {
 };
 
 
+export type MutationRemoveChannelArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type MutationRemoveUserArgs = {
   id: Scalars['String'];
 };
 
+
+export type MutationRemoveUserChannelArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationUpdateChannelArgs = {
+  updateChannelInput: UpdateChannelInput;
+};
+
+
+export type MutationUpdateUserChannelArgs = {
+  updateUserChannelInput: UpdateUserChannelInput;
+};
+
 export type Query = {
   __typename?: 'Query';
+  channel: Channel;
+  channels: Array<Channel>;
   me?: Maybe<User>;
   user: User;
+  userChannel: UserChannel;
+  userChannels: Array<UserChannel>;
   users: Array<User>;
+};
+
+
+export type QueryChannelArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -77,11 +157,56 @@ export type QueryUserArgs = {
   id: Scalars['String'];
 };
 
+
+export type QueryUserChannelArgs = {
+  id: Scalars['Int'];
+};
+
+export type Testing = {
+  __typename?: 'Testing';
+  channel: Channel;
+  channelId: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type Token = {
+  __typename?: 'Token';
+  refresh_token: Scalars['String'];
+};
+
+export type UpdateChannelInput = {
+  channelId?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int'];
+  refresh_token?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateUserChannelInput = {
+  /** Example field (placeholder) */
+  exampleField?: InputMaybe<Scalars['Int']>;
+  id: Scalars['Int'];
+};
+
 export type User = {
   __typename?: 'User';
+  channelConnections: Array<UserChannel>;
+  createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   id: Scalars['ID'];
   password: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type UserChannel = {
+  __typename?: 'UserChannel';
+  channel: Channel;
+  channelId: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  updatedAt: Scalars['DateTime'];
+  user: User;
+  userId: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -89,6 +214,18 @@ export type UserResponse = {
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<User>;
 };
+
+export type CreateAndSaveTokensMutationVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type CreateAndSaveTokensMutation = { __typename?: 'Mutation', createAndSaveTokens: { __typename?: 'ChannelResponse', channel?: { __typename?: 'Channel', id: string, channelId: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type GetAuthUrlMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAuthUrlMutation = { __typename?: 'Mutation', getAuthURL: string };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -122,6 +259,76 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', id: string, email: string } | null } };
 
 
+export const CreateAndSaveTokensDocument = gql`
+    mutation CreateAndSaveTokens($code: String!) {
+  createAndSaveTokens(code: $code) {
+    channel {
+      id
+      channelId
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type CreateAndSaveTokensMutationFn = Apollo.MutationFunction<CreateAndSaveTokensMutation, CreateAndSaveTokensMutationVariables>;
+
+/**
+ * __useCreateAndSaveTokensMutation__
+ *
+ * To run a mutation, you first call `useCreateAndSaveTokensMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAndSaveTokensMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAndSaveTokensMutation, { data, loading, error }] = useCreateAndSaveTokensMutation({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useCreateAndSaveTokensMutation(baseOptions?: Apollo.MutationHookOptions<CreateAndSaveTokensMutation, CreateAndSaveTokensMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateAndSaveTokensMutation, CreateAndSaveTokensMutationVariables>(CreateAndSaveTokensDocument, options);
+      }
+export type CreateAndSaveTokensMutationHookResult = ReturnType<typeof useCreateAndSaveTokensMutation>;
+export type CreateAndSaveTokensMutationResult = Apollo.MutationResult<CreateAndSaveTokensMutation>;
+export type CreateAndSaveTokensMutationOptions = Apollo.BaseMutationOptions<CreateAndSaveTokensMutation, CreateAndSaveTokensMutationVariables>;
+export const GetAuthUrlDocument = gql`
+    mutation GetAuthURL {
+  getAuthURL
+}
+    `;
+export type GetAuthUrlMutationFn = Apollo.MutationFunction<GetAuthUrlMutation, GetAuthUrlMutationVariables>;
+
+/**
+ * __useGetAuthUrlMutation__
+ *
+ * To run a mutation, you first call `useGetAuthUrlMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGetAuthUrlMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [getAuthUrlMutation, { data, loading, error }] = useGetAuthUrlMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAuthUrlMutation(baseOptions?: Apollo.MutationHookOptions<GetAuthUrlMutation, GetAuthUrlMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GetAuthUrlMutation, GetAuthUrlMutationVariables>(GetAuthUrlDocument, options);
+      }
+export type GetAuthUrlMutationHookResult = ReturnType<typeof useGetAuthUrlMutation>;
+export type GetAuthUrlMutationResult = Apollo.MutationResult<GetAuthUrlMutation>;
+export type GetAuthUrlMutationOptions = Apollo.BaseMutationOptions<GetAuthUrlMutation, GetAuthUrlMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($input: LoginInput!) {
   login(input: $input) {

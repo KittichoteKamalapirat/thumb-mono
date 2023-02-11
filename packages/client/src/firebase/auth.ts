@@ -29,6 +29,7 @@ export const signInWithGoogle = async () => {
     };
 
     console.log("newUser", newUser);
+
     // const docRef = await addDoc(collection(firestore, "users"), newUser);
     const userRef = doc(firestore, "users", uid);
 

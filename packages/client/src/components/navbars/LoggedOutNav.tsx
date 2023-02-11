@@ -1,13 +1,13 @@
+import classNames from "classnames";
 import { AiFillHome } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
-import { urlResolver } from "../../lib/UrlResolver";
-import classNames from "classnames";
 import { brandName, ICON_SIZE } from "../../constants";
-import { getAuthURLCall } from "../../firebase/client";
+import { useGetAuthUrlMutation } from "../../generated/graphql";
+import { useCreateAndSaveToken } from "../../hooks/useCreateAndSaveToken";
+import { urlResolver } from "../../lib/UrlResolver";
 import { primaryColor } from "../../theme";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import NavItem from "./NavItem";
-import { useCreateAndSaveToken } from "../../hooks/useCreateAndSaveToken";
 
 enum PATH_ENUM {
   HOME = "/",
@@ -16,14 +16,23 @@ const LoggedOutNav = () => {
   useCreateAndSaveToken();
   const { pathname } = useLocation();
 
-  const handleCreateURL = async () => {
-    console.log(1);
+  const [getAuthURL] = useGetAuthUrlMutation();
 
-    const result = await getAuthURLCall(null); // looks like I need a param, cannot be empty ()
-    console.log(2);
-    const url = result;
-    console.log(3);
-    window.location.replace(url);
+  const handleCreateURL = async () => {
+    try {
+      console.log(1);
+
+      const result = await getAuthURL(); // looks like I need a param, cannot be empty ()
+      console.log("result", result);
+
+      const url = result.data?.getAuthURL;
+      console.log(3);
+      console.log(url);
+
+      if (url) window.location.replace(url);
+    } catch (error) {
+      console.log("An error occured");
+    }
   };
 
   return (

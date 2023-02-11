@@ -1,0 +1,12 @@
+mutation CreateAndSaveTokens($code: String!){
+  createAndSaveTokens(code: $code){
+    channel{
+      id
+      channelId
+    }
+    errors{
+      field
+      message
+    }
+  }
+}
