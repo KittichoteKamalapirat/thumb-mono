@@ -3,33 +3,28 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserChannel } from '../../user-channels/entities/user-channel.entity';
+import { Channel } from '../../channels/entities/channel.entity';
 
 @ObjectType()
 @Entity()
-export class User {
+export class Testing {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
   id: string;
 
   @Field()
-  @Column({ unique: true })
-  email: string;
+  @Column('uuid')
+  channelId: string;
 
-  @Field()
-  @Column()
-  password: string;
-
-  // relationships
-  @OneToMany(() => UserChannel, (userChannel) => userChannel.user, {
-    cascade: true,
+  @ManyToOne(() => Channel, (channel) => channel.testings, {
+    onDelete: 'CASCADE',
   })
-  @Field(() => [UserChannel])
-  channelConnections: UserChannel[];
+  @Field(() => Channel)
+  channel: Channel;
 
   @CreateDateColumn()
   @Field()

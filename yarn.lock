@@ -7130,6 +7130,14 @@ googleapis@^110.0.0:
     google-auth-library "^8.0.2"
     googleapis-common "^6.0.0"
 
+googleapis@^111.0.0:
+  version "111.0.0"
+  resolved "https://registry.yarnpkg.com/googleapis/-/googleapis-111.0.0.tgz#aa3daac5ab033085d25fe8c52527ff35b2f7f688"
+  integrity sha512-nIIH+J/o/xjIscJcv3H3BCYgsFiI5ziM3Nbh2lHOWglYGqXE0Nqdt2lfCt4hX257QHEyC1y1iODDkmAMPWDYlw==
+  dependencies:
+    google-auth-library "^8.0.2"
+    googleapis-common "^6.0.0"
+
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.4, graceful-fs@^4.2.6, graceful-fs@^4.2.9:
   version "4.2.10"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.10.tgz#147d3a006da4ca3ce14728c7aefc287c367d7a6c"

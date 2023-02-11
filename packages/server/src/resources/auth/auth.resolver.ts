@@ -1,5 +1,6 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MyContext } from '../../types/context.type';
+import ChannelResponse from '../channels/dto/channel-response';
 import UserResponse from '../users/dto/user-response';
 
 import { User } from '../users/entities/user.entity';
@@ -13,6 +14,17 @@ export class AuthResolver {
     private readonly authService: AuthService,
     private usersService: UsersService,
   ) {}
+
+  // more appropriate with mutation
+  @Mutation(() => String)
+  async getAuthURL() {
+    return this.authService.getAuthURL();
+  }
+
+  @Mutation(() => ChannelResponse)
+  async createAndSaveTokens(@Args('code') code: string) {
+    return this.authService.createAndSaveTokens(code);
+  }
 
   @Mutation(() => UserResponse)
   async login(

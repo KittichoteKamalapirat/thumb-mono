@@ -8,6 +8,9 @@ import { join } from 'path';
 import { AuthModule } from './resources/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeormConfigNest } from './config/typeorm-nest.config';
+import { ChannelsModule } from './resources/channels/channels.module';
+import { TestingModule } from '@nestjs/testing';
+import { UserChannelsModule } from './resources/user-channels/user-channels.module';
 
 @Module({
   imports: [
@@ -24,7 +27,10 @@ import { typeormConfigNest } from './config/typeorm-nest.config';
     }),
     TypeOrmModule.forRoot(typeormConfigNest),
     UsersModule,
+    ChannelsModule,
     AuthModule,
+    TestingModule,
+    UserChannelsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
