@@ -1,0 +1,13 @@
+# Write your query or mutation here
+mutation Register($input: CreateUserInput!) {
+  register(input: $input) {
+    errors {
+      field
+      message
+    }
+    user {
+      id
+      email
+    }
+  }
+}

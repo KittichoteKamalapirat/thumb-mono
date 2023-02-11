@@ -4,11 +4,16 @@ import LabelAndData from "../components/LabelAndData";
 import Layout from "../components/layouts/Layout";
 import { ChannelContext, emptyChannel } from "../contexts/ChannelContext";
 import { googleLogout } from "../firebase/client";
+import { useMeQuery } from "../generated/graphql";
 
 interface Props {}
 
 const MyAccount = ({}: Props) => {
   const { channel, setChannel } = useContext(ChannelContext);
+
+  const { data, loading, error } = useMeQuery();
+
+  console.log("loadingggggg", loading);
 
   const handleLogout = async () => {
     const result = await googleLogout(channel.channelId);

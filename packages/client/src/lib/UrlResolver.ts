@@ -4,6 +4,10 @@ class UrlResolver {
     return "/"; //http://localhost:3000
   }
 
+  graphql() {
+    return "http://localhost:4004/graphql";
+  }
+
   home() {
     return "/";
   }
