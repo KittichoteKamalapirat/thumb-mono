@@ -1,13 +1,19 @@
 import { useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { ChannelContext } from "../contexts/ChannelContext";
+import { UserContext } from "../contexts/UserContext";
 import { createAndSaveTokens } from "../firebase/client";
-import { useCreateAndSaveTokensMutation } from "../generated/graphql";
+import {
+  Channel,
+  useCreateAndSaveTokensMutation,
+  User,
+} from "../generated/graphql";
 
 const GOOGLE_AUTH_CODE_REGEX = new RegExp("(?<=code=)(.*)(?=&scope)");
 
 export const useCreateAndSaveToken = () => {
   const { setChannel } = useContext(ChannelContext);
+  const { setUser } = useContext(UserContext);
 
   const [createAndSaveTokens] = useCreateAndSaveTokensMutation();
   const location = useLocation();
@@ -17,25 +23,36 @@ export const useCreateAndSaveToken = () => {
     const code = codes?.[0];
 
     const createAndSaveTokenAsync = async () => {
-      console.log(1);
-
       if (!code) return;
       console.log(2);
       const removePercentt2F = decodeURIComponent(code);
       const result = await createAndSaveTokens({
         variables: { code: removePercentt2F },
       });
+
+      console.log("result", result);
+
       console.log(3);
 
-      const { channelId } = result.data?.createAndSaveTokens.channel || {};
+      let errorMessage = "";
+      const resultUserErrors = result.data?.createAndSaveTokens.errors || [];
+      resultUserErrors.map(({ field, message }) => {
+        errorMessage += `${field} ${message}\n`;
+      });
+
+      const { channel, user } = result.data?.createAndSaveTokens || {};
 
       console.log(4);
-
-      if (channelId) {
+      if (user) {
+        console.log(6);
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser && setUser(user as User);
+      }
+      if (channel) {
         console.log(5);
-        localStorage.setItem("channelId", channelId);
-        const channel = { channelId };
-        setChannel(channel);
+        localStorage.setItem("channel", JSON.stringify(channel));
+
+        setChannel && setChannel(channel as Channel);
       }
     };
 

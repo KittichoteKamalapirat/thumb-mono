@@ -11,7 +11,7 @@ export class AuthGuard implements CanActivate {
     const req = ctx.getContext().req;
 
     // Check if the user is authenticated by checking req.session
-    if (!req.session.userId) {
+    if (!req.session.channelId) {
       return false;
     }
 

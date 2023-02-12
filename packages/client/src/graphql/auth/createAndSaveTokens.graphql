@@ -4,6 +4,11 @@ mutation CreateAndSaveTokens($code: String!){
       id
       channelId
     }
+    user{
+      id
+      membership
+    
+    }
     errors{
       field
       message

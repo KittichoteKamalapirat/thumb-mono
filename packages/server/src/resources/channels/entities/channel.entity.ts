@@ -22,6 +22,10 @@ export class Channel {
   @Column({ unique: true })
   channelId: string;
 
+  @Field()
+  @Column()
+  channelName: string;
+
   @Field(() => Token)
   @Column('jsonb')
   token: Token;

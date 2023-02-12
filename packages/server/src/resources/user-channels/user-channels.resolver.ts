@@ -13,7 +13,7 @@ export class UserChannelsResolver {
     @Args('createUserChannelInput')
     createUserChannelInput: CreateUserChannelInput,
   ) {
-    return this.userChannelsService.create(createUserChannelInput);
+    return this.userChannelsService.addUserChannel(createUserChannelInput);
   }
 
   @Query(() => [UserChannel], { name: 'userChannels' })

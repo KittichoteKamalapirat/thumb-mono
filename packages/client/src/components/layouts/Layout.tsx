@@ -1,5 +1,6 @@
 import { ReactNode, useContext } from "react";
 import { ChannelContext } from "../../contexts/ChannelContext";
+import { UserContext } from "../../contexts/UserContext";
 import Container from "../containers/Container";
 import { Footer } from "../Footer";
 import LoggedInNav from "../navbars/LoggedInNav";
@@ -30,10 +31,9 @@ const Layout = ({
   alignItems = "",
   extraStyle = "",
 }: Props) => {
-  const { channel } = useContext(ChannelContext);
-  const { channelId } = channel;
+  const { user } = useContext(UserContext);
 
-  if (channelId) return <SideAndTopNav>{children}</SideAndTopNav>;
+  if (user) return <SideAndTopNav>{children}</SideAndTopNav>;
   return (
     <div>
       <LoggedOutNav />

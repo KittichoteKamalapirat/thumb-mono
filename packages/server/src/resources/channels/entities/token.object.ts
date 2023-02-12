@@ -6,4 +6,8 @@ export class Token {
   @Field()
   @Column()
   refresh_token: string;
+
+  @Field()
+  @Column()
+  access_token: string;
 }

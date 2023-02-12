@@ -20,14 +20,9 @@ const LoggedOutNav = () => {
 
   const handleCreateURL = async () => {
     try {
-      console.log(1);
-
       const result = await getAuthURL(); // looks like I need a param, cannot be empty ()
-      console.log("result", result);
 
       const url = result.data?.getAuthURL;
-      console.log(3);
-      console.log(url);
 
       if (url) window.location.replace(url);
     } catch (error) {

@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { UserChannel } from '../../user-channels/entities/user-channel.entity';
 
+type membership = 'basic' | 'premium' | 'pro';
 @ObjectType()
 @Entity()
 export class User {
@@ -20,9 +21,9 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Field()
-  @Column()
-  password: string;
+  @Field(() => String)
+  @Column({ default: 'basic' })
+  membership: membership;
 
   // relationships
   @OneToMany(() => UserChannel, (userChannel) => userChannel.user, {

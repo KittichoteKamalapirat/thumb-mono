@@ -1,21 +1,16 @@
-import { RiCopperDiamondLine } from "react-icons/ri";
-import { BiPlus } from "react-icons/bi";
 import { ReactNode, useContext } from "react";
+import { BiPlus } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
+import { MdAccountCircle } from "react-icons/md";
+import { RiCopperDiamondLine } from "react-icons/ri";
 import { TbTestPipe } from "react-icons/tb";
 import { Link, useLocation } from "react-router-dom";
 import { brandName, ICON_SIZE } from "../../constants";
-import { ChannelContext, emptyChannel } from "../../contexts/ChannelContext";
-import { googleLogout } from "../../firebase/client";
+import { ChannelContext } from "../../contexts/ChannelContext";
+import { UserContext } from "../../contexts/UserContext";
+import { useLogoutMutation } from "../../generated/graphql";
 import { urlResolver } from "../../lib/UrlResolver";
-import { grey0 } from "../../theme";
-import {
-  MdAccountCircle,
-  MdOutlineNotificationsNone,
-  MdOutlineSpaceDashboard,
-} from "react-icons/md";
 import Button from "../Buttons/Button";
-import { HiPlusSm } from "react-icons/hi";
 
 interface Props {
   children: ReactNode;
@@ -23,13 +18,20 @@ interface Props {
 
 const SideAndTopNav = ({ children }: Props) => {
   const { pathname } = useLocation();
-  const { channel, setChannel } = useContext(ChannelContext);
+  const { setChannel } = useContext(ChannelContext);
+  const { user, setUser } = useContext(UserContext);
+
+  const [logout] = useLogoutMutation();
 
   const handleLogout = async () => {
-    const result = await googleLogout(channel.channelId);
-
-    localStorage.clear();
-    setChannel(emptyChannel);
+    try {
+      await logout();
+      localStorage.clear();
+      setChannel && setChannel(null);
+      setUser && setUser(null);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (
@@ -193,7 +195,7 @@ const SideAndTopNav = ({ children }: Props) => {
           </ul>
 
           <ul className="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
-            {!channel.isPremium && (
+            {user?.membership === "basic" && (
               <li>
                 <a
                   href="#"

@@ -1,11 +1,7 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MyContext } from '../../types/context.type';
 import { AuthGuard } from '../auth/auth.guard';
-import { ChangePasswordInput } from './dto/change-password.input';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
-import UserResponse from './dto/user-response';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
@@ -13,12 +9,18 @@ import { UsersService } from './users.service';
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Mutation(() => UserResponse)
-  async register(
-    @Args('input') input: CreateUserInput,
-    @Context() { req }: MyContext,
-  ): Promise<UserResponse> {
-    return this.usersService.create(input, req);
+  // @Mutation(() => UserResponse)
+  // async register(
+  //   @Args('input') input: CreateUserInput,
+  //   @Context() { req }: MyContext,
+  // ): Promise<UserResponse> {
+  //   return this.usersService.create(input, req);
+  // }
+
+  @Query(() => String)
+  getEmail(@Context() { req }: MyContext) {
+    const channelid = req.session.channelId;
+    return this.usersService.getEmailFromGoogleAfterCredentialsSet(channelid);
   }
 
   @Query(() => [User], { name: 'users' })
@@ -37,12 +39,13 @@ export class UsersResolver {
     return this.usersService.remove(id);
   }
 
-  @UseGuards(AuthGuard)
-  @Mutation(() => UserResponse)
-  async changePassword(
-    @Args('input') input: ChangePasswordInput,
-    @Context() { req }: MyContext,
-  ): Promise<UserResponse> {
-    return this.usersService.changePassword(req.session.userId, input);
-  }
+  // no change password since it's google login
+  // @UseGuards(AuthGuard)
+  // @Mutation(() => UserResponse)
+  // async changePassword(
+  //   @Args('input') input: ChangePasswordInput,
+  //   @Context() { req }: MyContext,
+  // ): Promise<UserResponse> {
+  //   return this.usersService.changePassword(req.session.userId, input);
+  // }
 }

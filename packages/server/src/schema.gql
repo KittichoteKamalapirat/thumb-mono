@@ -15,18 +15,13 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Token {
-  refresh_token: String!
-}
-
-type Channel {
+type User {
   id: ID!
-  channelId: String!
-  token: Token!
+  email: String!
+  membership: String!
+  channelConnections: [UserChannel!]!
   createdAt: DateTime!
   updatedAt: DateTime!
-  userConnections: [UserChannel!]!
-  testings: [Testing!]!
 }
 
 type UserChannel {
@@ -39,13 +34,20 @@ type UserChannel {
   updatedAt: DateTime!
 }
 
-type User {
+type Token {
+  refresh_token: String!
+  access_token: String!
+}
+
+type Channel {
   id: ID!
-  email: String!
-  password: String!
-  channelConnections: [UserChannel!]!
+  channelId: String!
+  channelName: String!
+  token: Token!
   createdAt: DateTime!
   updatedAt: DateTime!
+  userConnections: [UserChannel!]!
+  testings: [Testing!]!
 }
 
 type FieldError {
@@ -53,76 +55,48 @@ type FieldError {
   message: String!
 }
 
-type UserResponse {
+type LoginResponse {
   errors: [FieldError!]
+  channel: Channel
   user: User
 }
 
-type ChannelResponse {
-  errors: [FieldError!]
-  channel: Channel
-}
-
 type Query {
+  getEmail: String!
   users: [User!]!
   user(id: String!): User!
+  me: User
   channels: [Channel!]!
   channel(id: Int!): Channel!
-  listChannel(channelId: String!): Boolean!
-  me: User
   userChannels: [UserChannel!]!
   userChannel(id: Int!): UserChannel!
 }
 
 type Mutation {
-  register(input: CreateUserInput!): UserResponse!
   removeUser(id: String!): User!
-  changePassword(input: ChangePasswordInput!): UserResponse!
-  createChannel(createChannelInput: CreateChannelInput!): Channel!
-  updateChannel(updateChannelInput: UpdateChannelInput!): Channel!
-  removeChannel(id: Int!): Channel!
   getAuthURL: String!
-  createAndSaveTokens(code: String!): ChannelResponse!
-  login(input: LoginInput!): UserResponse!
+  createAndSaveTokens(code: String!): LoginResponse!
   logout: Boolean!
+  createChannel(createChannelInput: CreateChannelInput!): Channel!
   createUserChannel(createUserChannelInput: CreateUserChannelInput!): UserChannel!
   updateUserChannel(updateUserChannelInput: UpdateUserChannelInput!): UserChannel!
   removeUserChannel(id: Int!): UserChannel!
 }
 
-input CreateUserInput {
-  email: String!
-  password: String!
-}
-
-input ChangePasswordInput {
-  oldPassword: String!
-  newPassword: String!
-}
-
 input CreateChannelInput {
   channelId: String!
+  channelName: String!
   refresh_token: String!
-}
-
-input UpdateChannelInput {
-  channelId: String
-  refresh_token: String
-  id: Int!
-}
-
-input LoginInput {
-  email: String!
-  password: String!
+  access_token: String!
 }
 
 input CreateUserChannelInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  userId: String!
+  channelId: String!
 }
 
 input UpdateUserChannelInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  userId: String
+  channelId: String
   id: Int!
 }

@@ -1,15 +1,22 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import bcrypt from 'bcrypt';
+import axios from 'axios';
+import { Credentials } from 'google-auth-library';
+import { google } from 'googleapis';
 import { Repository } from 'typeorm';
 import { AppService } from '../../app.service';
+import { oauth2Client } from '../../oauthClient';
 import BooleanResponse from '../../types/boolean-response.input';
 import { RequestWithSession } from '../../types/context.type';
-import { validateRegister } from '../../utils/validateRegister';
-import { ChangePasswordInput } from './dto/change-password.input';
+import { AuthService } from '../auth/auth.service';
+import { ChannelsService } from '../channels/channels.service';
 import { CreateUserInput } from './dto/create-user.input';
 import UserResponse from './dto/user-response';
 import { User } from './entities/user.entity';
+
+const SCOPE_ENDPOINT =
+  'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=';
+const getScopesUrl = (accessToken: string) => SCOPE_ENDPOINT + accessToken;
 
 @Injectable()
 export class UsersService {
@@ -17,32 +24,77 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @Inject(forwardRef(() => AuthService))
+    private authService: AuthService,
+    private channelsService: ChannelsService,
   ) {}
 
+  // need access_token in a db to work (when oauth2Client.setCredentials(token); in refreshTokens)
+  // unpure function
+  async getEmailFromGoogleAfterCredentialsSet(
+    channelId: string,
+    tokens?: Credentials,
+  ) {
+    try {
+      console.log('getEmailFromGoogleAfterCredentialsSet', 1);
+
+      // await this.authService.refreshTokens(channelId);
+      oauth2Client.setCredentials(tokens);
+
+      console.log('getEmailFromGoogleAfterCredentialsSet', 2);
+
+      const people = google.people({ version: 'v1', auth: oauth2Client });
+
+      console.log('getEmailFromGoogleAfterCredentialsSet', 3);
+
+      const response = await people.people.get({
+        resourceName: 'people/me',
+        personFields: 'emailAddresses',
+      });
+
+      console.log('getEmailFromGoogleAfterCredentialsSet', 4);
+      return response.data.emailAddresses[0].value;
+    } catch (error) {
+      return '';
+    }
+  }
+
+  async getEmailFromGoogle2(channelId: string) {
+    await this.authService.refreshTokens(channelId);
+
+    const { access_token } = await this.channelsService.getTokens(channelId);
+    const url = getScopesUrl(access_token);
+
+    const response = await axios.get(url);
+    const data = response.data;
+    const email = data.email;
+
+    return email;
+  }
+
   async create(
-    data: CreateUserInput,
+    { email }: CreateUserInput,
     req: RequestWithSession,
   ): Promise<UserResponse> {
-    const errors = validateRegister(data);
-    if (errors) {
-      // if no error, return null as defined
-      return { errors };
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const hash = (await bcrypt.hash(data.password, salt)) as string;
-
-    let user;
     try {
+      const existing = await this.usersRepository.findOne({ where: { email } });
+      if (existing) {
+        req.session.userId = existing.id;
+        return { user: existing };
+      }
+
       const input = {
-        email: data.email,
-        password: hash,
+        email,
       };
       const newUser = this.usersRepository.create(input);
 
-      user = await this.usersRepository.save(newUser);
+      const savedUser = await this.usersRepository.save(newUser);
 
-      return { user };
+      // automatically logged in after register
+      // set a cookie on the user
+      req.session.userId = savedUser.id;
+
+      return { user: savedUser };
     } catch (error) {
       if (error.detail.includes('email')) {
         return {
@@ -55,9 +107,6 @@ export class UsersService {
         };
       }
     }
-    // automatically logged in after register
-    // set a cookie on the user
-    req.session.userId = user.id;
   }
 
   findAll() {
@@ -82,58 +131,6 @@ export class UsersService {
 
       await this.usersRepository.delete(id);
       return { value: true };
-    } catch (error) {
-      return {
-        errors: [{ field: 'user', message: 'An error occured' }],
-      };
-    }
-  }
-
-  async changePassword(userId: string, input: ChangePasswordInput) {
-    const { newPassword, oldPassword } = input;
-    try {
-      // validate form input first
-      if (newPassword.length < 6) {
-        return {
-          errors: [
-            {
-              field: 'newPassword', // match the frontend Field
-              message: 'Length must be at least 6',
-            },
-          ],
-        };
-      }
-
-      const user = await this.findOne(userId);
-
-      if (!user) {
-        return {
-          errors: [{ field: 'user', message: 'Cannot find the user ' }],
-        };
-      }
-
-      const valid = await bcrypt.compare(oldPassword, user.password);
-
-      if (!valid) {
-        return {
-          errors: [
-            {
-              field: 'currentPassword',
-              message: 'Incorrect password',
-            },
-          ],
-        };
-      }
-
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(newPassword, salt);
-      // user.password = await argon2.hash(newPassword);
-
-      const newUser = await this.usersRepository.save(user);
-      //  log in user after change password
-      return {
-        user: newUser,
-      };
     } catch (error) {
       return {
         errors: [{ field: 'user', message: 'An error occured' }],

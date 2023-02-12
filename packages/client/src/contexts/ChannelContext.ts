@@ -1,21 +1,13 @@
 import { createContext, Dispatch } from "react";
+import { Channel } from "../generated/graphql";
 
-export interface Channel {
-  channelId: string;
-  isPremium: boolean;
-}
 export interface ChannelContext {
-  channel: Channel;
-  setChannel: Dispatch<React.SetStateAction<Channel>>;
+  channel: Channel | null;
+  setChannel: Dispatch<React.SetStateAction<Channel | null> | null>;
 }
-
-export const emptyChannel: Channel = {
-  channelId: "",
-  isPremium: false,
-};
 
 const initialValue = {
-  channel: emptyChannel,
-  setChannel: null as any,
+  channel: null,
+  setChannel: null,
 };
 export const ChannelContext = createContext<ChannelContext>(initialValue);

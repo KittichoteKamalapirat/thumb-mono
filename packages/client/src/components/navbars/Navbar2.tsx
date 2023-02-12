@@ -8,10 +8,11 @@ import { urlResolver } from "../../lib/UrlResolver";
 
 import { useContext } from "react";
 import { brandName, ICON_SIZE } from "../../constants";
-import { ChannelContext, emptyChannel } from "../../contexts/ChannelContext";
+import { ChannelContext } from "../../contexts/ChannelContext";
 import { getAuthURLCall, googleLogout } from "../../firebase/client";
 import { ACTIVE_PAGE_CLASSNAMES, primaryColor } from "../../theme";
 import Button, { ButtonTypes } from "../Buttons/Button";
+import { UserContext } from "../../contexts/UserContext";
 
 enum PATH_ENUM {
   ACTIVITIES = "/activities",
@@ -23,6 +24,7 @@ enum PATH_ENUM {
 const Navbar = () => {
   const { pathname } = useLocation();
   const { channel, setChannel } = useContext(ChannelContext);
+  const { user, setUser } = useContext(UserContext);
 
   const handleCreateURL = async () => {
     const result = await getAuthURLCall();
@@ -35,7 +37,8 @@ const Navbar = () => {
   const handleLogout = async () => {
     const result = await googleLogout(channel.channelId);
     localStorage.clear();
-    setChannel(emptyChannel);
+    setChannel && setChannel(null);
+    setUser && setUser(null);
 
     console.log("resultttt", result);
     // const logoutUrl = urlResolver.googleLogout("http://localhost:5173/");

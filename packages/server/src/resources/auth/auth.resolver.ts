@@ -6,6 +6,7 @@ import UserResponse from '../users/dto/user-response';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
+import LoginResponse from './dto/login-response';
 import { LoginInput } from './dto/login.input';
 
 @Resolver()
@@ -21,27 +22,22 @@ export class AuthResolver {
     return this.authService.getAuthURL();
   }
 
-  @Mutation(() => ChannelResponse)
-  async createAndSaveTokens(@Args('code') code: string) {
-    return this.authService.createAndSaveTokens(code);
-  }
-
-  @Mutation(() => UserResponse)
-  async login(
-    @Args('input') input: LoginInput,
+  @Mutation(() => LoginResponse)
+  async createAndSaveTokens(
+    @Args('code') code: string,
     @Context() { req }: MyContext,
-  ): Promise<UserResponse> {
-    return this.authService.login(input, req);
+  ) {
+    return this.authService.createAndSaveTokens(code, req);
   }
 
   @Query(() => User, { nullable: true })
   me(@Context() { req }: MyContext): Promise<User | null> {
-    if (!req.session.userId) {
+    if (!req.session.channelId) {
       return null;
     }
 
     // no need to await, why?
-    return this.usersService.findOne(req.session.userId);
+    return this.usersService.findOne(req.session.channelId);
   }
 
   @Mutation(() => Boolean)
