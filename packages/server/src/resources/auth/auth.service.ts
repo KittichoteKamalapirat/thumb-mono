@@ -17,7 +17,7 @@ export class AuthService {
 
   async refreshTokens(channelId: string) {
     try {
-      const token = await this.channelsService.getTokens(channelId);
+      const token = await this.usersService.getTokens(channelId);
       oauth2Client.setCredentials(token);
       return true;
     } catch (error) {
@@ -26,7 +26,9 @@ export class AuthService {
   }
 
   async logout({ req, res }: MyContext) {
-    const tokens = await this.channelsService.getTokens(req.session.channelId);
+    // todo
+    // some users do not have tokens!
+    const tokens = await this.usersService.getTokens(req.session.channelId);
     return new Promise((resolve) => {
       console.log('logout 1');
       // remove the session in redis`
@@ -85,6 +87,8 @@ export class AuthService {
       console.log('tokens', tokens);
 
       console.log(111);
+
+      // refresh_token receive only the first time
       const { refresh_token, access_token } = tokens;
 
       console.log(222);
@@ -104,7 +108,10 @@ export class AuthService {
             channelId,
             tokens,
           );
-        const userResponse = await this.usersService.create({ email }, req);
+        const userResponse = await this.usersService.create(
+          { email, refresh_token, access_token },
+          req,
+        );
         return userResponse;
       }
 
@@ -114,15 +121,16 @@ export class AuthService {
           channelId,
           tokens,
         );
-      const userResponse = await this.usersService.create({ email }, req);
+      const userResponse = await this.usersService.create(
+        { email, refresh_token, access_token },
+        req,
+      );
 
       // create (or retrieve) a channel
       const channelResponse = await this.channelsService.create(
         {
           channelId,
           channelName,
-          refresh_token,
-          access_token,
         },
         req,
       );

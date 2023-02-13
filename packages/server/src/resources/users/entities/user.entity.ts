@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Token } from '../../channels/entities/token.object';
 import { UserChannel } from '../../user-channels/entities/user-channel.entity';
 
 type membership = 'basic' | 'premium' | 'pro';
@@ -31,6 +32,10 @@ export class User {
   })
   @Field(() => [UserChannel])
   channelConnections: UserChannel[];
+
+  @Field(() => Token)
+  @Column('jsonb')
+  token: Token;
 
   @CreateDateColumn()
   @Field()

@@ -62,7 +62,7 @@ export class UsersService {
   async getEmailFromGoogle2(channelId: string) {
     await this.authService.refreshTokens(channelId);
 
-    const { access_token } = await this.channelsService.getTokens(channelId);
+    const { access_token } = await this.getTokens(channelId);
     const url = getScopesUrl(access_token);
 
     const response = await axios.get(url);
@@ -73,7 +73,7 @@ export class UsersService {
   }
 
   async create(
-    { email }: CreateUserInput,
+    { email, refresh_token, access_token }: CreateUserInput,
     req: RequestWithSession,
   ): Promise<UserResponse> {
     try {
@@ -85,6 +85,8 @@ export class UsersService {
 
       const input = {
         email,
+        refresh_token,
+        access_token,
       };
       const newUser = this.usersRepository.create(input);
 
@@ -106,6 +108,28 @@ export class UsersService {
           ],
         };
       }
+    }
+  }
+
+  async getTokens(id: string) {
+    try {
+      const existing = await this.usersRepository.findOne({
+        where: { id },
+      });
+
+      return existing.token;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async refreshTokens(userId: string) {
+    try {
+      const token = await this.getTokens(userId);
+      oauth2Client.setCredentials(token);
+      return true;
+    } catch (error) {
+      console.log('error', error);
     }
   }
 

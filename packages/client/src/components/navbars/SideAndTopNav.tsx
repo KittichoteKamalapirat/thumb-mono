@@ -25,7 +25,9 @@ const SideAndTopNav = ({ children }: Props) => {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      const result = await logout();
+
+      console.log("logout result", result);
       localStorage.clear();
       setChannel && setChannel(null);
       setUser && setUser(null);

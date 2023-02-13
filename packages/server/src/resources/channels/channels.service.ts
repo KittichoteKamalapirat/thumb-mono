@@ -15,18 +15,6 @@ export class ChannelsService {
     private channelsRepository: Repository<Channel>,
   ) {}
 
-  async getTokens(channelId: string) {
-    try {
-      const existing = await this.channelsRepository.findOne({
-        where: { channelId },
-      });
-
-      return existing.token;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   async getChannelInfoAfterCredentialsSet() {
     console.log(111111);
 
@@ -59,7 +47,7 @@ export class ChannelsService {
     req: RequestWithSession,
   ): Promise<ChannelResponse> {
     try {
-      const { channelId, refresh_token, access_token } = input;
+      const { channelId, channelName } = input;
 
       // set channelId in session
       req.session.channelId = channelId;
@@ -71,7 +59,8 @@ export class ChannelsService {
       if (existing) return { channel: existing };
       const newChannel = this.channelsRepository.create({
         channelId,
-        token: { refresh_token, access_token },
+        channelName,
+        // token: { refresh_token, access_token },
       });
 
       const savedChannel = await this.channelsRepository.save(newChannel);

@@ -9,7 +9,6 @@ import {
 } from 'typeorm';
 import { Testing } from '../../testings/entities/testing.entity';
 import { UserChannel } from '../../user-channels/entities/user-channel.entity';
-import { Token } from './token.object';
 
 @ObjectType()
 @Entity()
@@ -25,10 +24,6 @@ export class Channel {
   @Field()
   @Column()
   channelName: string;
-
-  @Field(() => Token)
-  @Column('jsonb')
-  token: Token;
 
   @CreateDateColumn()
   @Field()
