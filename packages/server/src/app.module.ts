@@ -1,6 +1,7 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
@@ -9,6 +10,7 @@ import { AppService } from './app.service';
 import { typeormConfigNest } from './config/typeorm-nest.config';
 import { AuthModule } from './resources/auth/auth.module';
 import { ChannelsModule } from './resources/channels/channels.module';
+import { CronsService } from './resources/crons/crons.service';
 import { UsersModule } from './resources/users/users.module';
 
 @Module({
@@ -24,6 +26,7 @@ import { UsersModule } from './resources/users/users.module';
         return { req, res };
       },
     }),
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot(typeormConfigNest),
     UsersModule,
     ChannelsModule,
@@ -31,6 +34,6 @@ import { UsersModule } from './resources/users/users.module';
     TestingModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CronsService],
 })
 export class AppModule {}

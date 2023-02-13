@@ -31,10 +31,7 @@ export class UsersService {
 
   // need access_token in a db to work (when oauth2Client.setCredentials(token); in refreshTokens)
   // unpure function
-  async getEmailFromGoogleAfterCredentialsSet(
-    channelId: string,
-    tokens?: Credentials,
-  ) {
+  async getEmailFromGoogleAfterCredentialsSet(tokens?: Credentials) {
     try {
       console.log('getEmailFromGoogleAfterCredentialsSet', 1);
 

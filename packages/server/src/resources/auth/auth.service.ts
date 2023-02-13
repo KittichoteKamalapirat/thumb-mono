@@ -2,7 +2,6 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { COOKIE_NAME, IS_PROD } from '../../constants';
 import { oauth2Client } from '../../oauthClient';
 import { MyContext, RequestWithSession } from '../../types/context.type';
-
 import { ChannelsService } from '../channels/channels.service';
 import { UsersService } from '../users/users.service';
 import LoginResponse from './dto/login-response';
@@ -80,7 +79,7 @@ export class AuthService {
     req: RequestWithSession,
   ): Promise<LoginResponse> {
     try {
-      console.log('000');
+      console.log('create and save tokens');
       console.log('code', code);
 
       const { tokens } = await oauth2Client.getToken(code); // this could be invalid_grant
@@ -101,30 +100,19 @@ export class AuthService {
 
       console.log(444);
 
-      // if no channel => create a user but not channel
-      if (!channelId) {
-        const email =
-          await this.usersService.getEmailFromGoogleAfterCredentialsSet(
-            channelId,
-            tokens,
-          );
-        const userResponse = await this.usersService.create(
-          { email, refresh_token, access_token },
-          req,
-        );
-        return userResponse;
-      }
+      const email =
+        await this.usersService.getEmailFromGoogleAfterCredentialsSet(tokens);
 
       // create (or retrieve) a user
-      const email =
-        await this.usersService.getEmailFromGoogleAfterCredentialsSet(
-          channelId,
-          tokens,
-        );
       const userResponse = await this.usersService.create(
         { email, refresh_token, access_token },
         req,
       );
+
+      // if no channel => just return a user
+      if (!channelId) {
+        return userResponse;
+      }
 
       // create (or retrieve) a channel
       const channelResponse = await this.channelsService.create(
