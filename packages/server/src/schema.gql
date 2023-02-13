@@ -15,6 +15,15 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Channel {
+  id: ID!
+  channelId: String!
+  channelName: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  testings: [Testing!]!
+}
+
 type Token {
   refresh_token: String!
   access_token: String!
@@ -24,30 +33,9 @@ type User {
   id: ID!
   email: String!
   membership: String!
-  channelConnections: [UserChannel!]!
   token: Token!
   createdAt: DateTime!
   updatedAt: DateTime!
-}
-
-type UserChannel {
-  id: ID!
-  userId: String!
-  user: User!
-  channelId: String!
-  channel: Channel!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type Channel {
-  id: ID!
-  channelId: String!
-  channelName: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  userConnections: [UserChannel!]!
-  testings: [Testing!]!
 }
 
 type FieldError {
@@ -68,8 +56,6 @@ type Query {
   me: User
   channels: [Channel!]!
   channel(id: Int!): Channel!
-  userChannels: [UserChannel!]!
-  userChannel(id: Int!): UserChannel!
 }
 
 type Mutation {
@@ -78,23 +64,9 @@ type Mutation {
   createAndSaveTokens(code: String!): LoginResponse!
   logout: Boolean!
   createChannel(createChannelInput: CreateChannelInput!): Channel!
-  createUserChannel(createUserChannelInput: CreateUserChannelInput!): UserChannel!
-  updateUserChannel(updateUserChannelInput: UpdateUserChannelInput!): UserChannel!
-  removeUserChannel(id: Int!): UserChannel!
 }
 
 input CreateChannelInput {
   channelId: String!
   channelName: String!
-}
-
-input CreateUserChannelInput {
-  userId: String!
-  channelId: String!
-}
-
-input UpdateUserChannelInput {
-  userId: String
-  channelId: String
-  id: Int!
 }

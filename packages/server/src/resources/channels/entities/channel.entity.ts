@@ -8,7 +8,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Testing } from '../../testings/entities/testing.entity';
-import { UserChannel } from '../../user-channels/entities/user-channel.entity';
 
 @ObjectType()
 @Entity()
@@ -32,13 +31,6 @@ export class Channel {
   @UpdateDateColumn()
   @Field()
   updatedAt: Date;
-
-  // relationships
-  @OneToMany(() => UserChannel, (userChannel) => userChannel.channel, {
-    cascade: true,
-  })
-  @Field(() => [UserChannel])
-  userConnections: UserChannel[];
 
   @OneToMany(() => Testing, (testing) => testing.channel, {
     cascade: true,

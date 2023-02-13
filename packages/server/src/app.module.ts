@@ -1,16 +1,15 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
+import { TestingModule } from '@nestjs/testing';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './resources/users/users.module';
-import { join } from 'path';
-import { AuthModule } from './resources/auth/auth.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeormConfigNest } from './config/typeorm-nest.config';
+import { AuthModule } from './resources/auth/auth.module';
 import { ChannelsModule } from './resources/channels/channels.module';
-import { TestingModule } from '@nestjs/testing';
-import { UserChannelsModule } from './resources/user-channels/user-channels.module';
+import { UsersModule } from './resources/users/users.module';
 
 @Module({
   imports: [
@@ -30,7 +29,6 @@ import { UserChannelsModule } from './resources/user-channels/user-channels.modu
     ChannelsModule,
     AuthModule,
     TestingModule,
-    UserChannelsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

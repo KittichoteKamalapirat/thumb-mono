@@ -1,6 +1,5 @@
 import { Channel } from '../resources/channels/entities/channel.entity';
 import { Testing } from '../resources/testings/entities/testing.entity';
-import { UserChannel } from '../resources/user-channels/entities/user-channel.entity';
 import { User } from '../resources/users/entities/user.entity';
 
 export const typeormConfigNest = {
@@ -10,7 +9,7 @@ export const typeormConfigNest = {
   username: 'postgres',
   password: 'chain123',
   database: 'thumb_dev',
-  entities: [User, Channel, UserChannel, Testing],
+  entities: [User, Channel, Testing],
   synchronize: true,
   logging: true,
 };
