@@ -3,9 +3,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Channel } from '../../channels/entities/channel.entity';
 import { Token } from '../../channels/entities/token.object';
 
 type membership = 'basic' | 'premium' | 'pro';
@@ -27,6 +29,12 @@ export class User {
   @Field(() => Token)
   @Column('jsonb')
   token: Token;
+
+  @OneToMany(() => Channel, (channel) => channel.user, {
+    cascade: true,
+  })
+  @Field(() => [Channel])
+  channels: Channel[];
 
   @CreateDateColumn()
   @Field()

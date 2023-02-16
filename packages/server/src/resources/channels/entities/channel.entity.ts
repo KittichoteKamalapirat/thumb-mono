@@ -3,11 +3,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Testing } from '../../testings/entities/testing.entity';
+import { User } from '../../users/entities/user.entity';
 
 @ObjectType()
 @Entity()
@@ -27,6 +29,12 @@ export class Channel {
   @CreateDateColumn()
   @Field()
   createdAt: Date;
+
+  @ManyToOne(() => User, (user) => user.channels, {
+    onDelete: 'CASCADE',
+  })
+  @Field(() => User)
+  user: User;
 
   @UpdateDateColumn()
   @Field()

@@ -1,7 +1,9 @@
-import { Cron, CronExpression } from '@nestjs/schedule';
 import { Injectable } from '@nestjs/common';
-import { TestingsService } from '../testings/testings.service';
+import { Cron } from '@nestjs/schedule';
 import dayjs from 'dayjs';
+import { Testing } from '../testings/entities/testing.entity';
+import { TestingsService } from '../testings/testings.service';
+import { YoutubeService } from '../youtube/youtube.service';
 
 @Injectable()
 export class CronsService {
@@ -10,28 +12,67 @@ export class CronsService {
   //     console.log('1');
   //   }
 
-  constructor(private testingsService: TestingsService) {}
+  constructor(
+    private testingsService: TestingsService,
+    private youtubeService: YoutubeService,
+  ) {}
 
   @Cron('0 * * * *')
   async updateTitleEveryDay() {
+    console.log('update title every day at midnight');
     try {
-      const tests = await this.testingsService.findAllOngoingTitleTestings();
+      const tests = await this.testingsService.findAllOngoingTestings('title');
 
       // update title for each test
       const promiseArray = tests.map(async (test) => {
-        const { startDate, duration, channelId, id } = test;
+        const { startDate, duration, id } = test;
         if (!duration) return null;
         const endDate = dayjs(startDate).add(duration, 'day');
         const now = dayjs();
         if (endDate.isBefore(now)) {
           // 1. don't update title
           // 2. make as complete
-          const completedTest = await this.testingsService.completeTest(id);
+          await this.testingsService.completeTest(id);
 
-          return;
+          return true;
         } else {
           // 1. update title
-          return await updateVideoTitle(test); // TODO
+          return await this.youtubeService.updateVideoTitle(test); // TODO
+        }
+      });
+
+      const results = await Promise.all(promiseArray);
+
+      console.log('results', results);
+      return true;
+    } catch (error) {
+      console.log('error', error);
+      return false;
+    }
+  }
+
+  @Cron('0 * * * *')
+  async updateThumbEveryDay() {
+    console.log('update thumbnail every day at midnight');
+    try {
+      const tests = await this.testingsService.findAllOngoingTestings('thumb');
+
+      // update thumb for each test
+      const promiseArray = tests.map(async (test) => {
+        const { startDate, duration } = test;
+        if (!duration) return null;
+        const endDate = dayjs(startDate).add(duration, 'day');
+        const now = dayjs();
+        if (endDate.isBefore(now)) {
+          // 1. don't update thumb
+          // 2. make as complete
+
+          const updatedTest: Testing = { ...test, status: 'complete' };
+          await this.testingsService.save(updatedTest);
+          return;
+        } else {
+          // 1. update thumb
+          return await this.youtubeService.updateVideoThumb(test);
         }
       });
 

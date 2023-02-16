@@ -12,6 +12,8 @@ import { AuthModule } from './resources/auth/auth.module';
 import { ChannelsModule } from './resources/channels/channels.module';
 import { CronsService } from './resources/crons/crons.service';
 import { UsersModule } from './resources/users/users.module';
+import { YoutubeService } from './youtube/youtube.service';
+import { FileService } from './file/file.service';
 
 @Module({
   imports: [
@@ -34,6 +36,6 @@ import { UsersModule } from './resources/users/users.module';
     TestingModule,
   ],
   controllers: [AppController],
-  providers: [AppService, CronsService],
+  providers: [AppService, CronsService, YoutubeService, FileService],
 })
 export class AppModule {}

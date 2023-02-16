@@ -137,13 +137,36 @@
               "widthDefault": 60
             },
             "id": "b2a913e7-3a89-473c-a2b1-da6cdfd26749"
+          },
+          {
+            "name": "",
+            "comment": "",
+            "dataType": "FK",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": true,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            },
+            "id": "1c0ca84c-5ce3-482e-9a29-85e098a70a10"
           }
         ],
         "ui": {
           "active": false,
           "left": 74.4437,
           "top": 164.8889,
-          "zIndex": 219,
+          "zIndex": 7,
           "widthName": 60,
           "widthComment": 60
         },
@@ -201,7 +224,7 @@
             "id": "e8c40583-cc14-4a1a-9cfe-58a1d5334732"
           },
           {
-            "name": "",
+            "name": "token",
             "comment": "",
             "dataType": "FK",
             "default": "",
@@ -226,9 +249,9 @@
         ],
         "ui": {
           "active": false,
-          "left": 955.8898,
-          "top": 164.5555,
-          "zIndex": 166,
+          "left": 594.8898,
+          "top": 185.5555,
+          "zIndex": 10,
           "widthName": 60,
           "widthComment": 60
         },
@@ -474,74 +497,12 @@
           "active": false,
           "left": 23.6664,
           "top": 468.7786,
-          "zIndex": 220,
+          "zIndex": 3,
           "widthName": 60,
           "widthComment": 60
         },
         "visible": true,
         "id": "2ce98a19-034d-4740-82b0-5b657a1ac74c"
-      },
-      {
-        "name": "user_channel",
-        "comment": "",
-        "columns": [
-          {
-            "name": "channelId",
-            "comment": "",
-            "dataType": "FK",
-            "default": "",
-            "option": {
-              "autoIncrement": false,
-              "primaryKey": false,
-              "unique": false,
-              "notNull": true
-            },
-            "ui": {
-              "active": false,
-              "pk": false,
-              "fk": true,
-              "pfk": false,
-              "widthName": 60,
-              "widthComment": 60,
-              "widthDataType": 60,
-              "widthDefault": 60
-            },
-            "id": "5c52252b-9d0c-4905-8042-6641f0807bb3"
-          },
-          {
-            "name": "userId",
-            "comment": "",
-            "dataType": "FK",
-            "default": "",
-            "option": {
-              "autoIncrement": false,
-              "primaryKey": false,
-              "unique": false,
-              "notNull": true
-            },
-            "ui": {
-              "active": false,
-              "pk": false,
-              "fk": true,
-              "pfk": false,
-              "widthName": 60,
-              "widthComment": 60,
-              "widthDataType": 60,
-              "widthDefault": 60
-            },
-            "id": "491fa7cf-5738-44ed-9713-628d1e0a29c3"
-          }
-        ],
-        "ui": {
-          "active": true,
-          "left": 501.25,
-          "top": 174.75,
-          "zIndex": 224,
-          "widthName": 80.05712890625,
-          "widthComment": 60
-        },
-        "visible": true,
-        "id": "621595cb-aaa0-43fc-9555-9bcb515a74d7"
       }
     ],
     "indexes": []
@@ -560,60 +521,8 @@
           "columnIds": [
             "b2a913e7-3a89-473c-a2b1-da6cdfd26749"
           ],
-          "x": 421.44370000000004,
-          "y": 240.3889,
-          "direction": "right"
-        },
-        "end": {
-          "tableId": "621595cb-aaa0-43fc-9555-9bcb515a74d7",
-          "columnIds": [
-            "5c52252b-9d0c-4905-8042-6641f0807bb3"
-          ],
-          "x": 501.25,
-          "y": 229.75,
-          "direction": "left"
-        },
-        "constraintName": "fk_channel_to_channel_user",
-        "visible": true,
-        "id": "dddeb2b4-1760-4401-b07b-d5b1df90fbdf"
-      },
-      {
-        "identification": false,
-        "relationshipType": "OneN",
-        "startRelationshipType": "Dash",
-        "start": {
-          "tableId": "255e535e-2706-42a5-b5d8-f7cf4c8cd656",
-          "columnIds": [
-            "2cbbee80-a076-4985-bc00-29c0ba12eb46"
-          ],
-          "x": 955.8898,
-          "y": 229.8055,
-          "direction": "left"
-        },
-        "end": {
-          "tableId": "621595cb-aaa0-43fc-9555-9bcb515a74d7",
-          "columnIds": [
-            "491fa7cf-5738-44ed-9713-628d1e0a29c3"
-          ],
-          "x": 848.25,
-          "y": 229.75,
-          "direction": "right"
-        },
-        "constraintName": "fk_user_to_channel_user",
-        "visible": true,
-        "id": "81586141-313e-436d-9de3-3cfcb7689db4"
-      },
-      {
-        "identification": false,
-        "relationshipType": "OneN",
-        "startRelationshipType": "Dash",
-        "start": {
-          "tableId": "3bd99ae8-d5db-4883-a2a3-138f2150d2f7",
-          "columnIds": [
-            "b2a913e7-3a89-473c-a2b1-da6cdfd26749"
-          ],
           "x": 247.9437,
-          "y": 315.88890000000004,
+          "y": 336.38890000000004,
           "direction": "bottom"
         },
         "end": {
@@ -628,6 +537,32 @@
         "constraintName": "fk_channel_to_testing",
         "visible": true,
         "id": "fa059051-10e0-4ddd-8209-493f6a42198e"
+      },
+      {
+        "identification": false,
+        "relationshipType": "OneN",
+        "startRelationshipType": "Dash",
+        "start": {
+          "tableId": "255e535e-2706-42a5-b5d8-f7cf4c8cd656",
+          "columnIds": [
+            "2cbbee80-a076-4985-bc00-29c0ba12eb46"
+          ],
+          "x": 594.8898,
+          "y": 250.8055,
+          "direction": "left"
+        },
+        "end": {
+          "tableId": "3bd99ae8-d5db-4883-a2a3-138f2150d2f7",
+          "columnIds": [
+            "1c0ca84c-5ce3-482e-9a29-85e098a70a10"
+          ],
+          "x": 421.44370000000004,
+          "y": 250.6389,
+          "direction": "right"
+        },
+        "constraintName": "fk_user_to_channel",
+        "visible": true,
+        "id": "852087e0-cfbb-4412-aac6-b7202ef6ad1a"
       }
     ]
   }

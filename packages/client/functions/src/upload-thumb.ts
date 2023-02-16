@@ -35,7 +35,7 @@ const genArrbufFromUrl = async ({
 export const updateVideoThumb = async (testing: Testing) => {
   try {
     const { videoId, varis, ori, channelId, history } = testing;
-    testing;
+    // testing;
 
     // get url
     const newThumbUrl = getNextTestSubject(

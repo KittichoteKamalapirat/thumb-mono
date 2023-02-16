@@ -11,10 +11,10 @@ import { Channel } from '../../channels/entities/channel.entity';
 import { TestHistory } from '../dto/TestHistory.object';
 
 const TestingTypes = ['thumb', 'title'] as const;
-type TestingType = (typeof TestingTypes)[number];
+export type TestingType = (typeof TestingTypes)[number];
 
 const TestingStatuses = ['ongoing', 'complete'] as const;
-type TestingStatus = (typeof TestingStatuses)[number];
+export type TestingStatus = (typeof TestingStatuses)[number];
 
 const DurationTypes = ['specific', 'stats_significant'] as const;
 export type DurationType = (typeof DurationTypes)[number];
