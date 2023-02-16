@@ -2,7 +2,7 @@ mutation CreateAndSaveTokens($code: String!){
   createAndSaveTokens(code: $code){
     channel{
       id
-      channelId
+      ytChannelId
     }
     user{
       id

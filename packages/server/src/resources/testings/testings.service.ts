@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateTestingInput } from './dto/create-testing.input';
 import { TestHistory } from './dto/TestHistory.object';
 import { UpdateTestingInput } from './dto/update-testing.input';
+import TestingResponse from './dto/user-response';
 import { Testing, TestingType } from './entities/testing.entity';
 
 @Injectable()
@@ -14,8 +15,33 @@ export class TestingsService {
     private testingsRepository: Repository<Testing>,
   ) {}
 
-  create(createTestingInput: CreateTestingInput) {
-    return 'This action adds a new testing';
+  async create({
+    channelId,
+    ...rest
+  }: CreateTestingInput): Promise<TestingResponse> {
+    try {
+      const newTesting: Partial<Testing> = {
+        channelId,
+        status: 'ongoing',
+        startDate: new Date().toISOString(),
+        ...rest,
+      };
+
+      // if add doc (but id won't be the same as key)
+      // const colRef = collection(firestore, "channels", channelId, "testings");
+      // await addDoc(colRef, input);
+
+      const savedTesting = await this.testingsRepository.save(newTesting);
+
+      return { testing: savedTesting };
+    } catch (error) {
+      console.log('error inside create testing', error);
+      return { errors: [{ field: 'Testing', message: 'An error occured' }] };
+    }
+  }
+
+  find() {
+    return this.testingsRepository.find();
   }
 
   findAll(channelId) {

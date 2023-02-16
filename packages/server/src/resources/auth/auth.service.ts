@@ -95,7 +95,7 @@ export class AuthService {
       oauth2Client.setCredentials(tokens);
 
       console.log(333);
-      const { channelId, channelName } =
+      const { ytChannelId, channelName } =
         await this.channelsService.getChannelInfoAfterCredentialsSet(); // need to set credentials before using this /// this could be invalid_grant even after setCredentials
 
       console.log(444);
@@ -110,15 +110,16 @@ export class AuthService {
       );
 
       // if no channel => just return a user
-      if (!channelId) {
+      if (!ytChannelId) {
         return userResponse;
       }
 
       // create (or retrieve) a channel
       const channelResponse = await this.channelsService.create(
         {
-          channelId,
+          ytChannelId,
           channelName,
+          userId: userResponse.user.id,
         },
         req,
       );

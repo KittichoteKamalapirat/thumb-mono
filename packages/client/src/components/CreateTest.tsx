@@ -6,7 +6,13 @@ import { z } from "zod";
 
 import { ChannelContext } from "../contexts/ChannelContext";
 import { getVidList } from "../firebase/client";
-import { createTesting } from "../firebase/createTesting";
+
+import {
+  useCreateTestingMutation,
+  useMeChannelQuery,
+  useVideosQuery,
+  YoutubeVideo,
+} from "../generated/graphql";
 import { urlResolver } from "../lib/UrlResolver";
 import { debounce } from "../utils/debounce";
 import CreateTestEditor from "./CreateTestEditor";
@@ -14,11 +20,6 @@ import { UploadedFile } from "./DropzoneField";
 
 interface Props {}
 
-export interface MyUpload {
-  videoId: string;
-  thumbnailUrl: string;
-  title: string;
-}
 // const oauth2Client = new google.auth.OAuth2(client, secret, redirect);
 
 const TitleSchema = z
@@ -87,13 +88,23 @@ const defaultValues: FormValues = {
 
 const CreateTest = ({}: Props) => {
   // const [selectedUpload, setSelectedUpload] = useState<MyUpload>();
-  const [uploads, setUploads] = useState<MyUpload[]>([]);
+
+  const {
+    data: channelData,
+    loading: channelLoading,
+    error: channelError,
+  } = useMeChannelQuery();
+  const [uploads, setUploads] = useState<YoutubeVideo[]>([]);
   const [fileUploads, setFileUploads] = useState<UploadedFile[]>([]);
-  const [filteredUploads, setFilteredUploads] = useState<MyUpload[]>([]);
+  const [filteredUploads, setFilteredUploads] = useState<YoutubeVideo[]>([]);
   const params = useParams();
 
-  const { channel, setChannel } = useContext(ChannelContext);
-  const channelId = channel.channelId;
+  const { channel } = useContext(ChannelContext);
+  const channelId = channel?.channelId;
+
+  const { data, loading, error } = useVideosQuery({
+    variables: { channelId: channelId || "" },
+  });
   const location = useLocation();
 
   const [search, setSearch] = useState("");
@@ -120,38 +131,58 @@ const CreateTest = ({}: Props) => {
 
   const { durationType, duration, videoId, type } = useFormData.watch();
   const navigate = useNavigate();
+  const [createTesting] = useCreateTestingMutation();
 
   const onSubmit: SubmitHandler<FormValues> = async (form) => {
     try {
+      const channelUid = channelData?.meChannel?.id;
+      if (!channelUid) return;
       const input = (() => {
         switch (form.type) {
           case "thumb":
             return {
               ...form,
-              varis: fileUploads.map((file) => ({ value: file.url })),
+              channelId: channelUid,
+              varis: fileUploads.map((file) => file.url),
             };
           case "title":
-            return form;
+            return {
+              ...form,
+              channelId: channelUid,
+              varis: form.varis.map((vari) => vari.value),
+            };
         }
       })();
 
-      const docId = await createTesting(channelId, input);
+      const result = await createTesting({ variables: { input } });
 
-      if (docId) {
-        navigate(urlResolver.myTest(docId));
+      const resultValue = result.data?.createTesting.testing;
+
+      let errorMessage = "";
+      const resultUserErrors = result.data?.createTesting.errors || [];
+      resultUserErrors.map(({ field, message }) => {
+        errorMessage += `${field} ${message}\n`;
+      });
+
+      if (resultValue && resultUserErrors.length === 0) {
+        navigate(resultValue.id);
+        // dispatch(
+        //   showToast({
+        //     message: "Availability successfully updated",
+        //     variant: "success",
+        //   })
+        // );
       } else {
-        console.log("......cannot create ");
+        // dispatch(
+        //   showToast({
+        //     message: errorMessage,
+        //     variant: "error",
+        //   })
+        // );
       }
     } catch (error) {
       console.log("error inside  catch", error);
     }
-  };
-
-  const handleList = async () => {
-    const result = await getVidList(channelId);
-    const myUploads = result;
-    setUploads(myUploads);
-    setFilteredUploads(myUploads);
   };
 
   const selectedVideo = uploads?.find(
@@ -159,8 +190,8 @@ const CreateTest = ({}: Props) => {
   );
 
   useEffect(() => {
-    if (channelId) handleList();
-  }, [channelId]);
+    if (data?.videos) setFilteredUploads(data.videos);
+  }, [channelId, loading, data]);
 
   useEffect(() => {
     if (!selectedVideo) return;
@@ -169,7 +200,7 @@ const CreateTest = ({}: Props) => {
       return;
     }
     if (type === "thumb") {
-      useFormData.setValue(FormNames.ORI, selectedVideo.thumbnailUrl);
+      useFormData.setValue(FormNames.ORI, selectedVideo.thumbUrl);
       return;
     }
   }, [selectedVideo, type]);

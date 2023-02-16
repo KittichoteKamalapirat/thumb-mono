@@ -18,37 +18,36 @@ export type Scalars = {
 
 export type Channel = {
   __typename?: 'Channel';
-  channelId: Scalars['String'];
   channelName: Scalars['String'];
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
   testings: Array<Testing>;
-  token: Token;
   updatedAt: Scalars['DateTime'];
-  userConnections: Array<UserChannel>;
+  user: User;
+  userId: Scalars['String'];
+  ytChannelId: Scalars['String'];
 };
 
 export type CreateChannelInput = {
-  access_token: Scalars['String'];
-  channelId: Scalars['String'];
   channelName: Scalars['String'];
-  refresh_token: Scalars['String'];
+  userId: Scalars['String'];
+  ytChannelId: Scalars['String'];
 };
 
-export type CreateUserChannelInput = {
+export type CreateTestingInput = {
   channelId: Scalars['String'];
-  userId: Scalars['String'];
+  duration: Scalars['Float'];
+  durationType: Scalars['String'];
+  ori: Scalars['String'];
+  type: Scalars['String'];
+  varis: Array<Scalars['String']>;
+  videoId: Scalars['String'];
 };
 
 export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
   message: Scalars['String'];
-};
-
-export type LoginInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
 };
 
 export type LoginResponse = {
@@ -62,13 +61,12 @@ export type Mutation = {
   __typename?: 'Mutation';
   createAndSaveTokens: LoginResponse;
   createChannel: Channel;
-  createUserChannel: UserChannel;
+  createTesting: TestingResponse;
   getAuthURL: Scalars['String'];
-  login: UserResponse;
   logout: Scalars['Boolean'];
+  removeTesting: Testing;
   removeUser: User;
-  removeUserChannel: UserChannel;
-  updateUserChannel: UserChannel;
+  updateTesting: Testing;
 };
 
 
@@ -82,13 +80,13 @@ export type MutationCreateChannelArgs = {
 };
 
 
-export type MutationCreateUserChannelArgs = {
-  createUserChannelInput: CreateUserChannelInput;
+export type MutationCreateTestingArgs = {
+  input: CreateTestingInput;
 };
 
 
-export type MutationLoginArgs = {
-  input: LoginInput;
+export type MutationRemoveTestingArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -97,13 +95,8 @@ export type MutationRemoveUserArgs = {
 };
 
 
-export type MutationRemoveUserChannelArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationUpdateUserChannelArgs = {
-  updateUserChannelInput: UpdateUserChannelInput;
+export type MutationUpdateTestingArgs = {
+  updateTestingInput: UpdateTestingInput;
 };
 
 export type Query = {
@@ -111,15 +104,22 @@ export type Query = {
   channel: Channel;
   channels: Array<Channel>;
   getEmail: Scalars['String'];
-  me?: Maybe<User>;
+  meChannel?: Maybe<Channel>;
+  meUser?: Maybe<User>;
+  testing: Testing;
+  testings: Array<Testing>;
   user: User;
-  userChannel: UserChannel;
-  userChannels: Array<UserChannel>;
   users: Array<User>;
+  videos: Array<YoutubeVideo>;
 };
 
 
 export type QueryChannelArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryTestingArgs = {
   id: Scalars['Int'];
 };
 
@@ -129,8 +129,14 @@ export type QueryUserArgs = {
 };
 
 
-export type QueryUserChannelArgs = {
-  id: Scalars['Int'];
+export type QueryVideosArgs = {
+  channelId: Scalars['String'];
+};
+
+export type TestHistory = {
+  __typename?: 'TestHistory';
+  date: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type Testing = {
@@ -138,8 +144,23 @@ export type Testing = {
   channel: Channel;
   channelId: Scalars['String'];
   createdAt: Scalars['DateTime'];
+  duration: Scalars['Int'];
+  durationType: Scalars['String'];
+  history: Array<TestHistory>;
   id: Scalars['ID'];
+  ori: Scalars['String'];
+  startDate: Scalars['String'];
+  status: Scalars['String'];
+  type: Scalars['String'];
   updatedAt: Scalars['DateTime'];
+  varis: Array<Scalars['String']>;
+  videoId: Scalars['String'];
+};
+
+export type TestingResponse = {
+  __typename?: 'TestingResponse';
+  errors?: Maybe<Array<FieldError>>;
+  testing?: Maybe<Testing>;
 };
 
 export type Token = {
@@ -148,38 +169,33 @@ export type Token = {
   refresh_token: Scalars['String'];
 };
 
-export type UpdateUserChannelInput = {
+export type UpdateTestingInput = {
   channelId?: InputMaybe<Scalars['String']>;
+  duration?: InputMaybe<Scalars['Float']>;
+  durationType?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
-  userId?: InputMaybe<Scalars['String']>;
+  ori?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
+  varis?: InputMaybe<Array<Scalars['String']>>;
+  videoId?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
   __typename?: 'User';
-  channelConnections: Array<UserChannel>;
+  channels: Array<Channel>;
   createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   id: Scalars['ID'];
   membership: Scalars['String'];
-  password: Scalars['String'];
+  token: Token;
   updatedAt: Scalars['DateTime'];
 };
 
-export type UserChannel = {
-  __typename?: 'UserChannel';
-  channel: Channel;
-  channelId: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
-  updatedAt: Scalars['DateTime'];
-  user: User;
-  userId: Scalars['String'];
-};
-
-export type UserResponse = {
-  __typename?: 'UserResponse';
-  errors?: Maybe<Array<FieldError>>;
-  user?: Maybe<User>;
+export type YoutubeVideo = {
+  __typename?: 'YoutubeVideo';
+  thumbUrl: Scalars['String'];
+  title: Scalars['String'];
+  videoId: Scalars['String'];
 };
 
 export type CreateAndSaveTokensMutationVariables = Exact<{
@@ -187,29 +203,41 @@ export type CreateAndSaveTokensMutationVariables = Exact<{
 }>;
 
 
-export type CreateAndSaveTokensMutation = { __typename?: 'Mutation', createAndSaveTokens: { __typename?: 'LoginResponse', channel?: { __typename?: 'Channel', id: string, channelId: string } | null, user?: { __typename?: 'User', id: string, membership: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type CreateAndSaveTokensMutation = { __typename?: 'Mutation', createAndSaveTokens: { __typename?: 'LoginResponse', channel?: { __typename?: 'Channel', id: string, ytChannelId: string } | null, user?: { __typename?: 'User', id: string, membership: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type GetAuthUrlMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAuthUrlMutation = { __typename?: 'Mutation', getAuthURL: string };
 
-export type LoginMutationVariables = Exact<{
-  input: LoginInput;
-}>;
-
-
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', id: string, email: string } | null } };
-
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
 
-export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+export type MeUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, email: string } | null };
+export type MeUserQuery = { __typename?: 'Query', meUser?: { __typename?: 'User', id: string, email: string } | null };
+
+export type MeChannelQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeChannelQuery = { __typename?: 'Query', meChannel?: { __typename?: 'Channel', id: string, ytChannelId: string, channelName: string } | null };
+
+export type CreateTestingMutationVariables = Exact<{
+  input: CreateTestingInput;
+}>;
+
+
+export type CreateTestingMutation = { __typename?: 'Mutation', createTesting: { __typename?: 'TestingResponse', testing?: { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, value: string }> } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type VideosQueryVariables = Exact<{
+  channelId: Scalars['String'];
+}>;
+
+
+export type VideosQuery = { __typename?: 'Query', videos: Array<{ __typename?: 'YoutubeVideo', videoId: string, title: string, thumbUrl: string }> };
 
 
 export const CreateAndSaveTokensDocument = gql`
@@ -217,7 +245,7 @@ export const CreateAndSaveTokensDocument = gql`
   createAndSaveTokens(code: $code) {
     channel {
       id
-      channelId
+      ytChannelId
     }
     user {
       id
@@ -286,46 +314,6 @@ export function useGetAuthUrlMutation(baseOptions?: Apollo.MutationHookOptions<G
 export type GetAuthUrlMutationHookResult = ReturnType<typeof useGetAuthUrlMutation>;
 export type GetAuthUrlMutationResult = Apollo.MutationResult<GetAuthUrlMutation>;
 export type GetAuthUrlMutationOptions = Apollo.BaseMutationOptions<GetAuthUrlMutation, GetAuthUrlMutationVariables>;
-export const LoginDocument = gql`
-    mutation Login($input: LoginInput!) {
-  login(input: $input) {
-    errors {
-      field
-      message
-    }
-    user {
-      id
-      email
-    }
-  }
-}
-    `;
-export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
-
-/**
- * __useLoginMutation__
- *
- * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [loginMutation, { data, loading, error }] = useLoginMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
-      }
-export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
-export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
-export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const LogoutDocument = gql`
     mutation Logout {
   logout
@@ -356,9 +344,9 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
-export const MeDocument = gql`
-    query Me {
-  me {
+export const MeUserDocument = gql`
+    query MeUser {
+  meUser {
     id
     email
   }
@@ -366,28 +354,153 @@ export const MeDocument = gql`
     `;
 
 /**
- * __useMeQuery__
+ * __useMeUserQuery__
  *
- * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
- * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMeUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMeQuery({
+ * const { data, loading, error } = useMeUserQuery({
  *   variables: {
  *   },
  * });
  */
-export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+export function useMeUserQuery(baseOptions?: Apollo.QueryHookOptions<MeUserQuery, MeUserQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        return Apollo.useQuery<MeUserQuery, MeUserQueryVariables>(MeUserDocument, options);
       }
-export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+export function useMeUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeUserQuery, MeUserQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+          return Apollo.useLazyQuery<MeUserQuery, MeUserQueryVariables>(MeUserDocument, options);
         }
-export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
-export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
-export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export type MeUserQueryHookResult = ReturnType<typeof useMeUserQuery>;
+export type MeUserLazyQueryHookResult = ReturnType<typeof useMeUserLazyQuery>;
+export type MeUserQueryResult = Apollo.QueryResult<MeUserQuery, MeUserQueryVariables>;
+export const MeChannelDocument = gql`
+    query MeChannel {
+  meChannel {
+    id
+    ytChannelId
+    channelName
+  }
+}
+    `;
+
+/**
+ * __useMeChannelQuery__
+ *
+ * To run a query within a React component, call `useMeChannelQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeChannelQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeChannelQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeChannelQuery(baseOptions?: Apollo.QueryHookOptions<MeChannelQuery, MeChannelQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeChannelQuery, MeChannelQueryVariables>(MeChannelDocument, options);
+      }
+export function useMeChannelLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeChannelQuery, MeChannelQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeChannelQuery, MeChannelQueryVariables>(MeChannelDocument, options);
+        }
+export type MeChannelQueryHookResult = ReturnType<typeof useMeChannelQuery>;
+export type MeChannelLazyQueryHookResult = ReturnType<typeof useMeChannelLazyQuery>;
+export type MeChannelQueryResult = Apollo.QueryResult<MeChannelQuery, MeChannelQueryVariables>;
+export const CreateTestingDocument = gql`
+    mutation CreateTesting($input: CreateTestingInput!) {
+  createTesting(input: $input) {
+    testing {
+      id
+      type
+      status
+      duration
+      durationType
+      videoId
+      startDate
+      channelId
+      history {
+        date
+        value
+      }
+      ori
+      varis
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type CreateTestingMutationFn = Apollo.MutationFunction<CreateTestingMutation, CreateTestingMutationVariables>;
+
+/**
+ * __useCreateTestingMutation__
+ *
+ * To run a mutation, you first call `useCreateTestingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTestingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTestingMutation, { data, loading, error }] = useCreateTestingMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateTestingMutation(baseOptions?: Apollo.MutationHookOptions<CreateTestingMutation, CreateTestingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateTestingMutation, CreateTestingMutationVariables>(CreateTestingDocument, options);
+      }
+export type CreateTestingMutationHookResult = ReturnType<typeof useCreateTestingMutation>;
+export type CreateTestingMutationResult = Apollo.MutationResult<CreateTestingMutation>;
+export type CreateTestingMutationOptions = Apollo.BaseMutationOptions<CreateTestingMutation, CreateTestingMutationVariables>;
+export const VideosDocument = gql`
+    query Videos($channelId: String!) {
+  videos(channelId: $channelId) {
+    videoId
+    title
+    thumbUrl
+  }
+}
+    `;
+
+/**
+ * __useVideosQuery__
+ *
+ * To run a query within a React component, call `useVideosQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVideosQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVideosQuery({
+ *   variables: {
+ *      channelId: // value for 'channelId'
+ *   },
+ * });
+ */
+export function useVideosQuery(baseOptions: Apollo.QueryHookOptions<VideosQuery, VideosQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<VideosQuery, VideosQueryVariables>(VideosDocument, options);
+      }
+export function useVideosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VideosQuery, VideosQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<VideosQuery, VideosQueryVariables>(VideosDocument, options);
+        }
+export type VideosQueryHookResult = ReturnType<typeof useVideosQuery>;
+export type VideosLazyQueryHookResult = ReturnType<typeof useVideosLazyQuery>;
+export type VideosQueryResult = Apollo.QueryResult<VideosQuery, VideosQueryVariables>;

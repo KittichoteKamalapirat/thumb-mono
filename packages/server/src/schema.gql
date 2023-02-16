@@ -2,9 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type TestHistory {
+  date: String!
+  value: String!
+}
+
 type Testing {
   id: ID!
+  type: String!
+  status: String!
+  duration: Int!
+  durationType: String!
+  videoId: String!
+  startDate: String!
   channelId: String!
+  history: [TestHistory!]!
+  ori: String!
+  varis: [String!]!
   channel: Channel!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -14,15 +28,6 @@ type Testing {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-type Channel {
-  id: ID!
-  channelId: String!
-  channelName: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  testings: [Testing!]!
-}
 
 type Token {
   refresh_token: String!
@@ -34,8 +39,20 @@ type User {
   email: String!
   membership: String!
   token: Token!
+  channels: [Channel!]!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type Channel {
+  id: ID!
+  ytChannelId: String!
+  channelName: String!
+  createdAt: DateTime!
+  userId: String!
+  user: User!
+  updatedAt: DateTime!
+  testings: [Testing!]!
 }
 
 type FieldError {
@@ -49,13 +66,28 @@ type LoginResponse {
   user: User
 }
 
+type TestingResponse {
+  errors: [FieldError!]
+  testing: Testing
+}
+
+type YoutubeVideo {
+  videoId: String!
+  thumbUrl: String!
+  title: String!
+}
+
 type Query {
   getEmail: String!
   users: [User!]!
   user(id: String!): User!
-  me: User
+  meUser: User
   channels: [Channel!]!
   channel(id: Int!): Channel!
+  meChannel: Channel
+  testings: [Testing!]!
+  testing(id: Int!): Testing!
+  videos(channelId: String!): [YoutubeVideo!]!
 }
 
 type Mutation {
@@ -64,9 +96,34 @@ type Mutation {
   createAndSaveTokens(code: String!): LoginResponse!
   logout: Boolean!
   createChannel(createChannelInput: CreateChannelInput!): Channel!
+  createTesting(input: CreateTestingInput!): TestingResponse!
+  updateTesting(updateTestingInput: UpdateTestingInput!): Testing!
+  removeTesting(id: Int!): Testing!
 }
 
 input CreateChannelInput {
-  channelId: String!
+  ytChannelId: String!
   channelName: String!
+  userId: String!
+}
+
+input CreateTestingInput {
+  channelId: String!
+  type: String!
+  videoId: String!
+  duration: Float!
+  durationType: String!
+  ori: String!
+  varis: [String!]!
+}
+
+input UpdateTestingInput {
+  channelId: String
+  type: String
+  videoId: String
+  duration: Float
+  durationType: String
+  ori: String
+  varis: [String!]
+  id: Int!
 }

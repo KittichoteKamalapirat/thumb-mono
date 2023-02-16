@@ -31,7 +31,7 @@ export class Testing {
   type: TestingType;
 
   @Field()
-  @Column()
+  @Column({ default: 'ongoing' })
   status: TestingStatus;
 
   @Field(() => Int)
@@ -51,19 +51,19 @@ export class Testing {
   startDate: string; // iso utc
 
   @Field()
-  @Column('uuid')
+  @Column()
   channelId: string;
 
   @Field(() => [TestHistory])
-  @Column('jsonb', { array: true })
+  @Column('jsonb', { array: true, default: [] })
   history: TestHistory[];
 
   @Field()
   @Column()
   ori: string; // title or url
 
-  @Field()
-  @Column()
+  @Field(() => [String])
+  @Column('jsonb')
   varis: string[]; // title or url
 
   @ManyToOne(() => Channel, (channel) => channel.testings, {

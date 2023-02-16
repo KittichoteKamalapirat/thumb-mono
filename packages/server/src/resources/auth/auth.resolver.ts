@@ -1,13 +1,10 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MyContext } from '../../types/context.type';
-import ChannelResponse from '../channels/dto/channel-response';
-import UserResponse from '../users/dto/user-response';
 
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import LoginResponse from './dto/login-response';
-import { LoginInput } from './dto/login.input';
 
 @Resolver()
 export class AuthResolver {
@@ -31,13 +28,13 @@ export class AuthResolver {
   }
 
   @Query(() => User, { nullable: true })
-  me(@Context() { req }: MyContext): Promise<User | null> {
-    if (!req.session.channelId) {
+  meUser(@Context() { req }: MyContext): Promise<User | null> {
+    if (!req.session.userId) {
       return null;
     }
 
     // no need to await, why?
-    return this.usersService.findOne(req.session.channelId);
+    return this.usersService.findOne(req.session.userId);
   }
 
   @Mutation(() => Boolean)

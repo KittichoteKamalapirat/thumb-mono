@@ -1,20 +1,23 @@
 import { Injectable } from '@nestjs/common';
+import * as fs from 'fs';
 import { oauth2Client, youtube } from '../../oauthClient';
-import { FileService } from '../file/file.service';
+import { ChannelsService } from '../channels/channels.service';
+import { FilesService } from '../file/files.service';
 import { Testing } from '../testings/entities/testing.entity';
 import { TestingsService } from '../testings/testings.service';
-import * as fs from 'fs';
+import { YoutubeVideo } from './dto/youtube-video.object';
 
 @Injectable()
 export class YoutubeService {
   constructor(
     private testingsService: TestingsService,
-    private fileService: FileService,
+    private filesService: FilesService,
+    private channelsService: ChannelsService,
   ) {}
   async updateVideoTitle(testing: Testing) {
     // Get refresh_token from DB
     try {
-      const { videoId, varis, ori, channelId, history, channel } = testing;
+      const { videoId, varis, ori, history, channel } = testing;
 
       const tokens = channel.user.token;
       oauth2Client.setCredentials(tokens);
@@ -71,7 +74,7 @@ export class YoutubeService {
       );
 
       // load the thumb image to local file path
-      const { localPath } = await this.fileService.genArrbufFromUrl({
+      const { localPath } = await this.filesService.genArrbufFromUrl({
         url: newThumbUrl,
         filename: 'name',
         type: 'jpg',
@@ -97,5 +100,32 @@ export class YoutubeService {
       console.log('error updateThumbnail', error);
       return null;
     }
+  }
+
+  async findAll(channelId: string): Promise<YoutubeVideo[]> {
+    if (!channelId) return [];
+    const channel = await this.channelsService.findOneByYTChannelId(channelId);
+
+    console.log('channel', channel);
+
+    const tokens = channel.user.token;
+
+    oauth2Client.setCredentials(tokens);
+
+    // Get video
+    const result = await youtube.search.list({
+      part: ['snippet'],
+      forMine: true,
+      maxResults: 100,
+      type: ['video'],
+    });
+
+    const uploads: YoutubeVideo[] = result.data.items?.map((item) => ({
+      videoId: item.id?.videoId,
+      thumbUrl: item.snippet?.thumbnails?.default?.url,
+      title: item.snippet?.title,
+    }));
+
+    return uploads;
   }
 }

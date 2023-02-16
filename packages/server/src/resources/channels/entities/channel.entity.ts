@@ -20,7 +20,7 @@ export class Channel {
 
   @Field()
   @Column({ unique: true })
-  channelId: string;
+  ytChannelId: string;
 
   @Field()
   @Column()
@@ -29,6 +29,10 @@ export class Channel {
   @CreateDateColumn()
   @Field()
   createdAt: Date;
+
+  @Field()
+  @Column()
+  userId: string;
 
   @ManyToOne(() => User, (user) => user.channels, {
     onDelete: 'CASCADE',

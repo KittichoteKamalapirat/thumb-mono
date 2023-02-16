@@ -26,6 +26,16 @@ export class ChannelsResolver {
     return this.channelsService.findOne(id);
   }
 
+  @Query(() => Channel, { nullable: true })
+  meChannel(@Context() { req }: MyContext): Promise<Channel | null> {
+    if (!req.session.channelId) {
+      return null;
+    }
+
+    // no need to await, why?
+    return this.channelsService.findOneByYTChannelId(req.session.channelId);
+  }
+
   // @Query(() => Boolean)
   // async listChannel(@Args('channelId') channelId: string) {
   //   const tokens = await this.channelsService.getTokens(channelId);

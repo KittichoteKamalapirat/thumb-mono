@@ -34,12 +34,12 @@ export class ChannelsService {
 
     // if no channel => no items
     if (!result.data.items) {
-      return { channelId: '', channelName: '' };
+      return { ytChannelId: '', channelName: '' };
     }
-    const channelId = result.data.items?.[0].id;
+    const ytChannelId = result.data.items?.[0].id;
     const channelName = result.data.items[0].snippet.title;
 
-    return { channelId, channelName };
+    return { ytChannelId, channelName };
   }
 
   async create(
@@ -47,23 +47,24 @@ export class ChannelsService {
     req: RequestWithSession,
   ): Promise<ChannelResponse> {
     try {
-      const { channelId, channelName } = input;
-
+      const { ytChannelId, channelName, userId } = input;
       // set channelId in session
-      req.session.channelId = channelId;
 
       // check whether channel already created
       const existing = await this.channelsRepository.findOne({
-        where: { channelId },
+        where: { ytChannelId },
       });
       if (existing) return { channel: existing };
       const newChannel = this.channelsRepository.create({
-        channelId,
+        ytChannelId,
         channelName,
+        userId,
         // token: { refresh_token, access_token },
       });
 
       const savedChannel = await this.channelsRepository.save(newChannel);
+
+      req.session.channelId = savedChannel.id;
 
       return { channel: savedChannel };
     } catch (error) {
@@ -76,6 +77,16 @@ export class ChannelsService {
   }
 
   findOne(id: string) {
-    return this.channelsRepository.findOne({ where: { id } });
+    return this.channelsRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+  }
+
+  findOneByYTChannelId(ytChannelId: string) {
+    return this.channelsRepository.findOne({
+      where: { ytChannelId },
+      relations: ['user'],
+    });
   }
 }

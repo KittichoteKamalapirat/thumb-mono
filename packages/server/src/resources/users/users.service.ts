@@ -80,10 +80,9 @@ export class UsersService {
         return { user: existing };
       }
 
-      const input = {
+      const input: Partial<User> = {
         email,
-        refresh_token,
-        access_token,
+        token: { refresh_token, access_token },
       };
       const newUser = this.usersRepository.create(input);
 

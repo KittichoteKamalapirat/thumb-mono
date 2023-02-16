@@ -1,0 +1,6 @@
+query MeUser {
+  meUser {
+    id
+    email
+  }
+}
