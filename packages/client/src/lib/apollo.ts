@@ -23,5 +23,6 @@ export const client = new ApolloClient({
   // link: splitLink,uri: urlResolver.graphql(),
   uri: urlResolver.graphql(),
   credentials: "include",
-  cache: new InMemoryCache({ addTypename: false }),
+  // cache: new InMemoryCache({ addTypename: false }),
+  cache: new InMemoryCache(), // need addTypename true otherwise snippeet won't work
 });

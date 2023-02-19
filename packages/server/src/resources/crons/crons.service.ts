@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
+import { Cron, Timeout } from '@nestjs/schedule';
 import dayjs from 'dayjs';
 import { Testing } from '../testings/entities/testing.entity';
 import { TestingsService } from '../testings/testings.service';
@@ -17,7 +17,18 @@ export class CronsService {
     private youtubeService: YoutubeService,
   ) {}
 
-  @Cron('0 * * * *')
+  @Timeout(3000)
+  logTest() {
+    console.log('test');
+  }
+
+  @Cron('0 0 * * *')
+  logTestCron() {
+    console.log('test');
+  }
+
+  // @Cron('0 0 * * *') // minute hour
+  @Timeout(2000)
   async updateTitleEveryDay() {
     console.log('update title every day at midnight');
     try {
@@ -51,7 +62,7 @@ export class CronsService {
     }
   }
 
-  @Cron('0 * * * *')
+  // @Cron('0 0 * * *') // minute hour
   async updateThumbEveryDay() {
     console.log('update thumbnail every day at midnight');
     try {

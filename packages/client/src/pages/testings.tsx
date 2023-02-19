@@ -19,6 +19,9 @@ const Testings = ({}: Props) => {
 
   const testings = data?.myTestings;
 
+  console.log("data", data);
+  console.log("testings", testings);
+
   if (loading) return <div>loading</div>;
   if (error) return <div>{error.message}</div>;
 
