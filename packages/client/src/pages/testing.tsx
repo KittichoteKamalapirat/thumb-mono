@@ -9,6 +9,7 @@ import PageHeading from "../components/typography/PageHeading";
 import { ChannelContext } from "../contexts/ChannelContext";
 import { firestore, getStatsOneVid } from "../firebase/client";
 import { Testing } from "../firebase/types/Testing.type";
+import { useTestingQuery } from "../generated/graphql";
 
 import { primaryColor } from "../theme";
 import { StatsResponse } from "../types/StatsResponse";
@@ -68,56 +69,20 @@ export interface SummaryItem {
 const MyTesting = ({}: Props) => {
   const { id } = useParams();
   const { channel, setChannel } = useContext(ChannelContext);
-  const channelId = channel.channelId;
+  const channelId = channel?.ytChannelId;
 
   const [summary, setSummary] = useState<SummaryItem[]>([]);
 
   const [result, setResult] = useState<StatsResponse>();
-  const [testing, setTesting] = useState<Testing | null>(null);
+  // const [testing, setTesting] = useState<Testing | null>(null);
+
+  const { data, loading, error } = useTestingQuery({
+    variables: { id: id || "" },
+  });
+
+  const testing = data?.testing;
 
   const params = useParams();
-
-  useEffect(() => {
-    console.log("id", id);
-    console.log("channelId", channel);
-    if (!id || !channel.channelId) return;
-
-    const docRef = doc(
-      firestore,
-      "channels",
-      channelId,
-      "testings",
-      id as string
-    );
-
-    const unsubscribe = onSnapshot(docRef, (snap) => {
-      // const data = snap.docs.map(doc => doc.data())
-      // this.setData(data)
-      console.log("snap", snap);
-      console.log("snap data", snap.data());
-      const testing = snap.data() as Testing;
-      setTesting(testing);
-    });
-
-    //remember to unsubscribe from your realtime listener on unmount or you will create a memory leak
-    return () => unsubscribe();
-  }, [id, channel.channelId]);
-
-  // useEffect(() => {
-  //   if (!testing?.videoId || !channelId) return;
-  //   const handleStats = async () => {
-  //     const result = (await getStatsOneVid({
-  //       channelId,
-  //       // videoId: testing?.videoId,
-  //       testingId: testing.id,
-  //       date: "2023-01-15",
-  //     })) as { data: StatsResponse };
-  //     console.log("resultttttt", result);
-  //     setResult(result.data);
-  //   };
-
-  //   handleStats();
-  // }, [testing?.videoId, channelId]);
 
   useEffect(() => {
     const handleSummary = async () => {
@@ -136,6 +101,9 @@ const MyTesting = ({}: Props) => {
     handleSummary();
     console.log("handle summary 2 ");
   }, [testing, channelId]);
+
+  if (loading) return <div>loading</div>;
+  if (error) return <div>{error.message}</div>;
   if (!testing) return <div>no testing</div>;
 
   return (

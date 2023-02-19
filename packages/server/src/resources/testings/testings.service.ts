@@ -40,11 +40,7 @@ export class TestingsService {
     }
   }
 
-  find() {
-    return this.testingsRepository.find();
-  }
-
-  findAll(channelId) {
+  findByChannelId(channelId: string) {
     return this.testingsRepository.find({ where: { channelId } });
   }
 
@@ -55,8 +51,8 @@ export class TestingsService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} testing`;
+  findOne(id: string) {
+    return this.testingsRepository.findOne({ where: { id } });
   }
 
   update(id: number, updateTestingInput: UpdateTestingInput) {

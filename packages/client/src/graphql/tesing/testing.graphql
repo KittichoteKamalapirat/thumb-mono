@@ -1,0 +1,5 @@
+query Testing($id: String!){
+  testing (id: $id) {
+      ...TestingSnippet
+    }
+}

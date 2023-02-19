@@ -33,7 +33,7 @@ export class ChannelsResolver {
     }
 
     // no need to await, why?
-    return this.channelsService.findOneByYTChannelId(req.session.channelId);
+    return this.channelsService.findOne(req.session.channelId);
   }
 
   // @Query(() => Boolean)

@@ -1,4 +1,8 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { channel } from 'diagnostics_channel';
+import { MyContext } from '../../types/context.type';
+import { AuthGuard } from '../auth/auth.guard';
 import { CreateTestingInput } from './dto/create-testing.input';
 import { UpdateTestingInput } from './dto/update-testing.input';
 import TestingResponse from './dto/user-response';
@@ -14,13 +18,14 @@ export class TestingsResolver {
     return this.testingsService.create(input);
   }
 
-  @Query(() => [Testing], { name: 'testings' })
-  findAll() {
-    return this.testingsService.find();
+  @UseGuards(AuthGuard)
+  @Query(() => [Testing])
+  myTestings(@Context() { req }: MyContext) {
+    return this.testingsService.findByChannelId(req.session.channelId);
   }
 
-  @Query(() => Testing, { name: 'testing' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  @Query(() => Testing, { nullable: true })
+  testing(@Args('id') id: string) {
     return this.testingsService.findOne(id);
   }
 

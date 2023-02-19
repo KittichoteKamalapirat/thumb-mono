@@ -41,7 +41,7 @@ function App() {
                   index
                   path="/"
                   element={
-                    channel?.channelId ? (
+                    channel?.ytChannelId ? (
                       <Navigate to={urlResolver.myTests()} />
                     ) : (
                       <Home />

@@ -85,8 +85,8 @@ type Query {
   channels: [Channel!]!
   channel(id: Int!): Channel!
   meChannel: Channel
-  testings: [Testing!]!
-  testing(id: Int!): Testing!
+  myTestings: [Testing!]!
+  testing(id: String!): Testing
   videos(channelId: String!): [YoutubeVideo!]!
 }
 

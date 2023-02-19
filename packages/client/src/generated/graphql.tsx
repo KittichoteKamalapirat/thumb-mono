@@ -106,8 +106,8 @@ export type Query = {
   getEmail: Scalars['String'];
   meChannel?: Maybe<Channel>;
   meUser?: Maybe<User>;
-  testing: Testing;
-  testings: Array<Testing>;
+  myTestings: Array<Testing>;
+  testing?: Maybe<Testing>;
   user: User;
   users: Array<User>;
   videos: Array<YoutubeVideo>;
@@ -120,7 +120,7 @@ export type QueryChannelArgs = {
 
 
 export type QueryTestingArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
@@ -232,6 +232,20 @@ export type CreateTestingMutationVariables = Exact<{
 
 export type CreateTestingMutation = { __typename?: 'Mutation', createTesting: { __typename?: 'TestingResponse', testing?: { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, value: string }> } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
+export type MyTestingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyTestingsQuery = { __typename?: 'Query', myTestings: Array<{ __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, value: string }> }> };
+
+export type TestingQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type TestingQuery = { __typename?: 'Query', testing?: { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, value: string }> } | null };
+
+export type TestingSnippetFragment = { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, value: string }> };
+
 export type VideosQueryVariables = Exact<{
   channelId: Scalars['String'];
 }>;
@@ -239,7 +253,24 @@ export type VideosQueryVariables = Exact<{
 
 export type VideosQuery = { __typename?: 'Query', videos: Array<{ __typename?: 'YoutubeVideo', videoId: string, title: string, thumbUrl: string }> };
 
-
+export const TestingSnippetFragmentDoc = gql`
+    fragment TestingSnippet on Testing {
+  id
+  type
+  status
+  duration
+  durationType
+  videoId
+  startDate
+  channelId
+  history {
+    date
+    value
+  }
+  ori
+  varis
+}
+    `;
 export const CreateAndSaveTokensDocument = gql`
     mutation CreateAndSaveTokens($code: String!) {
   createAndSaveTokens(code: $code) {
@@ -467,6 +498,75 @@ export function useCreateTestingMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateTestingMutationHookResult = ReturnType<typeof useCreateTestingMutation>;
 export type CreateTestingMutationResult = Apollo.MutationResult<CreateTestingMutation>;
 export type CreateTestingMutationOptions = Apollo.BaseMutationOptions<CreateTestingMutation, CreateTestingMutationVariables>;
+export const MyTestingsDocument = gql`
+    query myTestings {
+  myTestings {
+    ...TestingSnippet
+  }
+}
+    ${TestingSnippetFragmentDoc}`;
+
+/**
+ * __useMyTestingsQuery__
+ *
+ * To run a query within a React component, call `useMyTestingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyTestingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyTestingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyTestingsQuery(baseOptions?: Apollo.QueryHookOptions<MyTestingsQuery, MyTestingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyTestingsQuery, MyTestingsQueryVariables>(MyTestingsDocument, options);
+      }
+export function useMyTestingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyTestingsQuery, MyTestingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyTestingsQuery, MyTestingsQueryVariables>(MyTestingsDocument, options);
+        }
+export type MyTestingsQueryHookResult = ReturnType<typeof useMyTestingsQuery>;
+export type MyTestingsLazyQueryHookResult = ReturnType<typeof useMyTestingsLazyQuery>;
+export type MyTestingsQueryResult = Apollo.QueryResult<MyTestingsQuery, MyTestingsQueryVariables>;
+export const TestingDocument = gql`
+    query Testing($id: String!) {
+  testing(id: $id) {
+    ...TestingSnippet
+  }
+}
+    ${TestingSnippetFragmentDoc}`;
+
+/**
+ * __useTestingQuery__
+ *
+ * To run a query within a React component, call `useTestingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTestingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTestingQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useTestingQuery(baseOptions: Apollo.QueryHookOptions<TestingQuery, TestingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TestingQuery, TestingQueryVariables>(TestingDocument, options);
+      }
+export function useTestingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TestingQuery, TestingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TestingQuery, TestingQueryVariables>(TestingDocument, options);
+        }
+export type TestingQueryHookResult = ReturnType<typeof useTestingQuery>;
+export type TestingLazyQueryHookResult = ReturnType<typeof useTestingLazyQuery>;
+export type TestingQueryResult = Apollo.QueryResult<TestingQuery, TestingQueryVariables>;
 export const VideosDocument = gql`
     query Videos($channelId: String!) {
   videos(channelId: $channelId) {

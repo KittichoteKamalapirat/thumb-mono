@@ -165,7 +165,7 @@ const CreateTest = ({}: Props) => {
       });
 
       if (resultValue && resultUserErrors.length === 0) {
-        navigate(resultValue.id);
+        navigate(`/tests/${resultValue.id}`);
         // dispatch(
         //   showToast({
         //     message: "Availability successfully updated",

@@ -1,0 +1,16 @@
+fragment TestingSnippet on Testing {
+    id
+    type
+    status
+    duration
+    durationType
+    videoId
+    startDate
+    channelId
+    history {
+    date
+    value
+    }
+    ori
+    varis
+}

@@ -33,6 +33,7 @@ const Layout = ({
 }: Props) => {
   const { user } = useContext(UserContext);
 
+  console.log("user", user);
   if (user) return <SideAndTopNav>{children}</SideAndTopNav>;
   return (
     <div>

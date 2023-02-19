@@ -3,7 +3,7 @@ import { Session } from 'express-session';
 import { Redis } from 'ioredis';
 
 export type RequestWithSession = Request & {
-  session?: Session & { channelId?: string; userId: string };
+  session?: Session & { channelId?: string; userId: string }; // channelId is channel.id (not youtube id)
 };
 
 export type MyContext = {
