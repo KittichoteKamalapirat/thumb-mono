@@ -17,18 +17,8 @@ export class CronsService {
     private youtubeService: YoutubeService,
   ) {}
 
-  @Timeout(3000)
-  logTest() {
-    console.log('test');
-  }
-
-  @Cron('0 0 * * *')
-  logTestCron() {
-    console.log('test');
-  }
-
-  // @Cron('0 0 * * *') // minute hour
-  @Timeout(2000)
+  @Cron('0 0 * * *') // minute hour day
+  // @Timeout(2000)
   async updateTitleEveryDay() {
     console.log('update title every day at midnight');
     try {
@@ -62,7 +52,7 @@ export class CronsService {
     }
   }
 
-  // @Cron('0 0 * * *') // minute hour
+  @Cron('0 0 * * *')
   async updateThumbEveryDay() {
     console.log('update thumbnail every day at midnight');
     try {
