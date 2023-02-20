@@ -1,11 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { TbLanguageHiragana } from "react-icons/tb";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 
 import { ChannelContext } from "../contexts/ChannelContext";
-import { getVidList } from "../firebase/client";
+import { TestingTypeObj } from "../firebase/types/Testing.type";
 
 import {
   useCreateTestingMutation,
@@ -35,7 +36,15 @@ const SharedSchema = z.object({
   ori: z.string(),
 });
 const CreateThumbTestSchema = SharedSchema.extend({
-  type: z.literal("thumb"),
+  // type: z.literal("thumb"),
+  type: z.literal(
+    JSON.stringify({
+      id: "1",
+      label: TestingTypeObj.title,
+      value: "title",
+      icon: <TbLanguageHiragana className="w-6 h-6" />,
+    })
+  ),
 });
 
 const CreateTitleTestSchema = SharedSchema.extend({
@@ -85,6 +94,12 @@ const defaultValues: FormValues = {
   [FormNames.ORI]: "original title or thumbnail url",
   [FormNames.TYPE]: "title",
 };
+
+export interface MyUpload {
+  videoId: string;
+  thumbnailUrl: string;
+  title: string;
+}
 
 const CreateTest = ({}: Props) => {
   // const [selectedUpload, setSelectedUpload] = useState<MyUpload>();

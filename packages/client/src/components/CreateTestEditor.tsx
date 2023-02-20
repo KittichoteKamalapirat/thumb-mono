@@ -9,7 +9,10 @@ import {
 import Button, { HTMLButtonType } from "./Buttons/Button";
 
 import dayjs from "dayjs";
-import { testingTypeOptions } from "../firebase/types/Testing.type";
+import {
+  TestingTypeObj,
+  testingTypeOptions,
+} from "../firebase/types/Testing.type";
 import { suggestNumTestDays } from "../utils/suggestNumTestDays";
 import { FormValues, MyUpload } from "./CreateTest";
 import DropzoneField, { UploadedFile } from "./DropzoneField";
@@ -17,6 +20,10 @@ import FormFieldLabel from "./forms/FormFieldLabel";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import { InputType } from "./forms/TextField/inputType";
 import Searchbar from "./Searchbar";
+import { useCreateTestingMutation } from "../generated/graphql";
+import Select, { Option } from "./Select/Select";
+import { IoMdImages } from "react-icons/io";
+import { TbLanguageHiragana } from "react-icons/tb";
 
 interface Props {
   uploads: MyUpload[];
@@ -26,7 +33,6 @@ interface Props {
   useFormData: UseFormReturn<FormValues>;
   onSubmit: SubmitHandler<FormValues>;
   selectedVideo: MyUpload | undefined;
-
   fileUploads: UploadedFile[];
   setFileUploads: Dispatch<SetStateAction<UploadedFile[]>>;
 }
@@ -40,6 +46,22 @@ enum FormNames {
   TYPE = "type",
   // TYPE = "type",
 }
+
+const testTypeOptions: Option[] = [
+  {
+    id: "1",
+    label: TestingTypeObj.title,
+    value: "title",
+    icon: <TbLanguageHiragana className="w-6 h-6" />,
+  },
+
+  {
+    id: "2",
+    label: TestingTypeObj.thumb,
+    value: "thumb",
+    icon: <IoMdImages className="w-6 h-6" />,
+  },
+];
 
 const CreateTestEditor = ({
   uploads,
@@ -86,15 +108,28 @@ const CreateTestEditor = ({
         {/* section 0 */}
         <div>
           <div className="grid grid-cols-12 gap-4 mt-4">
-            <select
+            {/* <select
               {...register("type")}
               className="col-span-4 bg-ice border border-gray-300 text-gray-900 rounded-lg focus:ring-blue focus:border-blue block w-full p-4 hover:cursor-pointer"
             >
               {testingTypeOptions.map((option) => (
                 <option value={option.value}>{option.label}</option>
               ))}
-            </select>
+            </select> */}
 
+            <div>
+              <Select
+                name={FormNames.TYPE}
+                control={control as unknown as Control}
+                options={testTypeOptions}
+                value={testTypeOptions[0]}
+                density="comfort"
+                onChange={register("type").onChange}
+                size="medium"
+                label="label"
+                // {...register("type").onChange}
+              />
+            </div>
             {/* {testingTypeOptions.map((option) => (
               <div key={option.value} className="flex col-span-6 md:col-span-4">
                 <input
