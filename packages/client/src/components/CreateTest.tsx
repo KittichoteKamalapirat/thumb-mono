@@ -1,12 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { TbLanguageHiragana } from "react-icons/tb";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 
 import { ChannelContext } from "../contexts/ChannelContext";
-import { TestingTypeObj } from "../firebase/types/Testing.type";
 
 import {
   useCreateTestingMutation,
@@ -14,7 +12,6 @@ import {
   useVideosQuery,
   YoutubeVideo,
 } from "../generated/graphql";
-import { urlResolver } from "../lib/UrlResolver";
 import { debounce } from "../utils/debounce";
 import CreateTestEditor from "./CreateTestEditor";
 import { UploadedFile } from "./DropzoneField";
@@ -36,15 +33,7 @@ const SharedSchema = z.object({
   ori: z.string(),
 });
 const CreateThumbTestSchema = SharedSchema.extend({
-  // type: z.literal("thumb"),
-  type: z.literal(
-    JSON.stringify({
-      id: "1",
-      label: TestingTypeObj.title,
-      value: "title",
-      icon: <TbLanguageHiragana className="w-6 h-6" />,
-    })
-  ),
+  type: z.literal("thumb"),
 });
 
 const CreateTitleTestSchema = SharedSchema.extend({
@@ -95,11 +84,11 @@ const defaultValues: FormValues = {
   [FormNames.TYPE]: "title",
 };
 
-export interface MyUpload {
-  videoId: string;
-  thumbnailUrl: string;
-  title: string;
-}
+// export interface MyUpload {
+//   videoId: string;
+//   thumbnailUrl: string;
+//   title: string;
+// }
 
 const CreateTest = ({}: Props) => {
   // const [selectedUpload, setSelectedUpload] = useState<MyUpload>();
@@ -109,17 +98,19 @@ const CreateTest = ({}: Props) => {
     loading: channelLoading,
     error: channelError,
   } = useMeChannelQuery();
-  const [uploads, setUploads] = useState<YoutubeVideo[]>([]);
+  // const [uploads, setUploads] = useState<YoutubeVideo[]>([]);
   const [fileUploads, setFileUploads] = useState<UploadedFile[]>([]);
   const [filteredUploads, setFilteredUploads] = useState<YoutubeVideo[]>([]);
   const params = useParams();
 
   const { channel } = useContext(ChannelContext);
-  const channelId = channel?.channelId;
+  const channelId = channel?.ytChannelId;
 
   const { data, loading, error } = useVideosQuery({
     variables: { channelId: channelId || "" },
   });
+
+  const uploads = data?.videos || [];
   const location = useLocation();
 
   const [search, setSearch] = useState("");
@@ -164,7 +155,7 @@ const CreateTest = ({}: Props) => {
             return {
               ...form,
               channelId: channelUid,
-              varis: form.varis.map((vari) => vari.value),
+              varis: form.varis.map((vari) => vari),
             };
         }
       })();
@@ -204,6 +195,10 @@ const CreateTest = ({}: Props) => {
     (upload) => upload.videoId === useFormData.watch("videoId")
   );
 
+  console.log("uploads up", uploads);
+  console.log("useFormData.watch up", useFormData.watch("videoId"));
+  console.log("selectedVideo up", selectedVideo);
+
   useEffect(() => {
     if (data?.videos) setFilteredUploads(data.videos);
   }, [channelId, loading, data]);
@@ -229,7 +224,6 @@ const CreateTest = ({}: Props) => {
       {/* <Navbar /> */}
       <CreateTestEditor
         uploads={uploads}
-        setUploads={setUploads}
         useFormData={useFormData}
         handleSearch={handleSearch}
         filteredUploads={filteredUploads}

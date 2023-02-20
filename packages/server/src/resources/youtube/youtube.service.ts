@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
+import { google } from 'googleapis';
 import { oauth2Client, youtube } from '../../oauthClient';
 import { ChannelsService } from '../channels/channels.service';
 import { FilesService } from '../file/files.service';
@@ -79,12 +80,31 @@ export class YoutubeService {
         filename: 'name',
         type: 'jpg',
       });
+
       // Get refresh_token from DB
 
       const tokens = channel.user.token;
+
+      console.log('tokens', tokens);
+      console.log('before', oauth2Client);
+
       oauth2Client.setCredentials(tokens);
 
+      console.log('after 1', oauth2Client);
+      const { refresh_token } = tokens;
+
+      oauth2Client.setCredentials({ refresh_token });
+
+      console.log('after 2', oauth2Client);
+
+      console.log('after', oauth2Client);
+
       // Update thumbnail
+
+      console.log(111);
+
+      console.log(222);
+
       await youtube.thumbnails.set({
         videoId,
         media: {
@@ -92,6 +112,7 @@ export class YoutubeService {
         },
       });
 
+      console.log(333);
       // TODO delete the local loaded image
       await this.testingsService.addSubjectToHistory(testing);
 

@@ -55,7 +55,8 @@ export class Testing {
   channelId: string;
 
   @Field(() => [TestHistory])
-  @Column('jsonb', { array: true, default: [] })
+  // @Column('jsonb', { array: true, default: [] }), had to remove array: true,otherwise error malformed array literal: "[{"value":"https://firebasestorage.googleapis.com/v0/b/thumb-be832.appspot.com/o/files%2FScreen%20Shot%202566-01-17%20at%2012.01.34.png?al
+  @Column('jsonb', { default: [] })
   history: TestHistory[];
 
   @Field()

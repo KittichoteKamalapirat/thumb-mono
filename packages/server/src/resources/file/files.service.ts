@@ -9,8 +9,11 @@ export class FilesService {
     // process aud
     const res = await axios.get(url, { responseType: 'arraybuffer' });
     const buffer = Buffer.from(res.data, 'binary');
-    const localPath = `${__dirname}/../tmp/${filename}.${type}`;
+    const localPath = `${__dirname}/../../../tmp/${filename}.${type}`; // get out from dist/
     fs.writeFileSync(localPath, buffer);
+
+    console.log('localPathh', localPath);
+    console.log('buffer', buffer);
 
     return { localPath };
   }

@@ -15,7 +15,7 @@ import UserResponse from './dto/user-response';
 import { User } from './entities/user.entity';
 
 const SCOPE_ENDPOINT =
-  'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=';
+  'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token='; // IMPORTANT: can see whether the token is valid
 const getScopesUrl = (accessToken: string) => SCOPE_ENDPOINT + accessToken;
 
 @Injectable()

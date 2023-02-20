@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Control,
   SubmitHandler,
@@ -9,30 +9,27 @@ import {
 import Button, { HTMLButtonType } from "./Buttons/Button";
 
 import dayjs from "dayjs";
-import {
-  TestingTypeObj,
-  testingTypeOptions,
-} from "../firebase/types/Testing.type";
+import { IoMdImages } from "react-icons/io";
+import { TbLanguageHiragana } from "react-icons/tb";
+import { TestingTypeObj } from "../firebase/types/Testing.type";
 import { suggestNumTestDays } from "../utils/suggestNumTestDays";
-import { FormValues, MyUpload } from "./CreateTest";
+import { FormValues } from "./CreateTest";
 import DropzoneField, { UploadedFile } from "./DropzoneField";
 import FormFieldLabel from "./forms/FormFieldLabel";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import { InputType } from "./forms/TextField/inputType";
 import Searchbar from "./Searchbar";
-import { useCreateTestingMutation } from "../generated/graphql";
 import Select, { Option } from "./Select/Select";
-import { IoMdImages } from "react-icons/io";
-import { TbLanguageHiragana } from "react-icons/tb";
+import { YoutubeVideo } from "../generated/graphql";
 
 interface Props {
-  uploads: MyUpload[];
-  setUploads: Dispatch<SetStateAction<MyUpload[]>>;
+  uploads: YoutubeVideo[];
+
   handleSearch: (query: string) => void;
-  filteredUploads: MyUpload[];
+  filteredUploads: YoutubeVideo[];
   useFormData: UseFormReturn<FormValues>;
   onSubmit: SubmitHandler<FormValues>;
-  selectedVideo: MyUpload | undefined;
+  selectedVideo: YoutubeVideo | undefined;
   fileUploads: UploadedFile[];
   setFileUploads: Dispatch<SetStateAction<UploadedFile[]>>;
 }
@@ -66,7 +63,7 @@ const testTypeOptions: Option[] = [
 const CreateTestEditor = ({
   uploads,
   fileUploads,
-  setUploads,
+
   handleSearch,
   filteredUploads,
   useFormData,
@@ -90,13 +87,26 @@ const CreateTestEditor = ({
     name: "varis",
     control,
   });
-  const { durationType, duration, videoId, type } = watch();
+  const { durationType, duration, videoId, type, ori } = watch();
 
   // const testTypeWatch = watch(FormNames.TYPE);
   // const videoIdWatch = watch(FormNames.VIDEO_ID);
   // const durationWatch = watch(FormNames.DURATION);
 
-  console.log("type", type);
+  console.log("ori", ori);
+  useEffect(() => {
+    console.log("ori 1");
+    console.log("videoId", videoId);
+    console.log("selectedVideo", selectedVideo);
+    if (!videoId) return;
+
+    if (!selectedVideo) return;
+
+    setValue(
+      FormNames.ORI,
+      type === "thumb" ? selectedVideo?.thumbUrl : selectedVideo?.title
+    );
+  }, [videoId, selectedVideo]);
 
   return (
     <div>

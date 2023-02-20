@@ -20,7 +20,7 @@ export class CronsService {
   @Cron('0 0 * * *') // minute hour day
   // @Timeout(2000)
   async updateTitleEveryDay() {
-    console.log('update title every day at midnight');
+    console.log('update title every day at midnightt');
     try {
       const tests = await this.testingsService.findAllOngoingTestings('title');
 
@@ -53,6 +53,7 @@ export class CronsService {
   }
 
   @Cron('0 0 * * *')
+  // @Timeout(2000)
   async updateThumbEveryDay() {
     console.log('update thumbnail every day at midnight');
     try {
