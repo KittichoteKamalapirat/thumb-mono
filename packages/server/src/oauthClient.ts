@@ -7,3 +7,8 @@ export const youtube = google.youtube({
   version: 'v3',
   auth: oauth2Client,
 });
+
+export const analytics = google.youtubeAnalytics({
+  version: 'v2',
+  auth: oauth2Client,
+});

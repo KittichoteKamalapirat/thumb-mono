@@ -14,6 +14,8 @@ import { FilesModule } from './resources/file/file.module';
 import { TestingsModule } from './resources/testings/testings.module';
 import { UsersModule } from './resources/users/users.module';
 import { YoutubeModule } from './resources/youtube/youtube.module';
+import { AnalyticsModule } from './resources/analytics/analytics.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -37,6 +39,7 @@ import { YoutubeModule } from './resources/youtube/youtube.module';
     YoutubeModule,
     CronsModule,
     FilesModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
