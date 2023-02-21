@@ -12,6 +12,7 @@ import dayjs from "dayjs";
 import { IoMdImages } from "react-icons/io";
 import { TbLanguageHiragana } from "react-icons/tb";
 import { TestingTypeObj } from "../firebase/types/Testing.type";
+import { YoutubeVideo } from "../generated/graphql";
 import { suggestNumTestDays } from "../utils/suggestNumTestDays";
 import { FormValues } from "./CreateTest";
 import DropzoneField, { UploadedFile } from "./DropzoneField";
@@ -20,7 +21,6 @@ import TextField, { TextFieldTypes } from "./forms/TextField";
 import { InputType } from "./forms/TextField/inputType";
 import Searchbar from "./Searchbar";
 import Select, { Option } from "./Select/Select";
-import { YoutubeVideo } from "../generated/graphql";
 
 interface Props {
   uploads: YoutubeVideo[];
@@ -202,7 +202,7 @@ const CreateTestEditor = ({
                     <div>
                       <div className="font-bold">
                         <img
-                          src={upload.thumbnailUrl}
+                          src={upload.thumbUrl}
                           className="w-full rounded-t-md"
                         />
                         <p className="text-lg p-2">
@@ -301,7 +301,7 @@ const CreateTestEditor = ({
               <div className="col-span-12 md:col-span-6 xl:col-span-4">
                 {selectedVideo ? (
                   <img
-                    src={selectedVideo?.thumbnailUrl}
+                    src={selectedVideo?.thumbUrl}
                     // src="https://firebasestorage.googleapis.com/v0/b/mee-time-364614.appspot.com/o/files%2FHair_Salon_Stations.jpeg?alt=media&token=302382b1-8c3c-43c4-96cc-c25c479d586f"
                     className="w-full rounded-xl"
                   />

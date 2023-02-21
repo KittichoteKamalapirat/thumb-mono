@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { doc, onSnapshot } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { useParams } from "react-router-dom";
@@ -7,8 +6,7 @@ import LabelAndData from "../components/LabelAndData";
 import Layout from "../components/layouts/Layout";
 import PageHeading from "../components/typography/PageHeading";
 import { ChannelContext } from "../contexts/ChannelContext";
-import { firestore, getStatsOneVid } from "../firebase/client";
-import { Testing } from "../firebase/types/Testing.type";
+import { getStatsOneVid } from "../firebase/client";
 import { useTestingQuery } from "../generated/graphql";
 
 import { primaryColor } from "../theme";

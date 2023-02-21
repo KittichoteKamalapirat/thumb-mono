@@ -1,6 +1,5 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { channel } from 'diagnostics_channel';
 import { MyContext } from '../../types/context.type';
 import { AuthGuard } from '../auth/auth.guard';
 import { CreateTestingInput } from './dto/create-testing.input';

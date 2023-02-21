@@ -1,11 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
-
 import { ChannelContext } from "../contexts/ChannelContext";
-
 import {
   useCreateTestingMutation,
   useMeChannelQuery,
@@ -111,9 +109,8 @@ const CreateTest = ({}: Props) => {
   });
 
   const uploads = data?.videos || [];
-  const location = useLocation();
 
-  const [search, setSearch] = useState("");
+  const [_, setSearch] = useState("");
 
   const handleSearch = (query: string) => {
     setSearch(query);
@@ -155,7 +152,7 @@ const CreateTest = ({}: Props) => {
             return {
               ...form,
               channelId: channelUid,
-              varis: form.varis.map((vari) => vari),
+              varis: form.varis.map((vari) => vari.value),
             };
         }
       })();

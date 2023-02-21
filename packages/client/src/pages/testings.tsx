@@ -1,12 +1,10 @@
 import dayjs from "dayjs";
-import { useContext } from "react";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import Button from "../components/Buttons/Button";
 import LabelAndData from "../components/LabelAndData";
 import Layout from "../components/layouts/Layout";
 import PageHeading from "../components/typography/PageHeading";
-import { ChannelContext } from "../contexts/ChannelContext";
 import { useMyTestingsQuery } from "../generated/graphql";
 import { urlResolver } from "../lib/UrlResolver";
 import { primaryColor } from "../theme";
@@ -14,7 +12,6 @@ import { primaryColor } from "../theme";
 interface Props {}
 
 const Testings = ({}: Props) => {
-  const { channel, setChannel } = useContext(ChannelContext);
   const { data, loading, error } = useMyTestingsQuery();
 
   const testings = data?.myTestings;

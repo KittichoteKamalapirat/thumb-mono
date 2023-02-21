@@ -1,13 +1,9 @@
-import { useController, UseControllerProps } from "react-hook-form";
-import React, { Fragment, useState } from "react";
-
-import clsx from "clsx";
 import { Listbox, Transition } from "@headlessui/react";
-
+import clsx from "clsx";
+import React, { Fragment } from "react";
+import { useController, UseControllerProps } from "react-hook-form";
 import { FiChevronDown, FiChevronRight, FiChevronUp } from "react-icons/fi";
 import { getClassName } from "../../TextField/TextField";
-import { TbLanguageHiragana } from "react-icons/tb";
-import { TestingTypeObj } from "../../firebase/types/Testing.type";
 
 type Size = "medium" | "small" | "xs"; // TODO:
 export interface Option {
@@ -46,8 +42,6 @@ const Select = (props: SelectProps & UseControllerProps) => {
   const {
     field: { value, onChange },
   } = useController(props);
-
-  console.log("field", value);
 
   const selecteOption = options.find(
     (option) => option.value === value

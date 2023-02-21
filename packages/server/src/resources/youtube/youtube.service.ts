@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
-import { google } from 'googleapis';
 import { oauth2Client, youtube } from '../../oauthClient';
 import { ChannelsService } from '../channels/channels.service';
 import { FilesService } from '../file/files.service';
@@ -93,17 +92,13 @@ export class YoutubeService {
       console.log('after 1', oauth2Client);
       const { refresh_token } = tokens;
 
-      oauth2Client.setCredentials({ refresh_token });
+      oauth2Client.setCredentials({ refresh_token }); // do not pass access token since it's already expired? // TODO think
 
       console.log('after 2', oauth2Client);
 
       console.log('after', oauth2Client);
 
       // Update thumbnail
-
-      console.log(111);
-
-      console.log(222);
 
       await youtube.thumbnails.set({
         videoId,

@@ -2,7 +2,6 @@ import { useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { ChannelContext } from "../contexts/ChannelContext";
 import { UserContext } from "../contexts/UserContext";
-import { createAndSaveTokens } from "../firebase/client";
 import {
   Channel,
   useCreateAndSaveTokensMutation,

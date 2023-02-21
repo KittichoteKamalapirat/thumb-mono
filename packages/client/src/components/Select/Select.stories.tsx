@@ -17,7 +17,7 @@ const Story: ComponentMeta<typeof Select> = {
 export default Story;
 
 const Template: ComponentStory<typeof Select> = (args: SelectProps) => (
-  <Select {...args} />
+  <Select name="fieldName" {...args} /> // Had to add name otherwise error from react-hook-form
 );
 
 export const Primary = Template.bind({});

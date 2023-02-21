@@ -3,7 +3,7 @@ import { Channel } from "../generated/graphql";
 
 export interface ChannelContext {
   channel: Channel | null;
-  setChannel: Dispatch<React.SetStateAction<Channel | null> | null>;
+  setChannel: Dispatch<React.SetStateAction<Channel | null>> | null;
 }
 
 const initialValue = {

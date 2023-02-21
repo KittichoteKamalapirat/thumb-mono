@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Cron, Timeout } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import dayjs from 'dayjs';
 import { Testing } from '../testings/entities/testing.entity';
 import { TestingsService } from '../testings/testings.service';
