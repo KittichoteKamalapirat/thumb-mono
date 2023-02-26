@@ -134,7 +134,7 @@ const uploadToYoutube = async ({
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-const authorize = (credentials, callback) => {
+const authorize = (credentials: any, callback: any) => {
   const clientSecret = credentials.web.client_secret;
   const clientId = credentials.web.client_id;
   const redirectUrl = credentials.web.redirect_uris[0];
@@ -167,7 +167,9 @@ const authorize = (credentials, callback) => {
  * @param {getEventsCallback} callback The callback to call with the authorized
  *     client.
  */
-const getNewToken = (oauth2Client, callback) => {
+
+// @ ts-ignore
+const getNewToken = (oauth2Client: any, callback: any) => {
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: "offline",
     scope: SCOPES,
@@ -180,7 +182,7 @@ const getNewToken = (oauth2Client, callback) => {
   const codeFromUrl = process.env.TOKEN_CODE_FROM_URL;
 
   rl.close();
-  oauth2Client.getToken(codeFromUrl, (err, token) => {
+  oauth2Client.getToken(codeFromUrl, (err: any, token: any) => {
     if (err) {
       console.log("Error while trying to retrieve access token", err);
       return;
@@ -197,7 +199,7 @@ const getNewToken = (oauth2Client, callback) => {
  *
  * @param {Object} token The token to store to disk.
  */
-const storeToken = (token) => {
+const storeToken = (token: any) => {
   fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
     if (err) {
       console.log("error storing token");

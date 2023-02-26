@@ -2,8 +2,9 @@ import { ReactNode, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import ReactModal from "react-modal";
 import { ICON_SIZE } from "../../constants";
-import { ConfirmType } from "../../redux/types/ConfirmModalType";
+
 import { grey100, grey500, grey900, red, yellow } from "../../theme";
+import { ConfirmType } from "../../types/ConfirmModalType";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import IconButton from "../Buttons/IconButton";
 import PageHeading from "../typography/PageHeading";

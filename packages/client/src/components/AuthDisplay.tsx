@@ -16,7 +16,7 @@ const AuthDisplay = ({}: Props) => {
   const toggleModal = () => setModalIsOpen(!modalIsOpen);
 
   const handleSubscribe = async () => {
-    if (!channel.channelId) return;
+    if (!channel) return;
     setPremiumButtonIsLoading(true);
     // await createCheckoutSession(user.uid); // TODO
     setPremiumButtonIsLoading(false);
@@ -25,11 +25,11 @@ const AuthDisplay = ({}: Props) => {
   // loading
 
   // no user
-  if (!channel.channelId) return <div>no user</div>;
+  if (!channel) return <div>no user</div>;
 
   return (
     <div>
-      {!channel.channelId && (
+      {!channel && (
         <div className="flex items-center">
           {/* {!userIsPremium ? (
             <Button

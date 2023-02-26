@@ -88,7 +88,7 @@ const MyTesting = ({}: Props) => {
       console.log("testing?.videoId", testing?.videoId);
 
       if (!testing || !channelId) return;
-      const summary = await getStatsOneVid(testing);
+      const summary = await getStatsOneVid(testing as any); // TODO fix me
       console.log("resulttt", result);
 
       if (!summary) return; // TODO

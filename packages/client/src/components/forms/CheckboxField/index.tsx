@@ -6,7 +6,7 @@ import {
   RefCallBack,
   UseFormRegisterReturn,
 } from "react-hook-form";
-import getErrorMessage from "../../../utils/getErrorMessage";
+import { getErrorMessage } from "../../../utils/getErrorMessage";
 
 import FormHelperText from "../FormHelperText";
 

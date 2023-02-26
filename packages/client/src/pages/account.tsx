@@ -27,11 +27,11 @@ const MyAccount = ({}: Props) => {
   return (
     <Layout>
       <LabelAndData
-        data={channel?.channelId.slice(0, 4) || ""}
+        data={channel?.ytChannelId.slice(0, 4) || ""}
         label="Channel Id: "
       />
 
-      {channel?.channelId ? (
+      {channel?.ytChannelId ? (
         <Button label="logout" onClick={handleLogout} />
       ) : null}
     </Layout>

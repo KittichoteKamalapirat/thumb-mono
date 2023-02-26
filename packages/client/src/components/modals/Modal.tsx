@@ -2,8 +2,9 @@ import { ReactNode, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import ReactModal from "react-modal";
 import { ICON_SIZE } from "../../constants";
-import { AlertType } from "../../redux/types/AlertModalType";
+
 import { green, grey500, grey900, red, yellow } from "../../theme";
+import { AlertType } from "../../types/AlertModalType";
 import IconButton from "../Buttons/IconButton";
 import PageHeading from "../typography/PageHeading";
 

@@ -104,7 +104,9 @@ const CreateTestEditor = ({
 
     setValue(
       FormNames.ORI,
-      type === "thumb" ? selectedVideo?.thumbUrl : selectedVideo?.title
+      type === "thumb"
+        ? (selectedVideo?.thumbUrl as never)
+        : (selectedVideo?.title as never) // TODO fix me
     );
   }, [videoId, selectedVideo]);
 
@@ -376,7 +378,9 @@ const CreateTestEditor = ({
                       {suggestNumTestDays(fields.length).map((num) => (
                         <div
                           key={num}
-                          onClick={() => setValue(FormNames.DURATION, num)}
+                          onClick={() =>
+                            setValue(FormNames.DURATION, num as never)
+                          } // TODO fix me
                           className={classNames(
                             "border w-20 text-center hover:cursor-pointer hover:bg-primary-50 px-2 py-1 rounded-md",
                             num === duration && "bg-primary-50"

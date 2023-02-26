@@ -203,17 +203,17 @@ const CreateTest = ({}: Props) => {
   useEffect(() => {
     if (!selectedVideo) return;
     if (type === "title") {
-      useFormData.setValue(FormNames.ORI, selectedVideo.title);
+      useFormData.setValue(FormNames.ORI, selectedVideo.title as never); // TODO fix me
       return;
     }
     if (type === "thumb") {
-      useFormData.setValue(FormNames.ORI, selectedVideo.thumbUrl);
+      useFormData.setValue(FormNames.ORI, selectedVideo.thumbUrl as never); // TODO fix me
       return;
     }
   }, [selectedVideo, type]);
 
   useEffect(() => {
-    useFormData.setValue(FormNames.TYPE, "title");
+    useFormData.setValue(FormNames.TYPE, "title" as never); // TODO fix me
   }, []);
 
   return (

@@ -5,7 +5,8 @@ import {
   RefCallBack,
   UseFormRegisterReturn,
 } from "react-hook-form";
-import getErrorMessage from "../../../utils/getErrorMessage";
+import { getErrorMessage } from "../../../utils/getErrorMessage";
+
 import FormFieldLabel from "../FormFieldLabel";
 import FormHelperText from "../FormHelperText";
 import styles from "./TextAreaField.module.css";
