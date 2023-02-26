@@ -5,7 +5,7 @@ class UrlResolver {
   }
 
   graphql() {
-    return "http://localhost:4004/graphql";
+    return import.meta.env.VITE_GRAPHQL_SERVER_URL;
   }
 
   home() {
