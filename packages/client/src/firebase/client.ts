@@ -20,9 +20,8 @@ export const functions = getFunctions(app, "us-central1");
 // connectFunctionsEmulator(functions, "localhost", 5001);
 
 export const googleLogout = createFunction<string, boolean>("googleLogout");
-export const getStatsOneVid = createFunction<Testing, SummaryItem[] | null>(
-  "getStatsOneVid"
-);
+export const getStatsOneVid =
+  createFunction<Testing, SummaryItem[] | null>("getStatsOneVid");
 export const getAuthURLCall = createFunction<null, string>("getAuthURLCall");
 
 export const createAndSaveTokens = createFunction<
