@@ -10,9 +10,6 @@ RUN yarn install --network-timeout 100000
 
 COPY ./ ./
 
-COPY ./.env.production ./.env
-
-
 WORKDIR /usr/src/app
 RUN yarn build
 
