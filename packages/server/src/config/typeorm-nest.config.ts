@@ -4,11 +4,11 @@ import { User } from '../resources/users/entities/user.entity';
 
 export const typeormConfigNest = {
   type: 'postgres' as const,
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: 'chain123',
-  database: 'thumb_dev',
+  host: process.env.PGHOST,
+  port: Number(process.env.PGPORT),
+  username: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  database: process.env.PGDATABASE,
   entities: [User, Channel, Testing],
   synchronize: true,
   logging: true,

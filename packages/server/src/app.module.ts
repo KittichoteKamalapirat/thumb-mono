@@ -15,13 +15,21 @@ import { TestingsModule } from './resources/testings/testings.module';
 import { UsersModule } from './resources/users/users.module';
 import { YoutubeModule } from './resources/youtube/youtube.module';
 import { AnalyticsModule } from './resources/analytics/analytics.module';
-import { AnalyticsModule } from './analytics/analytics.module';
+import { ConfigModule } from '@nestjs/config';
+import { getEnvPath } from './utils/getEnvPath';
+
+const ENV = process.env.NODE_ENV;
+const envPath = getEnvPath(ENV);
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: envPath,
+      isGlobal: true,
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       cors: {
-        origin: ['http://localhost:5173'],
+        origin: [process.env.CORS],
         credentials: true,
       },
       driver: ApolloDriver,

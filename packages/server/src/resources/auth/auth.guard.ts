@@ -11,7 +11,7 @@ export class AuthGuard implements CanActivate {
     const req = ctx.getContext().req;
 
     // Check if the user is authenticated by checking req.session
-    if (!req.session.channelId) {
+    if (!req.session.userId) {
       return false;
     }
 
@@ -21,3 +21,5 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 }
+
+// TODO should I add channelId guard?
