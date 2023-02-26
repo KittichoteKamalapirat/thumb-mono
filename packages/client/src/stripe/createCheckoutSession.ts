@@ -6,7 +6,7 @@ export const createCheckoutSession = async (userUId: string) => {
   try {
     const newCheckoutRef = collection(firestore, "checkout_sessions");
     const newCheckoutSession = {
-      price: process.env.NEXT_PUBLIC_STRIPE_PRODUCT_ID,
+      price: import.meta.env.VITE__STRIPE_PRODUCT_ID,
       success_url: window.location.origin,
       cancel_url: window.location.origin,
     };

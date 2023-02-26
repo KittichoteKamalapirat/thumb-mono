@@ -133,7 +133,7 @@ const MyTesting = ({}: Props) => {
         <div className="grid grid-cols-2 gap-2">
           <img src={testing.ori} className="w-full col-span-1" />
           {testing.varis.map((vari) => (
-            <img src={vari.value} className="w-full  col-span-1" />
+            <img src={vari} className="w-full  col-span-1" />
           ))}
         </div>
       )}
