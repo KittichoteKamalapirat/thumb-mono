@@ -26,7 +26,8 @@ const LoggedOutNav = () => {
 
       if (url) window.location.replace(url);
     } catch (error) {
-      console.log("An error occured");
+      console.log("error", error);
+      console.log("An error occured when getting auth url");
     }
   };
 
