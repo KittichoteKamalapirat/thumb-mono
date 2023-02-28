@@ -29,7 +29,7 @@ const envPath = getEnvPath(ENV);
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       cors: {
-        origin: [process.env.CORS],
+        origin: [process.env.CORS_ORIGIN],
         credentials: true,
       },
       driver: ApolloDriver,
