@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import connectRedis from 'connect-redis';
 import session from 'express-session';
 import Redis from 'ioredis';
@@ -6,10 +7,16 @@ import { AppModule } from './app.module';
 import { COOKIE_NAME, IS_PROD, SESSION_SECRET } from './constants';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const RedisStore = connectRedis(session);
   const redis = new Redis(process.env.REDIS_URL);
+
+  console.log('process.env.REDIS_URL', process.env.REDIS_URL);
+  console.log('process.env.CORS_ORIGIN', process.env.CORS_ORIGIN);
+  console.log('IS_PROD', IS_PROD);
+
+  app.set('trust proxy', 1);
 
   app.use(
     session({
