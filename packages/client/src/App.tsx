@@ -14,7 +14,6 @@ import Testing from "./pages/testing";
 import Testings from "./pages/testings";
 
 function App() {
-  console.log("import.meta.env", import.meta.env);
   const [channel, setChannel] = useState<Channel | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
