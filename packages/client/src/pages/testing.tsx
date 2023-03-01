@@ -1,20 +1,14 @@
 import dayjs from "dayjs";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { useParams } from "react-router-dom";
 import LabelAndData from "../components/LabelAndData";
 import Layout from "../components/layouts/Layout";
 import PageHeading from "../components/typography/PageHeading";
 import { ChannelContext } from "../contexts/ChannelContext";
-import { getStatsOneVid } from "../firebase/client";
-import {
-  SummaryItem,
-  useStatsQuery,
-  useTestingQuery,
-} from "../generated/graphql";
+import { useStatsQuery, useTestingQuery } from "../generated/graphql";
 
 import { primaryColor } from "../theme";
-import { StatsResponse } from "../types/StatsResponse";
 
 interface Props {}
 

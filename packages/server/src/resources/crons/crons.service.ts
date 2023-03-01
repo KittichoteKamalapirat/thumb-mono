@@ -55,7 +55,7 @@ export class CronsService {
     }
   }
 
-  @Cron('0 0 * * *')
+  @Cron('0 * * * *') // every hour
   // @Timeout(2000)
   async updateThumbEveryDay() {
     console.log('update thumbnail every day at midnight');
