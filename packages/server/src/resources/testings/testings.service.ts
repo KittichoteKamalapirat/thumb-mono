@@ -79,14 +79,14 @@ export class TestingsService {
     }
   }
 
-  getNextTestSubject(history, ori: string, varis: string[]) {
+  getNextTestSubject(history: TestHistory[], ori: string, varis: string[]) {
     const allTestSubjects = [ori, ...varis];
 
     let newSubject = '';
 
     if (history.length === 0) newSubject = varis[0];
     else {
-      const currentSubject = history.at(-1)?.title as string; // TODO
+      const currentSubject = history.at(-1).value as string; // TODO
       const indexInAllSubjects = allTestSubjects.indexOf(currentSubject);
       const newSubjectIndex = indexInAllSubjects + 1;
       // use the next one

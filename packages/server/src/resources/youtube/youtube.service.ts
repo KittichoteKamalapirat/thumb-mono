@@ -16,11 +16,25 @@ export class YoutubeService {
   ) {}
   async updateVideoTitle(testing: Testing) {
     // Get refresh_token from DB
+    console.log('inside update video title');
     try {
       const { videoId, varis, ori, history, channel } = testing;
 
-      const tokens = channel.user.token;
-      oauth2Client.setCredentials(tokens);
+      const tokens = channel.user.token; // has access_token and refresh_token
+      console.log('tokens', tokens);
+      console.log('before set credentials 1');
+
+      oauth2Client.setCredentials(tokens); // TODO do I need this line
+
+      console.log('oauth', oauth2Client);
+
+      // Have only 1 setCredentials (with both access_token and refresh_token) seeem to work fine
+
+      // console.log('before set credentials 2');
+      // const { refresh_token } = tokens;;
+      // oauth2Client.setCredentials({ refresh_token });
+
+      console.log('before list youtube vids');
 
       // Get video
       const result = await youtube.videos.list({
@@ -28,6 +42,7 @@ export class YoutubeService {
         part: 'statistics,snippet',
       } as any); // TODOO
 
+      console.log('after list youtube vids');
       const video = (result as any).data.items[0]; // TODO
 
       const newTitle = this.testingsService.getNextTestSubject(
@@ -38,6 +53,7 @@ export class YoutubeService {
 
       video.snippet.title = newTitle;
 
+      console.log('before updateing title');
       // Update video
       await youtube.videos.update({
         requestBody: {
