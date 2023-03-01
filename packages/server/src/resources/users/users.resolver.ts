@@ -19,8 +19,8 @@ export class UsersResolver {
 
   @Query(() => String)
   getEmail(@Context() { req }: MyContext) {
-    const channelid = req.session.channelId;
-    return this.usersService.getEmailFromGoogleAfterCredentialsSet(channelid);
+    const channelId = req.session.channelId;
+    return this.usersService.getEmailFromGoogleAfterCredentialsSet(channelId);
   }
 
   @Query(() => [User], { name: 'users' })

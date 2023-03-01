@@ -7,7 +7,11 @@ import Layout from "../components/layouts/Layout";
 import PageHeading from "../components/typography/PageHeading";
 import { ChannelContext } from "../contexts/ChannelContext";
 import { getStatsOneVid } from "../firebase/client";
-import { useTestingQuery } from "../generated/graphql";
+import {
+  SummaryItem,
+  useStatsQuery,
+  useTestingQuery,
+} from "../generated/graphql";
 
 import { primaryColor } from "../theme";
 import { StatsResponse } from "../types/StatsResponse";
@@ -44,64 +48,55 @@ const blank = {
   subscribersLost: 0,
 };
 
-export interface SummaryItem {
-  subject: string;
-  videoId: string;
-  // metrics
-  views: number;
-  annotationClickThroughRate: number;
-  annotationCloseRate: number;
-  annotationClickableImpressions: number;
-  averageViewDuration: number;
-
-  comments: number;
-  dislikes: number;
-  estimatedMinutesWatched: number;
-  likes: number;
-  shares: number;
-
-  subscribersGained: number;
-  subscribersLost: number;
-}
-
 const MyTesting = ({}: Props) => {
   const { id } = useParams();
   const { channel, setChannel } = useContext(ChannelContext);
   const channelId = channel?.ytChannelId;
 
-  const [summary, setSummary] = useState<SummaryItem[]>([]);
+  const {
+    data: statsData,
+    loading: statsLoading,
+    error: statsError,
+  } = useStatsQuery({
+    variables: { testingId: id || "" },
+  });
 
-  const [result, setResult] = useState<StatsResponse>();
+  const summary = statsData?.stats;
+
   // const [testing, setTesting] = useState<Testing | null>(null);
 
   const { data, loading, error } = useTestingQuery({
     variables: { id: id || "" },
   });
 
+  console.log("stats", statsData);
+
   const testing = data?.testing;
 
   const params = useParams();
 
-  useEffect(() => {
-    const handleSummary = async () => {
-      console.log("channel id", channelId);
-      console.log("testing?.videoId", testing?.videoId);
+  // useEffect(() => {
+  //   const handleSummary = async () => {
+  //     console.log("channel id", channelId);
+  //     console.log("testing?.videoId", testing?.videoId);
 
-      if (!testing || !channelId) return;
-      const summary = await getStatsOneVid(testing as any); // TODO fix me
-      console.log("resulttt", result);
+  //     if (!testing || !channelId) return;
+  //     const summary = await getStatsOneVid(testing as any); // TODO fix me
+  //     console.log("resulttt", result);
 
-      if (!summary) return; // TODO
-      setSummary(summary);
-    };
-    console.log("handle summary 1 ");
+  //     if (!summary) return; // TODO
+  //     setSummary(summary);
+  //   };
+  //   console.log("handle summary 1 ");
 
-    handleSummary();
-    console.log("handle summary 2 ");
-  }, [testing, channelId]);
+  //   handleSummary();
+  //   console.log("handle summary 2 ");
+  // }, [testing, channelId]);
 
-  if (loading) return <div>loading</div>;
-  if (error) return <div>{error.message}</div>;
+  if (loading || statsLoading) return <div>loading</div>;
+  if (error || statsError)
+    return <div>{error?.message || statsError?.message}</div>;
+
   if (!testing) return <div>no testing</div>;
 
   return (
@@ -138,32 +133,6 @@ const MyTesting = ({}: Props) => {
         </div>
       )}
 
-      <div>
-        <PageHeading heading="Result here" />
-        <div data-node="result">
-          <LabelAndData
-            label="Click Through Rate (CTR):"
-            data={String(result?.annotationClickThroughRate)}
-          />
-          <LabelAndData
-            label="Average View Duration (AVD):"
-            data={String(result?.averageViewDuration)}
-          />
-
-          <LabelAndData label="Views:" data={String(result?.views)} />
-
-          <LabelAndData
-            label="Impression:"
-            data={String(result?.annotationClickableImpressions)}
-          />
-
-          <LabelAndData
-            label="Subscribers Gained:"
-            data={String(result?.subscribersGained)}
-          />
-        </div>
-      </div>
-
       <div data-note="table">
         <div className="grid grid-cols-6">
           <div className="col-span-1">ThumbUrl</div>
@@ -175,7 +144,7 @@ const MyTesting = ({}: Props) => {
           <div className="col-span-1">Views</div>
         </div>
 
-        {summary.map((thumbResult) => (
+        {summary?.map((thumbResult) => (
           <div data-note="row" className="grid grid-cols-6">
             <div className="col-span-1"> {thumbResult.subject}</div>
             <div className="col-span-1">

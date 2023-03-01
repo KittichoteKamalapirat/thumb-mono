@@ -77,6 +77,23 @@ type YoutubeVideo {
   title: String!
 }
 
+type SummaryItem {
+  subject: String!
+  videoId: String!
+  views: Float!
+  annotationClickThroughRate: Float!
+  annotationCloseRate: Float!
+  annotationClickableImpressions: Float!
+  averageViewDuration: Float!
+  comments: Float!
+  dislikes: Float!
+  estimatedMinutesWatched: Float!
+  likes: Float!
+  shares: Float!
+  subscribersGained: Float!
+  subscribersLost: Float!
+}
+
 type Query {
   getEmail: String!
   users: [User!]!
@@ -88,6 +105,7 @@ type Query {
   myTestings: [Testing!]!
   testing(id: String!): Testing
   videos(channelId: String!): [YoutubeVideo!]!
+  stats(testingId: String!): [SummaryItem!]!
 }
 
 type Mutation {

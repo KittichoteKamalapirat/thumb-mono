@@ -17,9 +17,9 @@ export class CronsService {
     private youtubeService: YoutubeService,
   ) {}
 
-  @Timeout(1000)
+  // @Timeout(1000)
   // @Cron('* * * * *') // every minute
-  // @Cron('0 * * * *') // every hourr
+  @Cron('0 * * * *') // every hour
   // @Cron('0 0 * * *') // evvery dayy
   // @Timeout(2000)
   async updateTitleEveryDay() {

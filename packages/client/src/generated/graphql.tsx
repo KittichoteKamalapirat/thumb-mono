@@ -107,6 +107,7 @@ export type Query = {
   meChannel?: Maybe<Channel>;
   meUser?: Maybe<User>;
   myTestings: Array<Testing>;
+  stats: Array<SummaryItem>;
   testing?: Maybe<Testing>;
   user: User;
   users: Array<User>;
@@ -116,6 +117,11 @@ export type Query = {
 
 export type QueryChannelArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryStatsArgs = {
+  testingId: Scalars['String'];
 };
 
 
@@ -131,6 +137,24 @@ export type QueryUserArgs = {
 
 export type QueryVideosArgs = {
   channelId: Scalars['String'];
+};
+
+export type SummaryItem = {
+  __typename?: 'SummaryItem';
+  annotationClickThroughRate: Scalars['Float'];
+  annotationClickableImpressions: Scalars['Float'];
+  annotationCloseRate: Scalars['Float'];
+  averageViewDuration: Scalars['Float'];
+  comments: Scalars['Float'];
+  dislikes: Scalars['Float'];
+  estimatedMinutesWatched: Scalars['Float'];
+  likes: Scalars['Float'];
+  shares: Scalars['Float'];
+  subject: Scalars['String'];
+  subscribersGained: Scalars['Float'];
+  subscribersLost: Scalars['Float'];
+  videoId: Scalars['String'];
+  views: Scalars['Float'];
 };
 
 export type TestHistory = {
@@ -197,6 +221,13 @@ export type YoutubeVideo = {
   title: Scalars['String'];
   videoId: Scalars['String'];
 };
+
+export type StatsQueryVariables = Exact<{
+  testingId: Scalars['String'];
+}>;
+
+
+export type StatsQuery = { __typename?: 'Query', stats: Array<{ __typename?: 'SummaryItem', subject: string, videoId: string, views: number, annotationClickThroughRate: number, annotationCloseRate: number, annotationClickableImpressions: number, averageViewDuration: number, comments: number, dislikes: number, estimatedMinutesWatched: number, likes: number, shares: number, subscribersGained: number, subscribersLost: number }> };
 
 export type CreateAndSaveTokensMutationVariables = Exact<{
   code: Scalars['String'];
@@ -271,6 +302,54 @@ export const TestingSnippetFragmentDoc = gql`
   varis
 }
     `;
+export const StatsDocument = gql`
+    query Stats($testingId: String!) {
+  stats(testingId: $testingId) {
+    subject
+    videoId
+    views
+    annotationClickThroughRate
+    annotationCloseRate
+    annotationClickableImpressions
+    averageViewDuration
+    comments
+    dislikes
+    estimatedMinutesWatched
+    likes
+    shares
+    subscribersGained
+    subscribersLost
+  }
+}
+    `;
+
+/**
+ * __useStatsQuery__
+ *
+ * To run a query within a React component, call `useStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStatsQuery({
+ *   variables: {
+ *      testingId: // value for 'testingId'
+ *   },
+ * });
+ */
+export function useStatsQuery(baseOptions: Apollo.QueryHookOptions<StatsQuery, StatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StatsQuery, StatsQueryVariables>(StatsDocument, options);
+      }
+export function useStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StatsQuery, StatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StatsQuery, StatsQueryVariables>(StatsDocument, options);
+        }
+export type StatsQueryHookResult = ReturnType<typeof useStatsQuery>;
+export type StatsLazyQueryHookResult = ReturnType<typeof useStatsLazyQuery>;
+export type StatsQueryResult = Apollo.QueryResult<StatsQuery, StatsQueryVariables>;
 export const CreateAndSaveTokensDocument = gql`
     mutation CreateAndSaveTokens($code: String!) {
   createAndSaveTokens(code: $code) {

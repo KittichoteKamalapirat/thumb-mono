@@ -52,7 +52,10 @@ export class TestingsService {
   }
 
   findOne(id: string) {
-    return this.testingsRepository.findOne({ where: { id } });
+    return this.testingsRepository.findOne({
+      where: { id },
+      relations: ['channel'],
+    });
   }
 
   update(id: number, updateTestingInput: UpdateTestingInput) {

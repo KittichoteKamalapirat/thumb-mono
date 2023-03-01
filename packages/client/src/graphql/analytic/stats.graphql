@@ -1,0 +1,18 @@
+query Stats($testingId: String!) {
+  stats(testingId: $testingId) {
+    subject
+    videoId
+    views
+    annotationClickThroughRate
+    annotationCloseRate
+    annotationClickableImpressions
+    averageViewDuration
+    comments
+    dislikes
+    estimatedMinutesWatched
+    likes
+    shares
+    subscribersGained
+    subscribersLost
+  }
+}

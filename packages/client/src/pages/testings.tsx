@@ -48,6 +48,7 @@ const Testings = ({}: Props) => {
             target="_blank"
             rel="noopener noreferrer"
           >
+            <LabelAndData label="Type" data={String(testing.type)} />
             <LabelAndData label="Duration" data={String(testing?.duration)} />
             <LabelAndData
               label="Duration Type"

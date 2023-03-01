@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { analytics, oauth2Client } from '../../oauthClient';
-import { Testing } from '../testings/entities/testing.entity';
+import { TestingsService } from '../testings/testings.service';
 import { UsersService } from '../users/users.service';
 import { StatsResponse } from './dto/stats.response';
 import { SummaryItem } from './dto/summmary-item.interface';
@@ -23,14 +23,20 @@ const allZeroRow = (videoId: string) => [
 
 @Injectable()
 export class AnalyticsService {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private testingsService: TestingsService,
+  ) {}
 
-  async getStatsOneVid(testing: Testing): Promise<SummaryItem[] | null> {
-    console.log('calllllll');
+  async getStatsOneVid(testingId: string): Promise<SummaryItem[]> {
+    const testing = await this.testingsService.findOne(testingId);
+
+    console.log('testing', testing);
 
     try {
-      const { channelId, videoId } = testing;
-      const tokens = await this.usersService.getTokens(channelId);
+      const videoId = testing.videoId;
+      const userId = testing.channel.userId;
+      const tokens = await this.usersService.getTokens(userId);
 
       oauth2Client.setCredentials(tokens); // TODO, have to remove access_token?
 
@@ -74,7 +80,7 @@ export class AnalyticsService {
       return calculated;
     } catch (error) {
       console.log('error getting stats', error);
-      return null;
+      return [];
     }
   }
 
