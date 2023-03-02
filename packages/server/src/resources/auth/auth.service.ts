@@ -83,22 +83,22 @@ export class AuthService {
       console.log('code', code);
 
       const { tokens } = await oauth2Client.getToken(code); // this could be invalid_grant
-      console.log('tokens', tokens);
+      console.log('tokens from oAuth', tokens);
 
-      console.log(111);
+      console.log(1);
 
       // refresh_token receive only the first time
       const { refresh_token, access_token } = tokens;
 
-      console.log(222);
+      console.log(2);
 
       oauth2Client.setCredentials(tokens);
 
-      console.log(333);
+      console.log(3);
       const { ytChannelId, channelName } =
         await this.channelsService.getChannelInfoAfterCredentialsSet(); // need to set credentials before using this /// this could be invalid_grant even after setCredentials
 
-      console.log(444);
+      console.log(4);
 
       const email =
         await this.usersService.getEmailFromGoogleAfterCredentialsSet(tokens);
@@ -111,6 +111,7 @@ export class AuthService {
 
       // if no channel => just return a user
       if (!ytChannelId) {
+        console.log('no channel for this user');
         return userResponse;
       }
 
@@ -123,6 +124,8 @@ export class AuthService {
         },
         req,
       );
+
+      console.log('channelResponse', channelResponse);
       return { ...channelResponse, ...userResponse };
     } catch (error) {
       console.log('error in catch', error);
