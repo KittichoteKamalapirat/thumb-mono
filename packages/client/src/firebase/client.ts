@@ -3,8 +3,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getFunctions } from "firebase/functions";
 import { getStorage } from "firebase/storage";
-
-import { SummaryItem } from "../pages/testing";
+import { SummaryItem } from "../generated/graphql";
 import { firebaseConfig } from "./config";
 import { Testing } from "./types/Testing.type";
 import { createFunction } from "./utils/createFunction";
