@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start": "npx http-server --proxy https://vite-client-stage.up.railway.app? ./dist",
+    "start:production": "npx http-server --proxy https://vite-client-production.up.railway.app? ./dist",
+    "start:stage": "npx http-server --proxy https://vite-client-stage.up.railway.app? ./dist",
     "start2": "npx http-server ./dist",
     "dev": "vite --port 5173",
     "build": "tsc && vite build",
