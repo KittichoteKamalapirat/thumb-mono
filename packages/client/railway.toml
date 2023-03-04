@@ -1,5 +1,9 @@
-[environments.production.deploy]
-startCommand = "npm run start:production"
+[environments.development.deploy]
+startCommand = "npm run start:development"
 
 [environments.stage.deploy]
 startCommand = "npm run start:stage"
+
+[environments.production.deploy]
+startCommand = "npm run start:production"
+
