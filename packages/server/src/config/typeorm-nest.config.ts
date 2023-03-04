@@ -11,6 +11,7 @@ export const typeormConfigNest = {
   password: process.env.PGPASSWORD,
   database: process.env.PGDATABASE,
   entities: [User, Channel, Testing],
-  synchronize: !IS_PROD, // sync if not prod
+  // synchronize: !IS_PROD, // sync if not prod
+  synchronize: true,
   logging: !IS_PROD, // log if not prod
 };
