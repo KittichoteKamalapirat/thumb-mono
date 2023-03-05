@@ -85,35 +85,44 @@ export class TestingsService {
   getNextTestSubject(history: TestHistory[], ori: string, varis: string[]) {
     const allTestSubjects = [ori, ...varis];
 
-    let newSubject = '';
+    let nextSubject = '';
+    let nextSubjectIndexInAllSubjects = 0;
 
-    if (history.length === 0) newSubject = varis[0];
-    else {
-      const currentSubject = history.at(-1).value as string; // TODO
-      const indexInAllSubjects = allTestSubjects.indexOf(currentSubject);
-      const newSubjectIndex = indexInAllSubjects + 1;
+    if (history.length === 0) {
+      nextSubject = varis[0];
+      nextSubjectIndexInAllSubjects = 1; // index in allTestSubjects
+    } else {
+      const lastHistoryIndex = history.at(-1).valueIndex;
+      const lastHistoryIndexPlus1 = lastHistoryIndex + 1;
+
+      const nextSubjectIndex =
+        lastHistoryIndexPlus1 >= allTestSubjects.length
+          ? 0
+          : lastHistoryIndexPlus1;
       // use the next one
-      newSubject =
+      nextSubject =
         allTestSubjects[
-          newSubjectIndex >= allTestSubjects.length ? 0 : newSubjectIndex
+          nextSubjectIndex >= allTestSubjects.length ? 0 : nextSubjectIndex
         ];
+
+      nextSubjectIndexInAllSubjects = nextSubjectIndex;
     }
 
-    return newSubject;
+    return { nextSubject, nextIndex: nextSubjectIndexInAllSubjects };
   }
 
   async addSubjectToHistory(testing: Testing) {
     try {
       const { varis, ori, history } = testing;
 
-      const newSubject = this.getNextTestSubject(
+      const { nextIndex } = this.getNextTestSubject(
         history,
         ori,
         varis.map((subject) => subject),
       );
 
       const newHistory: TestHistory = {
-        value: newSubject,
+        valueIndex: nextIndex,
         date: dayjs().toISOString(),
       };
 

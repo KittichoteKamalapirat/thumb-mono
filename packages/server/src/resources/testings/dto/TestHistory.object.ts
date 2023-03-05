@@ -9,5 +9,5 @@ export class TestHistory {
 
   @Field()
   @Column()
-  value: string;
+  valueIndex: number; // index in [ori, ... varis], see getNextTestSubject in testings.service.ts
 }

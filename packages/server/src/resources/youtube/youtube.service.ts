@@ -45,7 +45,7 @@ export class YoutubeService {
       console.log('after list youtube vids');
       const video = (result as any).data.items[0]; // TODO
 
-      const newTitle = this.testingsService.getNextTestSubject(
+      const { nextSubject: newTitle } = this.testingsService.getNextTestSubject(
         history,
         ori,
         varis.map((title) => title),
@@ -83,11 +83,12 @@ export class YoutubeService {
       const { videoId, varis, ori, channel, history } = testing;
 
       // get url
-      const newThumbUrl = this.testingsService.getNextTestSubject(
-        history,
-        ori,
-        varis.map((thumb) => thumb),
-      );
+      const { nextSubject: newThumbUrl } =
+        this.testingsService.getNextTestSubject(
+          history,
+          ori,
+          varis.map((thumb) => thumb),
+        );
 
       // load the thumb image to local file path
       const { localPath } = await this.filesService.genArrbufFromUrl({
