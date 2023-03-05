@@ -6,12 +6,13 @@ import { UserContext } from "./contexts/UserContext";
 import { Channel, User } from "./generated/graphql";
 import { client } from "./lib/apollo";
 import { urlResolver } from "./lib/UrlResolver";
-import MyAccount from "./pages/account";
-import CreateTest from "./pages/create-test";
+import MyAccount from "./pages/account.page";
+import CreateTest from "./pages/create-test.page";
 
-import Home from "./pages/home";
-import Testing from "./pages/testing";
-import Testings from "./pages/testings";
+import Home from "./pages/home.page";
+import Pricing from "./pages/pricing.page";
+import Testing from "./pages/testing.page";
+import Testings from "./pages/testings.page";
 
 function App() {
   const [channel, setChannel] = useState<Channel | null>(null);
@@ -52,6 +53,7 @@ function App() {
                 <Route path="/tests/:id" element={<Testing />} />
                 <Route path="/account" element={<MyAccount />} />
                 <Route index path="/create-test" element={<CreateTest />} />
+                <Route index path="/pricing" element={<Pricing />} />
               </Routes>
             </BrowserRouter>
           </ApolloProvider>
