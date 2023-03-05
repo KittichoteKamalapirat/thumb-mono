@@ -1,30 +1,47 @@
+import { useContext } from "react";
 import { Helmet } from "react-helmet";
+import Layout from "../components/layouts/Layout";
 import LoggedOutNav from "../components/navbars/LoggedOutNav";
+import { UserContext } from "../contexts/UserContext";
 
-interface Props {}
+const Pricing = () => {
+  const { user } = useContext(UserContext);
 
-const Pricing = ({}: Props) => {
+  console.log(
+    "import.meta.env.STRIPE_API_PRICING_TABLE_ID",
+    import.meta.env.VITE_STRIPE_API_PUBLISHABLE
+  );
+
+  if (!user?.id) {
+    return <div>show pricing table with login buttons</div>;
+  }
+
+  console.log("user", user);
+
   return (
     <div className="h-screen my-4">
-      <LoggedOutNav />
-      <div className="block">
-        <Helmet>
-          <script
-            async
-            src="https://js.stripe.com/v3/pricing-table.js"
-          ></script>
-        </Helmet>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: `
+      <Layout>
+        <div className="block">
+          <Helmet>
+            <script
+              async
+              src="https://js.stripe.com/v3/pricing-table.js"
+            ></script>
+          </Helmet>
+
+          <div
+            dangerouslySetInnerHTML={{
+              __html: `
           <stripe-pricing-table
-          pricing-table-id="prctbl_1MiBrmI7tBOrSSsCHQxdUy7j"
-          publishable-key="pk_test_51MiBBaI7tBOrSSsCFHWHZcQFxK3qoI8vrUVR9doM5uXUVQ9Sa7fSYOZCGBQZuDeE5qM7bGMB9FmGhzTGlpN9EcoV007Y4nPJSI"
+          pricing-table-id="${import.meta.env.VITE_STRIPE_API_PRICING_TABLE_ID}"
+          publishable-key="${import.meta.env.VITE_STRIPE_API_PUBLISHABLE}"
+          client-reference-id=${user?.id}
         ></stripe-pricing-table>
         `,
-          }}
-        />
-      </div>
+            }}
+          />
+        </div>
+      </Layout>
     </div>
   );
 };

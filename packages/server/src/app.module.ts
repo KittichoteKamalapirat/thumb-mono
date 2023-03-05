@@ -17,6 +17,8 @@ import { YoutubeModule } from './resources/youtube/youtube.module';
 import { AnalyticsModule } from './resources/analytics/analytics.module';
 import { ConfigModule } from '@nestjs/config';
 import { getEnvPath } from './utils/getEnvPath';
+import { WebhooksModule } from './resources/webhooks/webhooks.module';
+import { StripeModule } from './resources/stripe/stripe.module';
 
 const ENV = process.env.NODE_ENV;
 const envPath = getEnvPath(ENV);
@@ -48,6 +50,8 @@ const envPath = getEnvPath(ENV);
     CronsModule,
     FilesModule,
     AnalyticsModule,
+    WebhooksModule,
+    StripeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
