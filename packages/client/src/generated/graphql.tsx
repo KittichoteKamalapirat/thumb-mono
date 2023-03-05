@@ -160,7 +160,7 @@ export type SummaryItem = {
 export type TestHistory = {
   __typename?: 'TestHistory';
   date: Scalars['String'];
-  value: Scalars['String'];
+  valueIndex: Scalars['Float'];
 };
 
 export type Testing = {
@@ -261,21 +261,21 @@ export type CreateTestingMutationVariables = Exact<{
 }>;
 
 
-export type CreateTestingMutation = { __typename?: 'Mutation', createTesting: { __typename?: 'TestingResponse', testing?: { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, value: string }> } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type CreateTestingMutation = { __typename?: 'Mutation', createTesting: { __typename?: 'TestingResponse', testing?: { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, valueIndex: number }> } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type MyTestingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyTestingsQuery = { __typename?: 'Query', myTestings: Array<{ __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, value: string }> }> };
+export type MyTestingsQuery = { __typename?: 'Query', myTestings: Array<{ __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, valueIndex: number }> }> };
 
 export type TestingQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type TestingQuery = { __typename?: 'Query', testing?: { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, value: string }> } | null };
+export type TestingQuery = { __typename?: 'Query', testing?: { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, valueIndex: number }> } | null };
 
-export type TestingSnippetFragment = { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, value: string }> };
+export type TestingSnippetFragment = { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, valueIndex: number }> };
 
 export type VideosQueryVariables = Exact<{
   channelId: Scalars['String'];
@@ -296,7 +296,7 @@ export const TestingSnippetFragmentDoc = gql`
   channelId
   history {
     date
-    value
+    valueIndex
   }
   ori
   varis
@@ -529,20 +529,7 @@ export const CreateTestingDocument = gql`
     mutation CreateTesting($input: CreateTestingInput!) {
   createTesting(input: $input) {
     testing {
-      id
-      type
-      status
-      duration
-      durationType
-      videoId
-      startDate
-      channelId
-      history {
-        date
-        value
-      }
-      ori
-      varis
+      ...TestingSnippet
     }
     errors {
       field
@@ -550,7 +537,7 @@ export const CreateTestingDocument = gql`
     }
   }
 }
-    `;
+    ${TestingSnippetFragmentDoc}`;
 export type CreateTestingMutationFn = Apollo.MutationFunction<CreateTestingMutation, CreateTestingMutationVariables>;
 
 /**

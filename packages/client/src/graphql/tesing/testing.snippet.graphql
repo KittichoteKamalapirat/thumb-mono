@@ -9,7 +9,7 @@ fragment TestingSnippet on Testing {
     channelId
     history {
     date
-    value
+    valueIndex
     }
     ori
     varis

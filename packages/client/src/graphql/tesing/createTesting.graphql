@@ -1,20 +1,7 @@
 mutation CreateTesting($input: CreateTestingInput!) {
   createTesting(input: $input) {
     testing {
-      id
-      type
-      status
-      duration
-      durationType
-      videoId
-      startDate
-      channelId
-      history {
-        date
-        value
-      }
-      ori
-      varis
+      ...TestingSnippet
     }
     errors {
       field

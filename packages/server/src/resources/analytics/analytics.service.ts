@@ -60,11 +60,15 @@ export class AnalyticsService {
           const formatted = this.formatResponse(data, metrics, videoId);
 
           console.log('formatteddd', formatted);
+          const testingSubject = this.testingsService.getSubjectFromIndex(
+            testing,
+            history.valueIndex,
+          );
 
           const responseWithTestSubject = {
             ...formatted,
           } as SummaryItem;
-          responseWithTestSubject.subject = history.value; // thumb url or title
+          responseWithTestSubject.subject = testingSubject; // thumb url or title
 
           return responseWithTestSubject;
         }),

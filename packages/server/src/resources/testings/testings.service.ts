@@ -40,6 +40,11 @@ export class TestingsService {
     }
   }
 
+  getSubjectFromIndex(testing: Testing, index: number) {
+    const testingSubject = [testing.ori, ...testing.varis];
+    return testingSubject[index];
+  }
+
   findByChannelId(channelId: string) {
     return this.testingsRepository.find({ where: { channelId } });
   }
