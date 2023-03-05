@@ -19,6 +19,7 @@ import { ConfigModule } from '@nestjs/config';
 import { getEnvPath } from './utils/getEnvPath';
 import { WebhooksModule } from './resources/webhooks/webhooks.module';
 import { StripeModule } from './resources/stripe/stripe.module';
+import { SubscriptionsModule } from './resources/subscriptions/subscriptions.module';
 
 const ENV = process.env.NODE_ENV;
 const envPath = getEnvPath(ENV);
@@ -52,6 +53,7 @@ const envPath = getEnvPath(ENV);
     AnalyticsModule,
     WebhooksModule,
     StripeModule,
+    SubscriptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -35,7 +35,7 @@ const Pricing = () => {
           <stripe-pricing-table
           pricing-table-id="${import.meta.env.VITE_STRIPE_API_PRICING_TABLE_ID}"
           publishable-key="${import.meta.env.VITE_STRIPE_API_PUBLISHABLE}"
-          client-reference-id=${user?.id}
+          client-reference-id=${user.id}
         ></stripe-pricing-table>
         `,
             }}

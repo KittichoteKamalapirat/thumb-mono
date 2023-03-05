@@ -8,6 +8,18 @@ export class StripeService {
     return 'This action adds a new stripe';
   }
 
+  handleCheckoutSessionComplete() {
+    // create a new subscription with active status
+  }
+
+  handleUpdateSubscription() {
+    // update a subscription
+  }
+
+  handleDeleteSubscription() {
+    // update a subscription
+  }
+
   findAll() {
     return `This action returns all stripe`;
   }

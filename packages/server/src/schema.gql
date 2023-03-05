@@ -94,6 +94,17 @@ type SummaryItem {
   subscribersLost: Float!
 }
 
+type Subscription {
+  id: ID!
+  userId: String!
+  stripeId: String!
+  stripePriceId: String!
+  stripeProductName: String!
+  status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   getEmail: String!
   users: [User!]!
@@ -106,6 +117,8 @@ type Query {
   testing(id: String!): Testing
   videos(channelId: String!): [YoutubeVideo!]!
   stats(testingId: String!): [SummaryItem!]!
+  subscriptions: [Subscription!]!
+  subscription(id: Int!): Subscription!
 }
 
 type Mutation {
@@ -117,6 +130,9 @@ type Mutation {
   createTesting(input: CreateTestingInput!): TestingResponse!
   updateTesting(updateTestingInput: UpdateTestingInput!): Testing!
   removeTesting(id: Int!): Testing!
+  createSubscription(createSubscriptionInput: CreateSubscriptionInput!): Subscription!
+  updateSubscription(updateSubscriptionInput: UpdateSubscriptionInput!): Subscription!
+  removeSubscription(id: Int!): Subscription!
 }
 
 input CreateChannelInput {
@@ -143,5 +159,16 @@ input UpdateTestingInput {
   durationType: String
   ori: String
   varis: [String!]
+  id: Int!
+}
+
+input CreateSubscriptionInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateSubscriptionInput {
+  """Example field (placeholder)"""
+  exampleField: Int
   id: Int!
 }

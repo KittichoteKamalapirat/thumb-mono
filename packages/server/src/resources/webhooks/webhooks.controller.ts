@@ -16,10 +16,14 @@ import { UpdateWebhookDto } from './dto/update-webhook.dto';
 import Stripe from 'stripe';
 import { Response } from 'express';
 import { stripe } from '../stripe/stripe';
+import { StripeService } from '../stripe/stripe.service';
 
 @Controller('webhooks')
 export class WebhooksController {
-  constructor(private readonly webhooksService: WebhooksService) {}
+  constructor(
+    private readonly webhooksService: WebhooksService,
+    private stripeService: StripeService,
+  ) {}
 
   @Post()
   create(@Body() createWebhookDto: CreateWebhookDto) {
@@ -45,6 +49,16 @@ export class WebhooksController {
 
     // Handle the event
     switch (event.type) {
+      case 'checkout.session.completed':
+        this.stripeService.handleCheckoutSessionComplete();
+        break;
+      case 'customer.subscription.updated':
+        this.stripeService.handleUpdateSubscription();
+        break;
+      case 'customer.subscription.deleted':
+        this.stripeService.handleDeleteSubscription();
+        break;
+
       case 'subscription_schedule.canceled':
         const subscriptionScheduleCanceled = event.data.object;
         // Then define and call a function to handle the event subscription_schedule.canceled
