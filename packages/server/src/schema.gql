@@ -36,7 +36,7 @@ type Token {
 
 type Subscription {
   id: ID!
-  stripeSubscriptionId: String!
+  stripeId: String!
   stripePriceId: String!
   stripeCustomerId: String!
   stripeProductId: String!
@@ -136,7 +136,7 @@ type Query {
   videos(channelId: String!): [YoutubeVideo!]!
   stats(testingId: String!): [SummaryItem!]!
   subscriptions: [Subscription!]!
-  subscription(id: Int!): Subscription!
+  subscription(id: String!): Subscription!
   customers: [Customer!]!
   customer(id: String!): Customer!
 }
@@ -186,7 +186,7 @@ input UpdateTestingInput {
 }
 
 input CreateSubscriptionInput {
-  stripeSubscriptionId: String!
+  stripeId: String!
   stripePriceId: String!
   stripeCustomerId: String!
   stripeProductId: String!

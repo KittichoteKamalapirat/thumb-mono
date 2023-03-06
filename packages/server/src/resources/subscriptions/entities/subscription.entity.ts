@@ -15,11 +15,11 @@ import { Customer } from '../../customers/entities/customer.entity';
 export class Subscription {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
-  id: string; // event.data.object.subscription
+  id: string;
 
   @Field()
   @Column()
-  stripeSubscriptionId: string; // event.data.object.customer
+  stripeId: string; // event.data.object.subscription, stripe subscription id
 
   @Field()
   @Column()
@@ -27,7 +27,7 @@ export class Subscription {
 
   @Field()
   @Column()
-  stripeCustomerId: string;
+  stripeCustomerId: string; // event.data.object.customer
 
   @Field()
   @Column()

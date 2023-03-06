@@ -8,6 +8,8 @@ import BooleanResponse from '../../types/boolean-response.input';
 import { CustomersService } from '../customers/customers.service';
 import { UsersService } from '../users/users.service';
 import StringResponse from '../../types/string-response.input';
+import { UpdateSubscriptionInput } from '../subscriptions/dto/update-subscription.input';
+import { UpdateSubscriptionByStripeIdInput } from '../subscriptions/dto/update-subscription-by-stripe-id.input';
 
 @Injectable()
 export class StripeService {
@@ -74,7 +76,7 @@ export class StripeService {
 
       await this.subscriptionsService.create({
         customerId: customer.id,
-        stripeSubscriptionId: subscription.id,
+        stripeId: subscription.id,
         stripePriceId: subscription.items.data[0].price.id,
         stripeProductId: (
           subscription.items.data[0].price.product as Stripe.Product
@@ -97,12 +99,78 @@ export class StripeService {
     }
   }
 
-  handleUpdateSubscription() {
-    // update a subscription
+  async handleSubscriptionUpdated(subscriptionPayload: Stripe.Subscription) {
+    console.log('handle subscription updated');
+    try {
+      // retreive because items.data.price.product are not included
+      const stripeSub = await stripe.subscriptions.retrieve(
+        subscriptionPayload.id,
+        { expand: ['items.data.price.product'] },
+      );
+
+      const dbSub = await this.subscriptionsService.findOneByStripeId(
+        stripeSub.id,
+      );
+
+      // make the current one cancelled
+      const updatedInput: UpdateSubscriptionByStripeIdInput = {
+        stripeId: stripeSub.id,
+        status: 'canceled',
+      };
+
+      await this.subscriptionsService.updateAllByStripeId(updatedInput);
+      // create a new one
+      await this.subscriptionsService.create({
+        customerId: dbSub.customerId,
+        stripeId: stripeSub.id,
+        stripePriceId: stripeSub.items.data[0].price.id,
+        stripeProductId: (
+          stripeSub.items.data[0].price.product as Stripe.Product
+        ).id,
+        stripeCustomerId: stripeSub.customer as string,
+        status: stripeSub.status,
+      });
+      return { value: true };
+    } catch (error) {
+      console.log('error handling subscription updated', error.message);
+      return {
+        errors: [
+          {
+            field: 'stripe',
+            message: 'An error occured while updating a subscription',
+          },
+        ],
+      };
+    }
   }
 
-  handleDeleteSubscription() {
-    // update a subscription
+  async handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+    try {
+      // get the sub's id in my db
+      const dbSub = await this.subscriptionsService.findOneByStripeId(
+        subscription.id,
+      );
+
+      // make the current one cancelled
+      const updatedInput: UpdateSubscriptionInput = {
+        id: dbSub.id,
+        status: subscription.status,
+      };
+
+      await this.subscriptionsService.update(updatedInput);
+
+      return { value: true };
+    } catch (error) {
+      console.log('error handling subscription updated', error.message);
+      return {
+        errors: [
+          {
+            field: 'stripe',
+            message: 'An error occured while updating a subscription',
+          },
+        ],
+      };
+    }
   }
 
   findAll() {

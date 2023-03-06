@@ -4,7 +4,7 @@ import Stripe from 'stripe';
 @InputType()
 export class CreateSubscriptionInput {
   @Field()
-  stripeSubscriptionId: string;
+  stripeId: string;
 
   @Field()
   stripePriceId: string;

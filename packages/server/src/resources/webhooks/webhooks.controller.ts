@@ -38,7 +38,7 @@ export class WebhooksController {
   stripe(
     @Req() request: RequestWithRawBody,
     @Res() response: Response,
-    @Headers('stripe-signature') signature: string,
+    @Headers('stripe-signature') signature: string, // request.headers['stripe-signature'];
   ) {
     console.log('incoming webhook');
     console.log('1');
@@ -47,9 +47,6 @@ export class WebhooksController {
     if (!signature) {
       throw new BadRequestException('Missing stripe-signature header');
     }
-
-    const sig = request.headers['stripe-signature'];
-    console.log('2');
 
     let event: Stripe.DiscriminatedEvent;
 
@@ -75,10 +72,10 @@ export class WebhooksController {
         this.stripeService.handleCheckoutSessionComplete(event.data.object);
         break;
       case 'customer.subscription.updated':
-        this.stripeService.handleUpdateSubscription();
+        this.stripeService.handleSubscriptionUpdated(event.data.object);
         break;
       case 'customer.subscription.deleted':
-        this.stripeService.handleDeleteSubscription();
+        this.stripeService.handleSubscriptionDeleted(event.data.object);
         break;
 
       case 'subscription_schedule.canceled':

@@ -21,7 +21,7 @@ export class SubscriptionsResolver {
   }
 
   @Query(() => Subscription, { name: 'subscription' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id') id: string) {
     return this.subscriptionsService.findOne(id);
   }
 
