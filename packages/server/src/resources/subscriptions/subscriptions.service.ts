@@ -1,11 +1,37 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateSubscriptionInput } from './dto/create-subscription.input';
+import SubscriptionResponse from './dto/subscription-response';
 import { UpdateSubscriptionInput } from './dto/update-subscription.input';
+import { Subscription } from './entities/subscription.entity';
 
 @Injectable()
 export class SubscriptionsService {
-  create(createSubscriptionInput: CreateSubscriptionInput) {
-    return 'This action adds a new subscription';
+  constructor(
+    @InjectRepository(Subscription)
+    private subscriptionsRepository: Repository<Subscription>,
+  ) {}
+
+  async create(input: CreateSubscriptionInput): Promise<SubscriptionResponse> {
+    try {
+      const newSub = this.subscriptionsRepository.create({
+        ...input,
+      });
+
+      const savedSub = await this.subscriptionsRepository.save(newSub);
+
+      return { subscription: savedSub };
+    } catch (error) {
+      return {
+        errors: [
+          {
+            field: 'subscription',
+            message: 'An error occured while creating a new subscription',
+          },
+        ],
+      };
+    }
   }
 
   findAll() {

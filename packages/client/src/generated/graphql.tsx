@@ -34,6 +34,20 @@ export type CreateChannelInput = {
   ytChannelId: Scalars['String'];
 };
 
+export type CreateCustomerInput = {
+  stripeId: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+export type CreateSubscriptionInput = {
+  customerId: Scalars['String'];
+  status: Scalars['String'];
+  stripeCustomerId: Scalars['String'];
+  stripePriceId: Scalars['String'];
+  stripeProductId: Scalars['String'];
+  stripeSubscriptionId: Scalars['String'];
+};
+
 export type CreateTestingInput = {
   channelId: Scalars['String'];
   duration: Scalars['Float'];
@@ -42,6 +56,17 @@ export type CreateTestingInput = {
   type: Scalars['String'];
   varis: Array<Scalars['String']>;
   videoId: Scalars['String'];
+};
+
+export type Customer = {
+  __typename?: 'Customer';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  stripeId: Scalars['String'];
+  subscriptions: Array<Subscription>;
+  updatedAt: Scalars['DateTime'];
+  user: User;
+  userId: Scalars['String'];
 };
 
 export type FieldError = {
@@ -60,12 +85,18 @@ export type LoginResponse = {
 export type Mutation = {
   __typename?: 'Mutation';
   createAndSaveTokens: LoginResponse;
+  createBillingPortalUrl: StringResponse;
   createChannel: Channel;
+  createCustomer: Customer;
+  createSubscription: Subscription;
   createTesting: TestingResponse;
   getAuthURL: Scalars['String'];
   logout: Scalars['Boolean'];
+  removeCustomer: Customer;
+  removeSubscription: Subscription;
   removeTesting: Testing;
   removeUser: User;
+  updateCustomer: Customer;
   updateTesting: Testing;
 };
 
@@ -80,8 +111,28 @@ export type MutationCreateChannelArgs = {
 };
 
 
+export type MutationCreateCustomerArgs = {
+  createCustomerInput: CreateCustomerInput;
+};
+
+
+export type MutationCreateSubscriptionArgs = {
+  createSubscriptionInput: CreateSubscriptionInput;
+};
+
+
 export type MutationCreateTestingArgs = {
   input: CreateTestingInput;
+};
+
+
+export type MutationRemoveCustomerArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationRemoveSubscriptionArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -95,6 +146,11 @@ export type MutationRemoveUserArgs = {
 };
 
 
+export type MutationUpdateCustomerArgs = {
+  updateCustomerInput: UpdateCustomerInput;
+};
+
+
 export type MutationUpdateTestingArgs = {
   updateTestingInput: UpdateTestingInput;
 };
@@ -103,11 +159,15 @@ export type Query = {
   __typename?: 'Query';
   channel: Channel;
   channels: Array<Channel>;
+  customer: Customer;
+  customers: Array<Customer>;
   getEmail: Scalars['String'];
   meChannel?: Maybe<Channel>;
   meUser?: Maybe<User>;
   myTestings: Array<Testing>;
   stats: Array<SummaryItem>;
+  subscription: Subscription;
+  subscriptions: Array<Subscription>;
   testing?: Maybe<Testing>;
   user: User;
   users: Array<User>;
@@ -120,8 +180,18 @@ export type QueryChannelArgs = {
 };
 
 
+export type QueryCustomerArgs = {
+  id: Scalars['String'];
+};
+
+
 export type QueryStatsArgs = {
   testingId: Scalars['String'];
+};
+
+
+export type QuerySubscriptionArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -137,6 +207,26 @@ export type QueryUserArgs = {
 
 export type QueryVideosArgs = {
   channelId: Scalars['String'];
+};
+
+export type StringResponse = {
+  __typename?: 'StringResponse';
+  errors?: Maybe<Array<FieldError>>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  createdAt: Scalars['DateTime'];
+  customer: Customer;
+  customerId: Scalars['String'];
+  id: Scalars['ID'];
+  status: Scalars['String'];
+  stripeCustomerId: Scalars['String'];
+  stripePriceId: Scalars['String'];
+  stripeProductId: Scalars['String'];
+  stripeSubscriptionId: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type SummaryItem = {
@@ -193,6 +283,12 @@ export type Token = {
   refresh_token: Scalars['String'];
 };
 
+export type UpdateCustomerInput = {
+  id: Scalars['String'];
+  stripeId?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['String']>;
+};
+
 export type UpdateTestingInput = {
   channelId?: InputMaybe<Scalars['String']>;
   duration?: InputMaybe<Scalars['Float']>;
@@ -208,6 +304,7 @@ export type User = {
   __typename?: 'User';
   channels: Array<Channel>;
   createdAt: Scalars['DateTime'];
+  customer?: Maybe<Customer>;
   email: Scalars['String'];
   id: Scalars['ID'];
   membership: Scalars['String'];
@@ -255,6 +352,11 @@ export type MeChannelQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeChannelQuery = { __typename?: 'Query', meChannel?: { __typename?: 'Channel', id: string, ytChannelId: string, channelName: string } | null };
+
+export type CreateBillingPortalUrlMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CreateBillingPortalUrlMutation = { __typename?: 'Mutation', createBillingPortalUrl: { __typename?: 'StringResponse', value?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type CreateTestingMutationVariables = Exact<{
   input: CreateTestingInput;
@@ -525,6 +627,42 @@ export function useMeChannelLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type MeChannelQueryHookResult = ReturnType<typeof useMeChannelQuery>;
 export type MeChannelLazyQueryHookResult = ReturnType<typeof useMeChannelLazyQuery>;
 export type MeChannelQueryResult = Apollo.QueryResult<MeChannelQuery, MeChannelQueryVariables>;
+export const CreateBillingPortalUrlDocument = gql`
+    mutation createBillingPortalUrl {
+  createBillingPortalUrl {
+    value
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type CreateBillingPortalUrlMutationFn = Apollo.MutationFunction<CreateBillingPortalUrlMutation, CreateBillingPortalUrlMutationVariables>;
+
+/**
+ * __useCreateBillingPortalUrlMutation__
+ *
+ * To run a mutation, you first call `useCreateBillingPortalUrlMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBillingPortalUrlMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBillingPortalUrlMutation, { data, loading, error }] = useCreateBillingPortalUrlMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateBillingPortalUrlMutation(baseOptions?: Apollo.MutationHookOptions<CreateBillingPortalUrlMutation, CreateBillingPortalUrlMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateBillingPortalUrlMutation, CreateBillingPortalUrlMutationVariables>(CreateBillingPortalUrlDocument, options);
+      }
+export type CreateBillingPortalUrlMutationHookResult = ReturnType<typeof useCreateBillingPortalUrlMutation>;
+export type CreateBillingPortalUrlMutationResult = Apollo.MutationResult<CreateBillingPortalUrlMutation>;
+export type CreateBillingPortalUrlMutationOptions = Apollo.BaseMutationOptions<CreateBillingPortalUrlMutation, CreateBillingPortalUrlMutationVariables>;
 export const CreateTestingDocument = gql`
     mutation CreateTesting($input: CreateTestingInput!) {
   createTesting(input: $input) {

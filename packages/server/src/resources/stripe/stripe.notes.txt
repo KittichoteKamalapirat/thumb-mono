@@ -1,0 +1,64 @@
+event {
+    id: 'evt_1MiVP8I7tBOrSSsCbqPYLxOg',
+    object: 'event',
+    api_version: '2022-11-15',
+    created: 1678075925,
+    data: {
+      object: {
+        id: 'cus_NTSJrF2BDHqx2N',
+        object: 'customer',
+        address: [Object],
+        balance: 0,
+        created: 1678075925,
+        currency: null,
+        default_source: null,
+        delinquent: false,
+        description: null,
+        discount: null,
+        email: 'kittichoteshane@gmail.com',
+        invoice_prefix: '0F10F346',
+        invoice_settings: [Object],
+        livemode: false,
+        metadata: {},
+        name: 'ss ss',
+        next_invoice_sequence: 2,
+        phone: null,
+        preferred_locales: [Array],
+        shipping: null,
+        tax_exempt: 'none',
+        test_clock: null
+      }
+    },
+    livemode: false,
+    pending_webhooks: 2,
+    request: { id: null, idempotency_key: null },
+    type: 'customer.created'
+  }
+
+
+webhooks fired when finish the "Stripe Checkout"
+------------------------------------------------
+setup_intent.succeeded
+setup_intent.created
+
+checkout.session.completed
+
+customer.created
+
+payment_method.attached
+
+customer.updated
+
+invoice.created
+invoice.finalized
+invoice.paid
+invoice.payment_succeeded
+
+customer.subscription.created
+
+2 setups
+1 checkout
+3 customers
+1 payment_method
+4 invoies
+11 in total

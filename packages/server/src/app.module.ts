@@ -20,6 +20,7 @@ import { getEnvPath } from './utils/getEnvPath';
 import { WebhooksModule } from './resources/webhooks/webhooks.module';
 import { StripeModule } from './resources/stripe/stripe.module';
 import { SubscriptionsModule } from './resources/subscriptions/subscriptions.module';
+import { CustomersModule } from './resources/customers/customers.module';
 
 const ENV = process.env.NODE_ENV;
 const envPath = getEnvPath(ENV);
@@ -54,6 +55,7 @@ const envPath = getEnvPath(ENV);
     WebhooksModule,
     StripeModule,
     SubscriptionsModule,
+    CustomersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

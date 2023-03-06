@@ -9,6 +9,8 @@ import {
   Delete,
   Req,
   Res,
+  BadRequestException,
+  Headers,
 } from '@nestjs/common';
 import { WebhooksService } from './webhooks.service';
 import { CreateWebhookDto } from './dto/create-webhook.dto';
@@ -17,6 +19,7 @@ import Stripe from 'stripe';
 import { Response } from 'express';
 import { stripe } from '../stripe/stripe';
 import { StripeService } from '../stripe/stripe.service';
+import RequestWithRawBody from '../../types/requestWithRawBody.interface';
 
 @Controller('webhooks')
 export class WebhooksController {
@@ -31,26 +34,45 @@ export class WebhooksController {
   }
 
   // /webhooks/stripe
-  @Post()
-  stripe(@Req() request: Request, @Res() response: Response) {
+  @Post('stripe')
+  stripe(
+    @Req() request: RequestWithRawBody,
+    @Res() response: Response,
+    @Headers('stripe-signature') signature: string,
+  ) {
+    console.log('incoming webhook');
+    console.log('1');
+    console.log('body', signature);
+
+    if (!signature) {
+      throw new BadRequestException('Missing stripe-signature header');
+    }
+
     const sig = request.headers['stripe-signature'];
+    console.log('2');
 
     let event: Stripe.DiscriminatedEvent;
+
+    console.log('3');
     try {
-      event = stripe.webhooks.constructEvent(
-        request.body as any, // TODO
-        sig,
-        'whsec_50134607e33afb8cf7d9ef971794d960809bfc71ebb2f1290ca5eb4407ef51fc',
-      ) as Stripe.DiscriminatedEvent;
+      console.log('4');
+      event = this.stripeService.constructEventFromPayload(
+        signature,
+        request.rawBody,
+      );
     } catch (err) {
+      console.log('error:', err.message);
+
       response.status(400).send(`Webhook Error: ${err.message}`);
       return;
     }
 
+    console.log('5');
+    console.log('event', event.type);
     // Handle the event
     switch (event.type) {
       case 'checkout.session.completed':
-        this.stripeService.handleCheckoutSessionComplete();
+        this.stripeService.handleCheckoutSessionComplete(event.data.object);
         break;
       case 'customer.subscription.updated':
         this.stripeService.handleUpdateSubscription();

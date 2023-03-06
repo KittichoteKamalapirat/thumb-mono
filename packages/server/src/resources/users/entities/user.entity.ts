@@ -4,11 +4,13 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Channel } from '../../channels/entities/channel.entity';
 import { Token } from '../../channels/entities/token.object';
+import { Customer } from '../../customers/entities/customer.entity';
 
 type membership = 'basic' | 'premium' | 'pro';
 @ObjectType()
@@ -43,4 +45,9 @@ export class User {
   @UpdateDateColumn()
   @Field()
   updatedAt: Date;
+
+  // relationship
+  @OneToOne(() => Customer, (customer) => customer.user, { cascade: true })
+  @Field(() => Customer, { nullable: true })
+  customer: Customer;
 }

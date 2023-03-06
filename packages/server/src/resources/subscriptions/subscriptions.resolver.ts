@@ -1,8 +1,7 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { SubscriptionsService } from './subscriptions.service';
-import { Subscription } from './entities/subscription.entity';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateSubscriptionInput } from './dto/create-subscription.input';
-import { UpdateSubscriptionInput } from './dto/update-subscription.input';
+import { Subscription } from './entities/subscription.entity';
+import { SubscriptionsService } from './subscriptions.service';
 
 @Resolver(() => Subscription)
 export class SubscriptionsResolver {
@@ -26,16 +25,16 @@ export class SubscriptionsResolver {
     return this.subscriptionsService.findOne(id);
   }
 
-  @Mutation(() => Subscription)
-  updateSubscription(
-    @Args('updateSubscriptionInput')
-    updateSubscriptionInput: UpdateSubscriptionInput,
-  ) {
-    return this.subscriptionsService.update(
-      updateSubscriptionInput.id,
-      updateSubscriptionInput,
-    );
-  }
+  // @Mutation(() => Subscription)
+  // updateSubscription(
+  //   @Args('updateSubscriptionInput')
+  //   updateSubscriptionInput: UpdateSubscriptionInput,
+  // ) {
+  //   return this.subscriptionsService.update(
+  //     updateSubscriptionInput.id,
+  //     updateSubscriptionInput,
+  //   );
+  // }
 
   @Mutation(() => Subscription)
   removeSubscription(@Args('id', { type: () => Int }) id: number) {

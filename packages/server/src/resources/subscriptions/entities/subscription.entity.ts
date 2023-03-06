@@ -1,38 +1,41 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import Stripe from 'stripe';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Customer } from '../../customers/entities/customer.entity';
 
 @ObjectType()
 @Entity()
 export class Subscription {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
-  id: string;
+  id: string; // event.data.object.subscription
 
   @Field()
   @Column()
-  userId: string;
+  stripeSubscriptionId: string; // event.data.object.customer
 
   @Field()
   @Column()
-  stripeId: string;
+  stripePriceId: string; // Can tell which price and which plan
 
   @Field()
   @Column()
-  stripePriceId: string;
+  stripeCustomerId: string;
 
   @Field()
   @Column()
-  stripeProductName: string;
+  stripeProductId: string;
 
   @Field()
   @Column()
-  status: 'free' | 'starter' | 'professional';
+  status: Stripe.Subscription.Status;
 
   @CreateDateColumn()
   @Field()
@@ -41,4 +44,15 @@ export class Subscription {
   @UpdateDateColumn()
   @Field()
   updatedAt: Date;
+
+  // relationships
+  @Field()
+  @Column()
+  customerId: string; // event.data.object.client_reference_id (I added)
+
+  @ManyToOne(() => Customer, (customer) => customer.subscriptions, {
+    onDelete: 'CASCADE',
+  })
+  @Field(() => Customer)
+  customer: Customer;
 }

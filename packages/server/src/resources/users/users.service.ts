@@ -8,6 +8,7 @@ import { AppService } from '../../app.service';
 import { oauth2Client } from '../../oauthClient';
 import BooleanResponse from '../../types/boolean-response.input';
 import { RequestWithSession } from '../../types/context.type';
+
 import { AuthService } from '../auth/auth.service';
 import { ChannelsService } from '../channels/channels.service';
 import { CreateUserInput } from './dto/create-user.input';
@@ -134,7 +135,10 @@ export class UsersService {
   }
 
   findOne(id: string) {
-    return this.usersRepository.findOne({ where: { id } });
+    return this.usersRepository.findOne({
+      where: { id },
+      relations: ['customer'],
+    });
   }
 
   findByEmail(email: string) {

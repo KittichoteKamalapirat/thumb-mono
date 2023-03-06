@@ -34,6 +34,29 @@ type Token {
   access_token: String!
 }
 
+type Subscription {
+  id: ID!
+  stripeSubscriptionId: String!
+  stripePriceId: String!
+  stripeCustomerId: String!
+  stripeProductId: String!
+  status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  customerId: String!
+  customer: Customer!
+}
+
+type Customer {
+  id: ID!
+  stripeId: String!
+  subscriptions: [Subscription!]!
+  userId: String!
+  user: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type User {
   id: ID!
   email: String!
@@ -42,6 +65,7 @@ type User {
   channels: [Channel!]!
   createdAt: DateTime!
   updatedAt: DateTime!
+  customer: Customer
 }
 
 type Channel {
@@ -94,15 +118,9 @@ type SummaryItem {
   subscribersLost: Float!
 }
 
-type Subscription {
-  id: ID!
-  userId: String!
-  stripeId: String!
-  stripePriceId: String!
-  stripeProductName: String!
-  status: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+type StringResponse {
+  errors: [FieldError!]
+  value: String
 }
 
 type Query {
@@ -119,6 +137,8 @@ type Query {
   stats(testingId: String!): [SummaryItem!]!
   subscriptions: [Subscription!]!
   subscription(id: Int!): Subscription!
+  customers: [Customer!]!
+  customer(id: String!): Customer!
 }
 
 type Mutation {
@@ -130,9 +150,12 @@ type Mutation {
   createTesting(input: CreateTestingInput!): TestingResponse!
   updateTesting(updateTestingInput: UpdateTestingInput!): Testing!
   removeTesting(id: Int!): Testing!
+  createBillingPortalUrl: StringResponse!
   createSubscription(createSubscriptionInput: CreateSubscriptionInput!): Subscription!
-  updateSubscription(updateSubscriptionInput: UpdateSubscriptionInput!): Subscription!
   removeSubscription(id: Int!): Subscription!
+  createCustomer(createCustomerInput: CreateCustomerInput!): Customer!
+  updateCustomer(updateCustomerInput: UpdateCustomerInput!): Customer!
+  removeCustomer(id: String!): Customer!
 }
 
 input CreateChannelInput {
@@ -163,12 +186,21 @@ input UpdateTestingInput {
 }
 
 input CreateSubscriptionInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  stripeSubscriptionId: String!
+  stripePriceId: String!
+  stripeCustomerId: String!
+  stripeProductId: String!
+  status: String!
+  customerId: String!
 }
 
-input UpdateSubscriptionInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input CreateCustomerInput {
+  stripeId: String!
+  userId: String!
+}
+
+input UpdateCustomerInput {
+  stripeId: String
+  userId: String
+  id: String!
 }
