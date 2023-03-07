@@ -71,24 +71,25 @@ export class SubscriptionsService {
 
   async update(input: UpdateSubscriptionInput): Promise<SubscriptionResponse> {
     try {
-      const existingSub = await this.findOne(input.id);
-      if (!existingSub)
-        return {
-          errors: [
-            {
-              field: 'subscription',
-              message: 'Cannot find a subscription in my database',
-            },
-          ],
-        };
+      // definitely exist because I just search for it
+      // const existingSub = await this.findOne(input.id);
+      // if (!existingSub)
+      //   return {
+      //     errors: [
+      //       {
+      //         field: 'subscription',
+      //         message: 'Cannot find a subscription in my database',
+      //       },
+      //     ],
+      //   };
 
       const savedSub = await this.subscriptionsRepository.save({
-        id: existingSub.id,
+        id: input.id,
         status: input.status,
       });
 
       // update a product in my db
-      await this.productsService.update(input.stripeProductId);
+      await this.productsService.update(input.id, input.stripeProductId);
 
       return { subscription: savedSub };
     } catch (error) {

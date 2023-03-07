@@ -1,4 +1,4 @@
-import { ReactNode, useContext } from "react";
+import { ReactNode, useContext, useEffect } from "react";
 import { BiPlus } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
 import { MdAccountCircle } from "react-icons/md";
@@ -8,9 +8,17 @@ import { Link, useLocation } from "react-router-dom";
 import { brandName, ICON_SIZE } from "../../constants";
 import { ChannelContext } from "../../contexts/ChannelContext";
 import { UserContext } from "../../contexts/UserContext";
-import { useLogoutMutation } from "../../generated/graphql";
+import {
+  useLogoutMutation,
+  useMeUserQuery,
+  User,
+} from "../../generated/graphql";
 import { urlResolver } from "../../lib/UrlResolver";
+import { PRODUCT_NAME } from "../../types/ProductName.type";
 import Button from "../Buttons/Button";
+import { Error } from "../skeletons/Error";
+import { Loading } from "../skeletons/Loading";
+import Badge from "../Badge";
 
 interface Props {
   children: ReactNode;
@@ -20,6 +28,8 @@ const SideAndTopNav = ({ children }: Props) => {
   const { pathname } = useLocation();
   const { setChannel } = useContext(ChannelContext);
   const { user, setUser } = useContext(UserContext);
+
+  const { data, loading, error } = useMeUserQuery();
 
   const [logout] = useLogoutMutation();
 
@@ -35,6 +45,16 @@ const SideAndTopNav = ({ children }: Props) => {
       console.log("error", error);
     }
   };
+
+  const productName = data?.meUser?.customer?.subscription?.product.name;
+
+  useEffect(() => {
+    const user = data?.meUser;
+    if (user && setUser) setUser(user as User);
+  }, [data?.meUser]);
+
+  if (loading) return <Loading isFullPage />;
+  if (error) return <Error text="Error retrieving a user" />;
 
   return (
     <div>
@@ -85,6 +105,9 @@ const SideAndTopNav = ({ children }: Props) => {
                     data-dropdown-toggle="dropdown-user"
                   >
                     <span className="sr-only">Open user menu</span>
+
+                    <Badge content={productName || "No info"} />
+
                     <img
                       className="w-8 h-8 rounded-full"
                       src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"

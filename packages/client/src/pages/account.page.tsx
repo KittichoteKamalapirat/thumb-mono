@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Buttons/Button";
 import LabelAndData from "../components/LabelAndData";
@@ -64,6 +64,7 @@ const MyAccount = ({}: Props) => {
       console.log("error", error);
     }
   };
+
   return (
     <Layout>
       <LabelAndData

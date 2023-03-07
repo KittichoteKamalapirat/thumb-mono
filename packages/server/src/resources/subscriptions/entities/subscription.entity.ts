@@ -62,6 +62,6 @@ export class Subscription {
   @OneToOne(() => Product, (product) => product.subscription, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
+  @Field(() => Product)
   product: Product;
 }

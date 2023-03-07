@@ -43,9 +43,9 @@ export type CreateSubscriptionInput = {
   customerId: Scalars['String'];
   status: Scalars['String'];
   stripeCustomerId: Scalars['String'];
+  stripeId: Scalars['String'];
   stripePriceId: Scalars['String'];
   stripeProductId: Scalars['String'];
-  stripeSubscriptionId: Scalars['String'];
 };
 
 export type CreateTestingInput = {
@@ -63,7 +63,7 @@ export type Customer = {
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
   stripeId: Scalars['String'];
-  subscriptions: Array<Subscription>;
+  subscription: Subscription;
   updatedAt: Scalars['DateTime'];
   user: User;
   userId: Scalars['String'];
@@ -155,6 +155,17 @@ export type MutationUpdateTestingArgs = {
   updateTestingInput: UpdateTestingInput;
 };
 
+export type Product = {
+  __typename?: 'Product';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  stripeId: Scalars['String'];
+  subscription: Subscription;
+  subscriptionId: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+};
+
 export type Query = {
   __typename?: 'Query';
   channel: Channel;
@@ -191,7 +202,7 @@ export type QueryStatsArgs = {
 
 
 export type QuerySubscriptionArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
@@ -221,11 +232,12 @@ export type Subscription = {
   customer: Customer;
   customerId: Scalars['String'];
   id: Scalars['ID'];
+  product: Product;
   status: Scalars['String'];
   stripeCustomerId: Scalars['String'];
+  stripeId: Scalars['String'];
   stripePriceId: Scalars['String'];
   stripeProductId: Scalars['String'];
-  stripeSubscriptionId: Scalars['String'];
   updatedAt: Scalars['DateTime'];
 };
 
@@ -346,7 +358,7 @@ export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
 export type MeUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeUserQuery = { __typename?: 'Query', meUser?: { __typename?: 'User', id: string, email: string } | null };
+export type MeUserQuery = { __typename?: 'Query', meUser?: { __typename?: 'User', id: string, email: string, customer?: { __typename?: 'Customer', subscription: { __typename?: 'Subscription', product: { __typename?: 'Product', name: string } } } | null } | null };
 
 export type MeChannelQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -561,6 +573,13 @@ export const MeUserDocument = gql`
   meUser {
     id
     email
+    customer {
+      subscription {
+        product {
+          name
+        }
+      }
+    }
   }
 }
     `;

@@ -137,7 +137,11 @@ export class UsersService {
   findOne(id: string) {
     return this.usersRepository.findOne({
       where: { id },
-      relations: ['customer'],
+      relations: [
+        'customer',
+        'customer.subscription',
+        'customer.subscription.product',
+      ],
     });
   }
 

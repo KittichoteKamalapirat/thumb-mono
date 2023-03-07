@@ -56,10 +56,12 @@ export class ProductsService {
     return `This action returns a #${id} product`;
   }
 
-  async update(stripeProductId: string) {
+  // have to find by subscriptionId
+  // stripeProductId could change
+  async update(subscriptionId: string, newStripeProductId: string) {
     try {
       const existingProduct = await this.productsRepository.findOneBy({
-        stripeId: stripeProductId,
+        subscriptionId,
       });
 
       if (!existingProduct)
@@ -71,7 +73,7 @@ export class ProductsService {
             },
           ],
         };
-      const stripeProduct = await stripe.products.retrieve(stripeProductId);
+      const stripeProduct = await stripe.products.retrieve(newStripeProductId);
 
       if (!stripeProduct)
         return {
@@ -85,7 +87,7 @@ export class ProductsService {
 
       const productInput: UpdateProductInput = {
         id: existingProduct.id,
-        stripeId: stripeProductId,
+        stripeId: newStripeProductId,
         name: stripeProduct.name as ProductName,
       };
 
