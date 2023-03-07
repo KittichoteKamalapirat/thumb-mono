@@ -1,5 +1,6 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,20 +8,20 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { typeormConfigNest } from './config/typeorm-nest.config';
+import { AnalyticsModule } from './resources/analytics/analytics.module';
 import { AuthModule } from './resources/auth/auth.module';
 import { ChannelsModule } from './resources/channels/channels.module';
 import { CronsModule } from './resources/crons/crons.module';
+import { CustomersModule } from './resources/customers/customers.module';
 import { FilesModule } from './resources/file/file.module';
-import { TestingsModule } from './resources/testings/testings.module';
-import { UsersModule } from './resources/users/users.module';
-import { YoutubeModule } from './resources/youtube/youtube.module';
-import { AnalyticsModule } from './resources/analytics/analytics.module';
-import { ConfigModule } from '@nestjs/config';
-import { getEnvPath } from './utils/getEnvPath';
-import { WebhooksModule } from './resources/webhooks/webhooks.module';
+import { ProductsModule } from './resources/products/products.module';
 import { StripeModule } from './resources/stripe/stripe.module';
 import { SubscriptionsModule } from './resources/subscriptions/subscriptions.module';
-import { CustomersModule } from './resources/customers/customers.module';
+import { TestingsModule } from './resources/testings/testings.module';
+import { UsersModule } from './resources/users/users.module';
+import { WebhooksModule } from './resources/webhooks/webhooks.module';
+import { YoutubeModule } from './resources/youtube/youtube.module';
+import { getEnvPath } from './utils/getEnvPath';
 
 const ENV = process.env.NODE_ENV;
 const envPath = getEnvPath(ENV);
@@ -56,6 +57,7 @@ const envPath = getEnvPath(ENV);
     StripeModule,
     SubscriptionsModule,
     CustomersModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

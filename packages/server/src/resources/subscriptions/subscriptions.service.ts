@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import Stripe from 'stripe';
 import { In, Repository } from 'typeorm';
 import BooleanResponse from '../../types/boolean-response.input';
+import { CreateProductInput } from '../products/dto/create-product.input';
+import { ProductsService } from '../products/products.service';
 import { CreateSubscriptionInput } from './dto/create-subscription.input';
 import SubscriptionResponse from './dto/subscription-response';
 import { UpdateSubscriptionByStripeIdInput } from './dto/update-subscription-by-stripe-id.input';
@@ -14,6 +16,7 @@ export class SubscriptionsService {
   constructor(
     @InjectRepository(Subscription)
     private subscriptionsRepository: Repository<Subscription>,
+    private productsService: ProductsService,
   ) {}
 
   async create(input: CreateSubscriptionInput): Promise<SubscriptionResponse> {
@@ -37,6 +40,9 @@ export class SubscriptionsService {
       });
 
       const savedSub = await this.subscriptionsRepository.save(newSub);
+
+      // create a product in my db
+      await this.productsService.create(input.stripeProductId, savedSub.id);
 
       return { subscription: savedSub };
     } catch (error) {
@@ -71,7 +77,7 @@ export class SubscriptionsService {
           errors: [
             {
               field: 'subscription',
-              message: 'Cannot find a subscription',
+              message: 'Cannot find a subscription in my database',
             },
           ],
         };
@@ -80,6 +86,9 @@ export class SubscriptionsService {
         id: existingSub.id,
         status: input.status,
       });
+
+      // update a product in my db
+      await this.productsService.update(input.stripeProductId);
 
       return { subscription: savedSub };
     } catch (error) {

@@ -15,6 +15,14 @@ export class CustomersService {
 
   async create(input: CreateCustomerInput): Promise<CustomerResponse> {
     try {
+      const existingCustomer = await this.customersRepository.findOneBy({
+        userId: input.userId,
+      });
+
+      if (existingCustomer)
+        return {
+          customer: existingCustomer,
+        };
       const newCustomer = this.customersRepository.create({
         ...input,
       });

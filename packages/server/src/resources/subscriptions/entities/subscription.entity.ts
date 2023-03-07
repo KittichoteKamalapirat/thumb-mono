@@ -5,12 +5,12 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Customer } from '../../customers/entities/customer.entity';
+import { Product } from '../../products/entities/product.entity';
 
 @ObjectType()
 @Entity()
@@ -58,4 +58,10 @@ export class Subscription {
   @JoinColumn()
   @Field(() => Customer)
   customer: Customer;
+
+  @OneToOne(() => Product, (product) => product.subscription, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  product: Product;
 }

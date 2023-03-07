@@ -84,21 +84,15 @@ type FieldError {
   message: String!
 }
 
-type LoginResponse {
-  errors: [FieldError!]
-  channel: Channel
-  user: User
-}
-
 type TestingResponse {
   errors: [FieldError!]
   testing: Testing
 }
 
-type YoutubeVideo {
-  videoId: String!
-  thumbUrl: String!
-  title: String!
+type LoginResponse {
+  errors: [FieldError!]
+  channel: Channel
+  user: User
 }
 
 type SummaryItem {
@@ -116,6 +110,12 @@ type SummaryItem {
   shares: Float!
   subscribersGained: Float!
   subscribersLost: Float!
+}
+
+type YoutubeVideo {
+  videoId: String!
+  thumbUrl: String!
+  title: String!
 }
 
 type StringResponse {

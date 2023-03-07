@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import Stripe from 'stripe';
+import BooleanResponse from '../../types/boolean-response.input';
+import StringResponse from '../../types/string-response.input';
+import { CustomersService } from '../customers/customers.service';
+import { UpdateSubscriptionInput } from '../subscriptions/dto/update-subscription.input';
+import { SubscriptionsService } from '../subscriptions/subscriptions.service';
+import { UsersService } from '../users/users.service';
 import { CreateStripeInput } from './dto/create-stripe.input';
 import { UpdateStripeInput } from './dto/update-stripe.input';
 import { stripe } from './stripe';
-import Stripe from 'stripe';
-import { SubscriptionsService } from '../subscriptions/subscriptions.service';
-import BooleanResponse from '../../types/boolean-response.input';
-import { CustomersService } from '../customers/customers.service';
-import { UsersService } from '../users/users.service';
-import StringResponse from '../../types/string-response.input';
-import { UpdateSubscriptionInput } from '../subscriptions/dto/update-subscription.input';
-import { UpdateSubscriptionByStripeIdInput } from '../subscriptions/dto/update-subscription-by-stripe-id.input';
 
 @Injectable()
 export class StripeService {
@@ -76,6 +75,7 @@ export class StripeService {
         subscription.items.data[0].price.product.toString(),
       );
 
+      // create a subscription and product
       await this.subscriptionsService.create({
         customerId: customer.id,
         stripeId: subscription.id,
@@ -128,6 +128,7 @@ export class StripeService {
         status: stripeSub.status,
       };
 
+      // update a subscription and a product
       await this.subscriptionsService.update(updatedInput);
       return { value: true };
     } catch (error) {
