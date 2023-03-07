@@ -18,6 +18,20 @@ export class SubscriptionsService {
 
   async create(input: CreateSubscriptionInput): Promise<SubscriptionResponse> {
     try {
+      const customerId = input.customerId;
+      const existingSub = await this.subscriptionsRepository.findOne({
+        where: { customerId },
+      });
+
+      if (existingSub)
+        return {
+          errors: [
+            {
+              field: 'subscription',
+              message: 'This customer already has a subscription.',
+            },
+          ],
+        };
       const newSub = this.subscriptionsRepository.create({
         ...input,
       });
@@ -51,7 +65,7 @@ export class SubscriptionsService {
 
   async update(input: UpdateSubscriptionInput): Promise<SubscriptionResponse> {
     try {
-      const existingSub = this.findOne(input.id);
+      const existingSub = await this.findOne(input.id);
       if (!existingSub)
         return {
           errors: [
@@ -62,10 +76,8 @@ export class SubscriptionsService {
           ],
         };
 
-      // update all by stripeId
       const savedSub = await this.subscriptionsRepository.save({
-        // id: existingSub,
-        stripeId: (await existingSub).stripeId,
+        id: existingSub.id,
         status: input.status,
       });
 

@@ -34,6 +34,9 @@ export class StripeService {
     ) as Stripe.DiscriminatedEvent;
   }
 
+  // has client_reference_id
+  // customer.subscription.created doesn't have it
+  // this won't be run when change plan, or cancel a plan
   async handleCheckoutSessionComplete(
     checkoutSession: Stripe.Checkout.Session,
   ): Promise<BooleanResponse> {
@@ -61,7 +64,6 @@ export class StripeService {
           };
       }
       // create a new subscription with active status
-
       const subscription = await stripe.subscriptions.retrieve(
         checkoutSession.subscription.toString(),
         { expand: ['items.data.price.product'] },
@@ -100,7 +102,9 @@ export class StripeService {
   }
 
   async handleSubscriptionUpdated(subscriptionPayload: Stripe.Subscription) {
-    console.log('handle subscription updated');
+    console.log('handle subscription updated', subscriptionPayload);
+
+    // if (subscriptionPayload.cancel_at_period_end) return; // mean it's a cancellation requests, not need to create another sub
     try {
       // retreive because items.data.price.product are not included
       const stripeSub = await stripe.subscriptions.retrieve(
@@ -113,15 +117,8 @@ export class StripeService {
       );
 
       // make the current one cancelled
-      const updatedInput: UpdateSubscriptionByStripeIdInput = {
-        stripeId: stripeSub.id,
-        status: 'canceled',
-      };
-
-      await this.subscriptionsService.updateAllByStripeId(updatedInput);
-      // create a new one
-      await this.subscriptionsService.create({
-        customerId: dbSub.customerId,
+      const updatedInput: UpdateSubscriptionInput = {
+        id: dbSub.id,
         stripeId: stripeSub.id,
         stripePriceId: stripeSub.items.data[0].price.id,
         stripeProductId: (
@@ -129,7 +126,9 @@ export class StripeService {
         ).id,
         stripeCustomerId: stripeSub.customer as string,
         status: stripeSub.status,
-      });
+      };
+
+      await this.subscriptionsService.update(updatedInput);
       return { value: true };
     } catch (error) {
       console.log('error handling subscription updated', error.message);
@@ -145,6 +144,7 @@ export class StripeService {
   }
 
   async handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+    console.log('handle subscription delete');
     try {
       // get the sub's id in my db
       const dbSub = await this.subscriptionsService.findOneByStripeId(
@@ -181,8 +181,19 @@ export class StripeService {
     try {
       const accountUrl = `${process.env.CORS_ORIGIN}/account`;
 
+      console.log('userId', userId);
+
       const user = await this.usersService.findOne(userId);
       console.log('user', user);
+      if (!user)
+        return {
+          errors: [
+            {
+              field: 'user',
+              message: 'Cannot find a user',
+            },
+          ],
+        };
       const stripeCustomerId = user.customer.stripeId;
 
       const portal = await stripe.billingPortal.sessions.create({

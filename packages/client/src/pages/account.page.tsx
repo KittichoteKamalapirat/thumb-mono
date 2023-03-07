@@ -25,6 +25,7 @@ const MyAccount = ({}: Props) => {
   const handleCreatePortal = async () => {
     const result = await createPortal();
 
+    console.log("result creating portal", result);
     const resultValue = result.data?.createBillingPortalUrl;
 
     let errorMessage = "";

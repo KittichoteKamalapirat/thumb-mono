@@ -25,11 +25,11 @@ export class Customer {
   stripeId: string;
 
   // relationships
-  @OneToMany(() => Subscription, (sub) => sub.customer, {
+  @OneToOne(() => Subscription, (sub) => sub.customer, {
     cascade: true,
   })
-  @Field(() => [Subscription])
-  subscriptions: Subscription[];
+  @Field(() => Subscription)
+  subscription: Subscription[];
 
   @Field()
   @Column()

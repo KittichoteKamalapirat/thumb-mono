@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -50,9 +52,10 @@ export class Subscription {
   @Column()
   customerId: string; // event.data.object.client_reference_id (I added)
 
-  @ManyToOne(() => Customer, (customer) => customer.subscriptions, {
+  @OneToOne(() => Customer, (customer) => customer.subscription, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn()
   @Field(() => Customer)
   customer: Customer;
 }

@@ -50,7 +50,7 @@ type Subscription {
 type Customer {
   id: ID!
   stripeId: String!
-  subscriptions: [Subscription!]!
+  subscription: Subscription!
   userId: String!
   user: User!
   createdAt: DateTime!
