@@ -110,7 +110,7 @@ export const getClassName = ({ size, leftIcon, isError }: ClassNameProps) => {
   const sharedInputClassName = clsx(
     "bg-primary-200",
     isError ? "border-coral-500" : "border-opacity-black-8",
-    "border-2 border-grey-800 group bg-transparent peer block w-full placeholder-white focus:placeholder-grey-400 appearance-none rounded-sm text-grey-900 focus:border-blue active:border-blue focus:placeholder-grey-300 focus:outline-none focus:ring-0"
+    "border-2 border-grey-600 group bg-transparent peer block w-full placeholder-white focus:placeholder-grey-400 appearance-none rounded-sm text-grey-900 focus:border-primary active:border-primary focus:placeholder-grey-300 focus:outline-none focus:ring-0"
   );
 
   const borderSizeClassName = borderSize[size];

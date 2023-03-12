@@ -87,7 +87,7 @@ const CreateTest = () => {
 
   const uploads = data?.videos || [];
 
-  const [_, setSearch] = useState("");
+  const [search, setSearch] = useState("");
 
   const handleSearch = (query: string) => {
     setSearch(query);
@@ -206,6 +206,7 @@ const CreateTest = () => {
       <CreateTestEditor
         uploads={uploads}
         useFormData={useFormData}
+        search={search}
         handleSearch={handleSearch}
         filteredUploads={filteredUploads}
         onSubmit={onSubmit}

@@ -32,7 +32,7 @@ import { BiSearch } from "react-icons/bi";
 
 interface Props {
   uploads: YoutubeVideo[];
-
+  search: string;
   handleSearch: (query: string) => void;
   filteredUploads: YoutubeVideo[];
   useFormData: UseFormReturn<FormValues>;
@@ -71,7 +71,7 @@ const testTypeOptions: Option[] = [
 const CreateTestEditor = ({
   uploads,
   fileUploads,
-
+  search,
   handleSearch,
   filteredUploads,
   useFormData,
@@ -79,10 +79,9 @@ const CreateTestEditor = ({
   selectedVideo,
   setFileUploads,
 }: Props) => {
-  const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
 
-  const handleSearchIcon = () => {
+  const handleToggleSearch = () => {
     setShowSearch(!showSearch);
     return;
   };
@@ -175,7 +174,7 @@ const CreateTestEditor = ({
                   </div>
                 )}
                 <IconButton
-                  onClick={handleSearchIcon}
+                  onClick={handleToggleSearch}
                   size="MEDIUM"
                   icon={showSearch ? IoMdClose : BiSearch}
                   type="TERTIARY"
@@ -199,10 +198,8 @@ const CreateTestEditor = ({
                     <label
                       htmlFor={upload.videoId}
                       className={classNames(
-                        "rounded-md border hover:bg-primary-50 hover:cursor-pointer w-full ",
-                        `${
-                          videoId === upload.videoId && "border-4 border-green"
-                        }`
+                        "rounded-md border hover:bg-primary-100 hover:cursor-pointer w-full ",
+                        `${videoId === upload.videoId && "ring-4 ring-primary"}`
                       )}
                     >
                       <input
@@ -248,8 +245,14 @@ const CreateTestEditor = ({
             <div className="grid grid-cols-12 gap-4">
               {/* left */}
               <div className="col-span-12 md:col-span-6 xl:col-span-4 md:border-r">
-                <p className="font-bold mb-2">Original Title</p>
-                {selectedVideo ? selectedVideo?.title : "Please select a video"}
+                <p className=" text-grey-400 text-sm mb-2">Original Title</p>
+                {selectedVideo ? (
+                  <p className="font-semibold text-lg">
+                    {selectedVideo?.title}
+                  </p>
+                ) : (
+                  "Please select a video"
+                )}
               </div>
 
               {/* right side */}
@@ -259,7 +262,7 @@ const CreateTestEditor = ({
                 )}
               >
                 <div className="flex justify-between items-center mb-4">
-                  <p className="font-bold mb-2">Test Title</p>
+                  <p className=" text-grey-400 text-sm mb-2">Test Title</p>
                   <Button
                     label="Add title"
                     onClick={() => append({ value: "" })}
@@ -411,8 +414,8 @@ const CreateTestEditor = ({
                             setValue(FormNames.DURATION, num as never)
                           } // TODO fix me
                           className={classNames(
-                            "border w-20 text-center hover:cursor-pointer hover:bg-primary-50 px-2 py-1 rounded-md",
-                            num === duration && "bg-primary-50"
+                            "border w-20 text-center hover:cursor-pointer hover:bg-primary-100 px-2 py-1 rounded-md",
+                            num === duration && "bg-primary border-2"
                           )}
                         >
                           {num}
