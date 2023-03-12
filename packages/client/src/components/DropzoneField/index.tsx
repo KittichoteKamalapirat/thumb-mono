@@ -185,7 +185,7 @@ const DropzoneField = ({
               ) : (
                 <div className="flex flex-col items-center ">
                   {/* no image and not uploading */}
-                  <p className="text-primary">Drop a thumbnail to test here</p>
+                  <p className="text-grey-500">Drop a thumbnail to test here</p>
                   <AiOutlineCloudUpload
                     size={ICON_SIZE + 50}
                     color={primaryColor.main}

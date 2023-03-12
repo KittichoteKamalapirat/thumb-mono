@@ -10,7 +10,6 @@ const grey500 = "#686868";
 const grey600 = "#525252";
 const grey700 = "#3D3D3D";
 const grey800 = "#292929";
-const grey850 = "#1F1F1F";
 const grey900 = "#121212";
 
 const blue50 = "#EDF1FC";
@@ -163,6 +162,16 @@ module.exports = {
         dark: primaryColor.dark,
         light: primaryColor.light,
         hover: yellow400,
+        50: yellow50,
+        100: yellow100,
+        200: yellow200,
+        300: yellow300,
+        400: yellow400,
+        500: yellow500,
+        600: yellow600,
+        700: yellow700,
+        800: yellow800,
+        900: yellow900,
         DEFAULT: primaryColor.main,
       },
       secondary: {
@@ -209,7 +218,6 @@ module.exports = {
         600: grey600,
         700: grey700,
         800: grey800,
-        850: grey850,
         900: grey900,
         DEFAULT: "#9086AB",
       },

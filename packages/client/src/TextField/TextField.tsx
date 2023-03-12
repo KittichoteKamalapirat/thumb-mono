@@ -1,18 +1,21 @@
-import classnames from "classnames";
-import { ReactNode } from "react";
+import clsx from "clsx";
+import React, { ReactNode } from "react";
 import { TextFieldSizeValue } from "./TextField.type";
 
-export interface TextFieldProps {
+export interface TextFieldProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   label: string;
-  placeholder: string;
-  size: TextFieldSizeValue;
+  name: string;
+  size?: TextFieldSizeValue;
   leftIcon?: ReactNode;
+  isError?: boolean;
   hideLabel?: boolean;
 }
 
 interface ClassNameProps {
   size: TextFieldSizeValue;
   leftIcon?: ReactNode;
+  isError: boolean;
   hideLabel: boolean;
 }
 
@@ -102,13 +105,20 @@ const inputClassNameObjWithLeftIcon: Record<TextFieldSizeValue, string> = {
 };
 
 // TODO: Refactor to share utils
-export const getClassName = ({ size, leftIcon, hideLabel }: ClassNameProps) => {
-  const sharedLabelClassName = classnames(
-    "absolute z-10 origin-[0] font-semibold transform text-grey-500 duration-300 group-focus:text-blue group-active:text-blue",
+export const getClassName = ({
+  size,
+  leftIcon,
+  isError,
+  hideLabel,
+}: ClassNameProps) => {
+  const sharedLabelClassName = clsx(
+    "absolute z-10 origin-[0] transform text-grey-500 duration-300 group-focus:text-blue group-active:text-blue",
+    ["xl", "xxl"].includes(size) ? "font-semibold" : "font-normal",
     hideLabel && "peer-focus:hidden hidden peer-placeholder-shown:block"
   );
-  const sharedInputClassName = classnames(
-    "group bg-transparent peer block w-full placeholder-white focus:placeholder-grey-400 appearance-none rounded-lg border-[1px] border-grey-300 text-grey-900 focus:border-blue active:border-blue focus:placeholder-grey-300 focus:outline-none focus:ring-0"
+  const sharedInputClassName = clsx(
+    isError ? "border-coral-500" : "border-opacity-black-8",
+    "group bg-transparent peer block w-full placeholder-white focus:placeholder-grey-400 appearance-none rounded-lg border-[2px] text-grey-900 focus:border-blue active:border-blue focus:placeholder-grey-300 focus:outline-none focus:ring-0"
   );
 
   const borderSizeClassName = borderSize[size];
@@ -118,24 +128,21 @@ export const getClassName = ({ size, leftIcon, hideLabel }: ClassNameProps) => {
   const inputClassNameWithLabel = inputSizesWithLabelObj[size];
   const fontSizeClassName = fontSizes[size];
 
-  const leftIconClassName = classnames(
-    sharedLeftIconClassName,
-    leftIconSizes[size]
-  );
-  const rightIconClassName = classnames(
+  const leftIconClassName = clsx(sharedLeftIconClassName, leftIconSizes[size]);
+  const rightIconClassName = clsx(
     sharedLeftIconClassName,
     rightIconSizes[size]
   );
-  const labelClassName = classnames(
+  const labelClassName = clsx(
     sharedLabelClassName,
     labelSizes[size],
     !!leftIcon && labelSizesWithLeftIcon[size]
   );
-  const valueClassName = classnames(
+  const valueClassName = clsx(
     labelSizes[size],
     !!leftIcon && labelSizesWithLeftIcon[size]
   );
-  const inputClassName = classnames(
+  const inputClassName = clsx(
     sharedInputClassName,
     borderSizeClassName,
     hideLabel ? inputClassNameWithoutLabel : inputClassNameWithLabel,
@@ -151,33 +158,43 @@ export const getClassName = ({ size, leftIcon, hideLabel }: ClassNameProps) => {
   };
 };
 
-const TextField = ({
-  label,
-  placeholder = label,
-  leftIcon,
-  size = "medium",
-  hideLabel = false,
-}: TextFieldProps) => {
-  const { labelClassName, inputClassName, leftIconClassName } = getClassName({
-    leftIcon,
-    size,
-    hideLabel,
-  });
+const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
+  (props, ref) => {
+    const {
+      label,
+      placeholder = " ",
+      leftIcon,
+      size = "medium",
+      isError = false,
+      hideLabel = false,
+      ...inputProps
+    } = props;
+    const { labelClassName, inputClassName, leftIconClassName } = getClassName({
+      leftIcon,
+      size,
+      isError,
+      hideLabel,
+    });
 
-  return (
-    <div className="relative">
-      <input
-        type="text"
-        id="floating_label_input"
-        className={inputClassName}
-        placeholder={placeholder}
-      />
-      <div className={leftIconClassName}>{leftIcon}</div>
-      <label htmlFor="floating_label_input" className={labelClassName}>
-        {label}
-      </label>
-    </div>
-  );
-};
+    const inputLabel = `floating_label_input_${inputProps.name}`;
+
+    return (
+      <div className="relative">
+        <input
+          type="text"
+          id={inputLabel}
+          placeholder={placeholder}
+          className={inputClassName}
+          ref={ref}
+          {...inputProps}
+        />
+        <div className={leftIconClassName}>{leftIcon}</div>
+        <label htmlFor={inputLabel} className={labelClassName}>
+          {label}
+        </label>
+      </div>
+    );
+  }
+);
 
 export default TextField;

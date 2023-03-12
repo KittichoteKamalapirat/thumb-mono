@@ -13,10 +13,8 @@ import {
 import { debounce } from "../utils/debounce";
 import CreateTestEditor from "./CreateTestEditor";
 import { UploadedFile } from "./DropzoneField";
-
-interface Props {}
-
-// const oauth2Client = new google.auth.OAuth2(client, secret, redirect);
+import { Error } from "./skeletons/Error";
+import { Loading } from "./skeletons/Loading";
 
 const TitleSchema = z
   .object({
@@ -39,19 +37,11 @@ const CreateTitleTestSchema = SharedSchema.extend({
   type: z.literal("title"),
 });
 
-// const CreateThumbTestSpecificSchema = SharedSchema.extend({
-//   originalThumb: z.string(),
-//   durationType: z.literal("specific"),
-//   type: z.literal("thumb"),
-// });
-
 export const FormSchema = z.discriminatedUnion("type", [
   CreateThumbTestSchema,
   CreateTitleTestSchema,
 ]);
 
-type CreateThumbTestFormValues = z.infer<typeof CreateThumbTestSchema>;
-type CreateTitleTestFormValues = z.infer<typeof CreateTitleTestSchema>;
 export type FormValues = z.infer<typeof FormSchema>;
 
 export type CreateTitleTestInput = FormValues;
@@ -63,15 +53,7 @@ enum FormNames {
   VARIS = "varis", // for titles
   ORI = "ori", // could be thumb url or title
   TYPE = "type",
-  // TYPE = "type",
 }
-
-// export interface FormValues {
-//   [FormNames.VIDEO_ID]: string;
-//   [FormNames.DURATION_TYPE]: DurationType;
-//   [FormNames.DURATION]: number; // in days
-//   // [FormNames.TYPE]: TestingType ; // TODO add this later, now only thumbnail
-// }
 
 const defaultValues: FormValues = {
   [FormNames.VIDEO_ID]: "PlT05VwzMlg",
@@ -82,15 +64,7 @@ const defaultValues: FormValues = {
   [FormNames.TYPE]: "title",
 };
 
-// export interface MyUpload {
-//   videoId: string;
-//   thumbnailUrl: string;
-//   title: string;
-// }
-
-const CreateTest = ({}: Props) => {
-  // const [selectedUpload, setSelectedUpload] = useState<MyUpload>();
-
+const CreateTest = () => {
   const {
     data: channelData,
     loading: channelLoading,
@@ -104,9 +78,12 @@ const CreateTest = ({}: Props) => {
   const { channel } = useContext(ChannelContext);
   const channelId = channel?.ytChannelId;
 
+  // uncomment this
   const { data, loading, error } = useVideosQuery({
     variables: { channelId: channelId || "" },
   });
+
+  // const uploads = [] as YoutubeVideo[];
 
   const uploads = data?.videos || [];
 
@@ -219,6 +196,9 @@ const CreateTest = ({}: Props) => {
   useEffect(() => {
     useFormData.setValue(FormNames.TYPE, "title" as never); // TODO fix me
   }, []);
+
+  if (loading || channelLoading) return <Loading isFullPage />;
+  if (error || channelError) return <Error text="An error occured" />;
 
   return (
     <div>

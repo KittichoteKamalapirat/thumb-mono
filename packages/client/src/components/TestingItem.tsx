@@ -35,7 +35,8 @@ const TestingItem = ({ testing }: Props) => {
           >
             <Button
               label="Watch on Youtube"
-              type="TERTIARY"
+              type="TEXT"
+              size="SMALL"
               leftIcon={HiOutlineExternalLink}
             />
           </LinkButton>

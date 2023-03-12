@@ -13,6 +13,7 @@ export const BUTTON_TYPE = {
   DANGER_PRIMARY: "DANGER_PRIMARY",
   DANGER_SECONDARY: "DANGER_SECONDARY",
   DANGER_TERTIARY: "DANGER_TERTIARY",
+  TEXT: "TEXT",
 } as const;
 
 export type ButtonTypeValues = ObjectValues<typeof BUTTON_TYPE>;
@@ -59,15 +60,26 @@ export interface ButtonProps {
 }
 
 // TODO: UI labels are reusable, create as components and remove theme tokens if needed
-const getSizeStyle = (size: ButtonSizeValues) =>
-  ({
+const getSizeStyle = (size: ButtonSizeValues, type?: ButtonTypeValues) => {
+  if (type === "TEXT") {
+    return {
+      [BUTTON_SIZE.XXL]: "text-xxl px-0",
+      [BUTTON_SIZE.XL]: "text-xl px-0",
+      [BUTTON_SIZE.LARGE]: "text-lg px-0",
+      [BUTTON_SIZE.MEDIUM]: "text-md px-0",
+      [BUTTON_SIZE.SMALL]: "text-sm px-0",
+      [BUTTON_SIZE.XS]: "text-xs px-0",
+    }[size];
+  }
+  return {
     [BUTTON_SIZE.XXL]: "text-xxl leading-xxl px-[32px] h-[84px]",
     [BUTTON_SIZE.XL]: "text-xl leading-xl px-[28px] h-[72px]",
     [BUTTON_SIZE.LARGE]: "text-lg leading-lg px-[24px] h-[60px]",
     [BUTTON_SIZE.MEDIUM]: "text-md leading-md px-[20px] h-[48px]",
     [BUTTON_SIZE.SMALL]: "text-sm leading-sm px-[16px] h-[36px]",
     [BUTTON_SIZE.XS]: "text-xs leading-xs px-[12px] h-[28px]",
-  }[size]);
+  }[size];
+};
 
 export const getTypeStyle = (
   type: ButtonTypeValues,
@@ -105,6 +117,7 @@ export const getTypeStyle = (
       "bg-coral-100 text-coral-500 hover:bg-coral-200 hover:text-coral-600 active:bg-coral-300 active:text-coral-600 focus:bg-coral-200 focus:text-coral-600 disabled:cursor-not-allowed disabled:bg-opacity-black-4 disabled:text-opacity-black-24",
     [BUTTON_TYPE.DANGER_TERTIARY]:
       "bg-coral-100 bg-opacity-0 text-coral-500 hover:bg-opacity-100 active:bg-coral-200 active:bg-opacity-100 focus:bg-opacity-100 disabled:cursor-not-allowed disabled:bg-opacity-0 disabled:text-opacity-black-24",
+    [BUTTON_TYPE.TEXT]: "",
   }[type]);
 
 export const getWidthStyle = (width: ButtonWidthValues) =>
@@ -160,7 +173,7 @@ export const getButtonStyles = (
   inverted: boolean
 ) => ({
   baseStyle: "bg-transition rounded-sm font-semibold duration-300 ease-in-out",
-  sizeStyle: getSizeStyle(size),
+  sizeStyle: getSizeStyle(size, type),
   typeStyle: getTypeStyle(type, size, isSelected, inverted),
   widthStyle: getWidthStyle(width),
 });

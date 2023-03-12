@@ -1,24 +1,25 @@
 interface Props {
   label: string;
   ariaLabel?: string;
-  fontSize: string;
-  fontStyle: string;
-  fontColor: string;
-  extraClass: string;
-  displayOptionalLabel: boolean;
+  fontSize?: string;
+  fontStyle?: string;
+  fontColor?: string;
+  extraClass?: string;
+  fontWeight?: string;
+  displayOptionalLabel?: boolean;
   optionalLabelStyle?: string;
   htmlFor?: string;
   required?: boolean;
 }
 
 const FormFieldLabel = ({
-  label,
-  fontSize,
+  label = "",
+  fontWeight = "",
+  fontSize = "text-md",
   ariaLabel,
-  fontStyle,
-  fontColor,
-  extraClass,
-  displayOptionalLabel,
+  fontColor = "text-opacity-black-92",
+  extraClass = "mb-2",
+  displayOptionalLabel = false,
   optionalLabelStyle = "",
   htmlFor = "",
   required = false,
@@ -28,10 +29,10 @@ const FormFieldLabel = ({
       <label
         aria-label={ariaLabel || label}
         htmlFor={htmlFor || label}
-        className={`inline-block ${fontSize} ${fontStyle} ${fontColor} ${extraClass} `}
+        className={`inline-block ${fontWeight} ${fontSize} ${fontColor} ${extraClass} `}
       >
         {label}
-        {required && <span className="align-sub text-xl text-red-500"> *</span>}
+        {required && <span className="align-super text-md text-error"> *</span>}
         {displayOptionalLabel && (
           <span
             className={`ml-2 italic font-thin text-xxs ${optionalLabelStyle}`}
@@ -44,15 +45,6 @@ const FormFieldLabel = ({
   } else {
     return null;
   }
-};
-
-FormFieldLabel.defaultProps = {
-  label: "",
-  fontSize: "text-11px",
-  fontStyle: "font-nunito",
-  fontColor: "text-grey-420",
-  extraClass: "mb-2",
-  displayOptionalLabel: false,
 };
 
 export default FormFieldLabel;

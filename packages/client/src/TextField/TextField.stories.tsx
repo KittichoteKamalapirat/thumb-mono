@@ -31,5 +31,5 @@ LeftIcon.args = {
   label: "First Name",
   placeholder: "First Name",
   size: "medium",
-  leftIcon: <IoMdImages />,
+  leftIcon: <IoMdImages size="40" />,
 };

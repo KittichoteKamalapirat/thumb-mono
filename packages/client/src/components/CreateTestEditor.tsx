@@ -1,3 +1,4 @@
+import { BsImage } from "react-icons/bs";
 import classNames from "classnames";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
@@ -8,7 +9,7 @@ import {
 } from "react-hook-form";
 
 import dayjs from "dayjs";
-import { IoMdImages } from "react-icons/io";
+import { IoMdClose, IoMdImages } from "react-icons/io";
 import { TbLanguageHiragana } from "react-icons/tb";
 import { TestingTypeObj } from "../firebase/types/Testing.type";
 import { YoutubeVideo } from "../generated/graphql";
@@ -21,6 +22,13 @@ import { InputType } from "./forms/TextField/inputType";
 import Searchbar from "./Searchbar";
 import Select, { Option } from "./Select/Select";
 import Button from "../design-system/lib/Button/Button";
+import { ICON_SIZE } from "../constants";
+import { grey100, grey200 } from "../theme";
+import PageHeading from "./typography/PageHeading";
+import SelectText from "./Select/SelectText";
+import { HiOutlineTrash } from "react-icons/hi";
+import IconButton from "../design-system/lib/Button/IconButton";
+import { BiSearch } from "react-icons/bi";
 
 interface Props {
   uploads: YoutubeVideo[];
@@ -72,6 +80,12 @@ const CreateTestEditor = ({
   setFileUploads,
 }: Props) => {
   const [search, setSearch] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+
+  const handleSearchIcon = () => {
+    setShowSearch(!showSearch);
+    return;
+  };
 
   const {
     register,
@@ -112,129 +126,128 @@ const CreateTestEditor = ({
 
   return (
     <div>
-      <div>{JSON.stringify(watch(), null, 2)}</div>
-      <div>{JSON.stringify(errors, null, 2)}</div>
-      <div>valid: {isValid ? "valid" : "not valid"}</div>
-      {/* <Navbar /> */}
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* section 0 */}
         <div>
           <div className="grid grid-cols-12 gap-4 mt-4">
-            {/* <select
-              {...register("type")}
-              className="col-span-4 bg-ice border border-gray-300 text-gray-900 rounded-lg focus:ring-blue focus:border-blue block w-full p-4 hover:cursor-pointer"
-            >
-              {testingTypeOptions.map((option) => (
-                <option value={option.value}>{option.label}</option>
-              ))}
-            </select> */}
+            {/* section 1 */}
+            <div data-section="1" className="col-span-12 py-4">
+              <div className="flex flex-col md:flex-row items-start gap-2">
+                <PageHeading heading="Start a new" fontSize="text-lg" />
 
-            <div>
-              <Select
-                name={FormNames.TYPE}
-                control={control as unknown as Control}
-                options={testTypeOptions}
-                value={testTypeOptions[0]}
-                density="comfort"
-                onChange={register("type").onChange}
-                size="medium"
-                label="label"
-                // {...register("type").onChange}
-              />
-            </div>
-            {/* {testingTypeOptions.map((option) => (
-              <div key={option.value} className="flex col-span-6 md:col-span-4">
-                <input
-                  id={option.value}
-                  type="option"
-                  value={option.value}
-                  className="hidden"
-                  checked={type === option.value}
-                  {...register("type")}
-                />
-                <label
-                  htmlFor={option.value}
-                  className={classNames(
-                    "w-full",
-                    `${
-                      type === option.value
-                        ? ACTION_ACTIVE_CARD_CLASSNAMES
-                        : ACTION_CARD_CLASSNAMES
-                    }`
-                  )}
-                >
-                  <div>{option.label}</div>
-                </label>
+                <div className="w-full sm:w-1/2 md:w-1/3">
+                  <SelectText
+                    name={FormNames.TYPE}
+                    control={control as unknown as Control}
+                    options={testTypeOptions}
+                    density="comfort"
+                    onChange={register("type").onChange}
+                    size="large"
+                    label="Test Type"
+                  />
+                </div>
               </div>
-            ))} */}
+            </div>
           </div>
         </div>
         {/* section 1 */}
-        <div data-section="1" className="mt-4">
-          <FormFieldLabel required label="Select a video" />
+        <div
+          data-section="1"
+          className="col-span-12  border rounded-md p-4 mt-4"
+        >
+          <div>
+            <FormFieldLabel required label="1.Select a video" />
 
-          <div className="grid grid-cols-5 gap-2">
-            {filteredUploads?.slice(0, 5).map((upload, index) => {
-              const selectedClass =
-                selectedVideo?.videoId === upload.videoId
-                  ? "bg-primary-50"
-                  : "";
-              if (selectedVideo?.videoId === upload.videoId) {
-              }
+            {/* search */}
+            <div className="mb-4">
+              {showSearch && (
+                <FormFieldLabel
+                  required
+                  label="Search by title or video id"
+                  fontColor="text-grey-500"
+                  fontSize="text-sm"
+                />
+              )}
+              <div className="flex w-full gap-2 items-center">
+                {showSearch && (
+                  <div>
+                    <Searchbar query={search} onChange={handleSearch} />
+                  </div>
+                )}
+                <IconButton
+                  onClick={handleSearchIcon}
+                  size="MEDIUM"
+                  icon={showSearch ? IoMdClose : BiSearch}
+                  type="TERTIARY"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-12 gap-2">
+              {filteredUploads?.slice(0, 5).map((upload, index) => {
+                const selectedClass =
+                  selectedVideo?.videoId === upload.videoId
+                    ? "bg-primary-50"
+                    : "";
+                if (selectedVideo?.videoId === upload.videoId) {
+                }
 
-              return (
-                <div
-                  key={upload.videoId}
-                  className="flex gap-2 col-span-2 md:col-span-1"
-                >
-                  <input
-                    id={upload.videoId}
-                    type="radio"
-                    value={upload.videoId}
-                    className="hidden"
-                    {...register(FormNames.VIDEO_ID)}
-                  />
-                  <label
-                    htmlFor={upload.videoId}
-                    className={classNames(
-                      "w-full rounded-md border p-0 hover:bg-primary-50 hover:cursor-pointer",
-                      `${videoId === upload.videoId && "border-4 border-green"}`
-                    )}
+                return (
+                  <div
+                    key={upload.videoId}
+                    className="flex gap-2 col-span-6 sm:col-span-4 md:col-span-2 lg:col-span-2"
                   >
-                    <div>
-                      <div className="font-bold">
-                        <img
-                          src={upload.thumbUrl}
-                          className="w-full rounded-t-md"
-                        />
-                        <p className="text-lg p-2">
-                          {upload.title.slice(0, 25)}
-                          {upload.title.length > 40 && " ..."}
-                        </p>
-                        {/* <p>{upload.videoId}</p> */}
+                    <label
+                      htmlFor={upload.videoId}
+                      className={classNames(
+                        "rounded-md border hover:bg-primary-50 hover:cursor-pointer w-full ",
+                        `${
+                          videoId === upload.videoId && "border-4 border-green"
+                        }`
+                      )}
+                    >
+                      <input
+                        id={upload.videoId}
+                        type="radio"
+                        value={upload.videoId}
+                        className="hidden"
+                        {...register(FormNames.VIDEO_ID)}
+                      />
+                      <div>
+                        <div className="font-bold">
+                          <img
+                            src={upload.thumbUrl}
+                            className="w-full rounded-t-md"
+                          />
+                          <p className="text-lg p-2">
+                            {upload.title.slice(0, 25)}
+                            {upload.title.length > 40 && " ..."}
+                          </p>
+                          {/* <p>{upload.videoId}</p> */}
+                        </div>
                       </div>
-                    </div>
-                  </label>
-                </div>
-              );
-            })}
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-        <div>
-          <FormFieldLabel required label="Or search by title or video id" />
-          <Searchbar query={search} onChange={handleSearch} />
         </div>
 
         {/* section 2 Select a thumbnail */}
+
         {type === "title" && (
-          <div data-section="2" className="mt-4">
+          <div
+            data-section="2"
+            className="col-span-12 border rounded-md p-4 mt-4"
+          >
             <FormFieldLabel
               required
               label="2. What title do you want to test?"
             />
 
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12 md:col-span-6 xl:col-span-4">
+              {/* left */}
+              <div className="col-span-12 md:col-span-6 xl:col-span-4 md:border-r">
                 <p className="font-bold mb-2">Original Title</p>
                 {selectedVideo ? selectedVideo?.title : "Please select a video"}
               </div>
@@ -275,10 +288,10 @@ const CreateTestEditor = ({
                             shouldUnregister: true,
                           })}
                         />
-                        <Button
-                          label="delete"
+                        <IconButton
                           onClick={() => remove(index)}
-                          size="SMALL"
+                          size="MEDIUM"
+                          icon={HiOutlineTrash}
                           type="TERTIARY"
                         />
                       </div>
@@ -291,21 +304,24 @@ const CreateTestEditor = ({
         )}
         {/* section 2 (thumbnail) */}
         {type === "thumb" && (
-          <div data-section="2" className="mt-4">
+          <div
+            data-section="2"
+            className="col-span-12 border rounded-md p-4 mt-4"
+          >
             <FormFieldLabel required label="2. Upload thumbnails" />
 
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12 md:col-span-6 xl:col-span-4">
-                <p className="font-bold text-primary mb-2">
+              <div className="col-span-12 md:col-span-6 xl:col-span-4 md:border-r">
+                <p className=" text-grey-400 text-sm mb-2">
                   Original Thumbnail
                 </p>
               </div>
               <div className="col-span-12 md:col-span-6 xl:col-span-4">
-                <p className="font-bold text-primary mb-2">Test Thumbnail</p>
+                <p className=" text-grey-400 text-sm mb-2">Test Thumbnail</p>
               </div>
             </div>
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12 md:col-span-6 xl:col-span-4">
+              <div className="col-span-12 md:col-span-6 xl:col-span-4 md:border-r md:pr-4 items-center justify-center flex ">
                 {selectedVideo ? (
                   <img
                     src={selectedVideo?.thumbUrl}
@@ -313,14 +329,17 @@ const CreateTestEditor = ({
                     className="w-full rounded-xl"
                   />
                 ) : (
-                  <div>Select a video</div>
+                  <div className="flex flex-col items-center p-2 rounded-md bg-grey-50 text-grey-300 h-full w-full border-solid border-[1px] border-grey-500">
+                    <BsImage size={ICON_SIZE + 100} color={grey200} />
+                    <p className="">Please select a video above</p>
+                  </div>
                 )}
               </div>
               <div
                 className={classNames(
                   "col-span-12 md:col-span-6 xl:col-span-8",
                   fileUploads.length === 0 &&
-                    "border-dashed border-[2px] rounded-xl border-primary-500 cursor-pointer p-4"
+                    "border-dashed border-[2px] rounded-xl border-grey-300 cursor-pointer p-4"
                 )}
               >
                 <DropzoneField
@@ -335,7 +354,10 @@ const CreateTestEditor = ({
           </div>
         )}
         {/* section 3 */}
-        <div data-section="3" className="mt-4">
+        <div
+          data-section="3"
+          className="col-span-12 border rounded-md p-4 mt-4"
+        >
           {/* select duration label */}
 
           <FormFieldLabel
@@ -373,10 +395,12 @@ const CreateTestEditor = ({
                 />
 
                 {fields.length > 0 && (
-                  <div>
-                    <p>
-                      Since you have {fields.length} titles to test. We
-                      recommend the following number of days.
+                  <div className="mt-2">
+                    <p className=" text-grey-400 text-sm">
+                      Since you have{" "}
+                      <span className="font-bold">{fields.length}</span> title
+                      {fields.length > 1 && "s"} to test. We recommend the
+                      following number of days.
                     </p>
 
                     <div className="flex gap-2">
@@ -398,9 +422,9 @@ const CreateTestEditor = ({
                   </div>
                 )}
 
-                <p className="mt-4">
+                <p className="mt-4 text-grey-400 text-sm">
                   Test will complete on{" "}
-                  <span className="font-bold">
+                  <span className="font-bold text-grey-900">
                     {" "}
                     {dayjs()
                       .add(duration, "d")
@@ -408,9 +432,9 @@ const CreateTestEditor = ({
                   </span>
                 </p>
 
-                <p className="mt-4">
+                <p className="mt-4 text-grey-400 text-sm">
                   Final results will be available on
-                  <span className="font-bold text-green-500">
+                  <span className="font-bold text-success">
                     {" "}
                     {dayjs()
                       .add(duration + 2, "d")

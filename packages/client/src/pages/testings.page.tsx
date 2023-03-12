@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/layouts/Layout";
+import { Error } from "../components/skeletons/Error";
+import { Loading } from "../components/skeletons/Loading";
 import TestingItem from "../components/TestingItem";
 import PageHeading from "../components/typography/PageHeading";
 import Button from "../design-system/lib/Button/Button";
@@ -16,8 +18,8 @@ const Testings = ({}: Props) => {
   console.log("data", data);
   console.log("testings", testings);
 
-  if (loading) return <div>loading</div>;
-  if (error) return <div>{error.message}</div>;
+  if (loading) return <Loading isFullPage />;
+  if (error) return <Error text={error.message} />;
 
   return (
     <Layout>

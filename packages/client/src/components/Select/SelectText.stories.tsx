@@ -2,25 +2,25 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useForm } from "react-hook-form";
 import { IoMdImages } from "react-icons/io";
 import { TbLanguageHiragana } from "react-icons/tb";
-import Select, { Option, SelectProps } from "./Select";
+import SelectText, { Option, SelectProps } from "./SelectText";
 
-const Story: ComponentMeta<typeof Select> = {
-  component: Select,
-  title: "Select",
+const Story: ComponentMeta<typeof SelectText> = {
+  component: SelectText,
+  title: "SelectText",
   argTypes: {
     size: {
-      options: ["medium", "small", "xs"],
+      options: ["xxl", "xl", "large", "medium", "small", "xs"],
       control: { type: "radio" },
     },
   },
 };
 export default Story;
 
-const Template: ComponentStory<typeof Select> = (args: SelectProps) => {
+const Template: ComponentStory<typeof SelectText> = (args: SelectProps) => {
   const name = "fieldName";
   const { control, register } = useForm();
   return (
-    <Select
+    <SelectText
       {...args}
       control={control}
       name={name}
@@ -30,7 +30,6 @@ const Template: ComponentStory<typeof Select> = (args: SelectProps) => {
 };
 
 export const Primary = Template.bind({});
-export const NoLabel = Template.bind({});
 export const LeftIcon = Template.bind({});
 
 const valuesNoIcon: Option[] = [
@@ -57,18 +56,13 @@ const values: Option[] = [
 ];
 
 Primary.args = {
-  label: "Select options",
-  size: "medium",
-  options: valuesNoIcon,
-};
-NoLabel.args = {
-  label: "",
+  label: "SelectText options",
   size: "medium",
   options: valuesNoIcon,
 };
 
 LeftIcon.args = {
-  label: "Select options",
+  label: "SelectText options",
   size: "medium",
   options: values,
 };
