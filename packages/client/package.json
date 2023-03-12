@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "test": "jest",
     "gen": "graphql-codegen --config codegen.ts",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
@@ -39,6 +39,7 @@
     "react-select": "^5.7.0",
     "stripe": "^11.6.0",
     "uuid": "^9.0.0",
+    "vite-plugin-svgr": "^2.4.0",
     "zod": "^3.20.2"
   },
   "devDependencies": {
@@ -49,6 +50,7 @@
     "@graphql-codegen/typescript-operations": "^3.0.0",
     "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "@storybook/addon-actions": "^6.5.16",
+    "@storybook/addon-docs": "^6.5.16",
     "@storybook/addon-essentials": "^6.5.16",
     "@storybook/addon-interactions": "^6.5.16",
     "@storybook/addon-links": "^6.5.16",

@@ -56,6 +56,8 @@ export type CreateTestingInput = {
   type: Scalars['String'];
   varis: Array<Scalars['String']>;
   videoId: Scalars['String'];
+  videoThumbUrl: Scalars['String'];
+  videoTitle: Scalars['String'];
 };
 
 export type Customer = {
@@ -281,6 +283,8 @@ export type Testing = {
   updatedAt: Scalars['DateTime'];
   varis: Array<Scalars['String']>;
   videoId: Scalars['String'];
+  videoThumbUrl: Scalars['String'];
+  videoTitle: Scalars['String'];
 };
 
 export type TestingResponse = {
@@ -310,6 +314,8 @@ export type UpdateTestingInput = {
   type?: InputMaybe<Scalars['String']>;
   varis?: InputMaybe<Array<Scalars['String']>>;
   videoId?: InputMaybe<Scalars['String']>;
+  videoThumbUrl?: InputMaybe<Scalars['String']>;
+  videoTitle?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
@@ -375,21 +381,21 @@ export type CreateTestingMutationVariables = Exact<{
 }>;
 
 
-export type CreateTestingMutation = { __typename?: 'Mutation', createTesting: { __typename?: 'TestingResponse', testing?: { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, valueIndex: number }> } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type CreateTestingMutation = { __typename?: 'Mutation', createTesting: { __typename?: 'TestingResponse', testing?: { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, videoTitle: string, videoThumbUrl: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, valueIndex: number }> } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type MyTestingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyTestingsQuery = { __typename?: 'Query', myTestings: Array<{ __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, valueIndex: number }> }> };
+export type MyTestingsQuery = { __typename?: 'Query', myTestings: Array<{ __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, videoTitle: string, videoThumbUrl: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, valueIndex: number }> }> };
 
 export type TestingQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type TestingQuery = { __typename?: 'Query', testing?: { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, valueIndex: number }> } | null };
+export type TestingQuery = { __typename?: 'Query', testing?: { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, videoTitle: string, videoThumbUrl: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, valueIndex: number }> } | null };
 
-export type TestingSnippetFragment = { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, valueIndex: number }> };
+export type TestingSnippetFragment = { __typename?: 'Testing', id: string, type: string, status: string, duration: number, durationType: string, videoId: string, startDate: string, channelId: string, videoTitle: string, videoThumbUrl: string, ori: string, varis: Array<string>, history: Array<{ __typename?: 'TestHistory', date: string, valueIndex: number }> };
 
 export type VideosQueryVariables = Exact<{
   channelId: Scalars['String'];
@@ -408,6 +414,8 @@ export const TestingSnippetFragmentDoc = gql`
   videoId
   startDate
   channelId
+  videoTitle
+  videoThumbUrl
   history {
     date
     valueIndex

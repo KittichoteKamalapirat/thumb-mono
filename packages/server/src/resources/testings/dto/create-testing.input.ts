@@ -23,4 +23,11 @@ export class CreateTestingInput {
 
   @Field(() => [String])
   varis: string[];
+
+  // for display in TestingTitle
+  @Field()
+  videoTitle: string;
+
+  @Field()
+  videoThumbUrl: string;
 }

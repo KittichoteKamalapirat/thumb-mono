@@ -6,7 +6,6 @@ import {
   useFieldArray,
   UseFormReturn,
 } from "react-hook-form";
-import Button, { HTMLButtonType } from "./Buttons/Button";
 
 import dayjs from "dayjs";
 import { IoMdImages } from "react-icons/io";
@@ -21,6 +20,7 @@ import TextField, { TextFieldTypes } from "./forms/TextField";
 import { InputType } from "./forms/TextField/inputType";
 import Searchbar from "./Searchbar";
 import Select, { Option } from "./Select/Select";
+import Button from "../design-system/lib/Button/Button";
 
 interface Props {
   uploads: YoutubeVideo[];
@@ -249,9 +249,9 @@ const CreateTestEditor = ({
                   <p className="font-bold mb-2">Test Title</p>
                   <Button
                     label="Add title"
-                    fontColor="text-grey-0"
-                    buttonType={HTMLButtonType.BUTTON}
                     onClick={() => append({ value: "" })}
+                    size="SMALL"
+                    type="TERTIARY"
                   />
                 </div>
 
@@ -275,7 +275,12 @@ const CreateTestEditor = ({
                             shouldUnregister: true,
                           })}
                         />
-                        <Button label="delete" onClick={() => remove(index)} />
+                        <Button
+                          label="delete"
+                          onClick={() => remove(index)}
+                          size="SMALL"
+                          type="TERTIARY"
+                        />
                       </div>
                     </div>
                   );
@@ -422,8 +427,7 @@ const CreateTestEditor = ({
         <div className="flex justify-end mt-10">
           <Button
             label="Create a test"
-            fontColor="text-grey-0"
-            buttonType={HTMLButtonType.SUBMIT}
+            buttonType="submit"
             // disabled={!isValid || isSubmitting}
           />
         </div>

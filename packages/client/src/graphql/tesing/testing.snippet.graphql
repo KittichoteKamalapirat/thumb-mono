@@ -7,6 +7,8 @@ fragment TestingSnippet on Testing {
     videoId
     startDate
     channelId
+    videoTitle
+    videoThumbUrl
     history {
     date
     valueIndex

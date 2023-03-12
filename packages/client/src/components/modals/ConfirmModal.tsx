@@ -2,10 +2,11 @@ import { ReactNode, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import ReactModal from "react-modal";
 import { ICON_SIZE } from "../../constants";
+import Button from "../../design-system/lib/Button/Button";
 
 import { grey100, grey500, grey900, red, yellow } from "../../theme";
 import { ConfirmType } from "../../types/ConfirmModalType";
-import Button, { ButtonTypes } from "../Buttons/Button";
+
 import IconButton from "../Buttons/IconButton";
 import PageHeading from "../typography/PageHeading";
 
@@ -94,11 +95,7 @@ const ConfirmModal = ({
         <div> {children}</div>
 
         <div className="flex gap-2 justify-end mt-4">
-          <Button
-            label="Cancel"
-            onClick={onRequestClose}
-            type={ButtonTypes.OUTLINED}
-          />
+          <Button label="Cancel" onClick={onRequestClose} type="TERTIARY" />
           <Button
             label="Yes"
             onClick={() => {

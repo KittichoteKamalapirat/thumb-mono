@@ -48,6 +48,14 @@ export class Testing {
 
   @Field()
   @Column()
+  videoTitle: string;
+
+  @Field()
+  @Column()
+  videoThumbUrl: string;
+
+  @Field()
+  @Column()
   startDate: string; // iso utc
 
   @Field()

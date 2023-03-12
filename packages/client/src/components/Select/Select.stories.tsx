@@ -1,8 +1,8 @@
-import type { ComponentMeta, ComponentStory } from "@storybook/react";
 import Select, { Option, SelectProps } from "./Select";
 
 import { IoMdImages } from "react-icons/io";
 import { TbLanguageHiragana } from "react-icons/tb";
+import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 const Story: ComponentMeta<typeof Select> = {
   component: Select,

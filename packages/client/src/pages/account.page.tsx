@@ -1,10 +1,11 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Buttons/Button";
+
 import LabelAndData from "../components/LabelAndData";
 import Layout from "../components/layouts/Layout";
 import { ChannelContext } from "../contexts/ChannelContext";
 import { UserContext } from "../contexts/UserContext";
+import Button from "../design-system/lib/Button/Button";
 import {
   useCreateBillingPortalUrlMutation,
   useLogoutMutation,

@@ -2,11 +2,12 @@ import classNames from "classnames";
 import { AiFillHome } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
 import { brandName, ICON_SIZE } from "../../constants";
+import Button from "../../design-system/lib/Button/Button";
 import { useGetAuthUrlMutation } from "../../generated/graphql";
 import { useCreateAndSaveToken } from "../../hooks/useCreateAndSaveToken";
 import { urlResolver } from "../../lib/UrlResolver";
 import { primaryColor } from "../../theme";
-import Button, { ButtonTypes } from "../Buttons/Button";
+
 import NavItem from "./NavItem";
 
 enum PATH_ENUM {
@@ -60,8 +61,7 @@ const LoggedOutNav = () => {
               <Button
                 label="Sign in with Google"
                 onClick={handleCreateURL}
-                type={ButtonTypes.OUTLINED}
-                fontColor="text-grey-500"
+                type="TERTIARY"
               />
             </div>
           </li>

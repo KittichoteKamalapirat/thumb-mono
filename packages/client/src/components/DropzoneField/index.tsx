@@ -1,11 +1,10 @@
 import { useEffect, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import { HiOutlineTrash } from "react-icons/hi";
 import { ICON_SIZE } from "../../constants";
-import { grey0, primaryColor } from "../../theme";
-import Button, { ButtonTypes } from "../Buttons/Button";
-import IconButton from "../Buttons/IconButton";
+import Button from "../../design-system/lib/Button/Button";
+import { primaryColor } from "../../theme";
+
 import FormFieldLabel from "../forms/FormFieldLabel";
 import FormHelperText from "../forms/FormHelperText";
 import FileUploads from "./FileUploads";
@@ -189,9 +188,9 @@ const DropzoneField = ({
                   <p className="text-primary">Drop a thumbnail to test here</p>
                   <AiOutlineCloudUpload
                     size={ICON_SIZE + 50}
-                    color={primaryColor}
+                    color={primaryColor.main}
                   />
-                  <Button label="Browse" type={ButtonTypes.OUTLINED} />
+                  <Button label="Browse" type="TERTIARY" />
                 </div>
               )}
             </div>

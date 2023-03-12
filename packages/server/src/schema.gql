@@ -14,6 +14,8 @@ type Testing {
   duration: Int!
   durationType: String!
   videoId: String!
+  videoTitle: String!
+  videoThumbUrl: String!
   startDate: String!
   channelId: String!
   history: [TestHistory!]!
@@ -183,6 +185,8 @@ input CreateTestingInput {
   durationType: String!
   ori: String!
   varis: [String!]!
+  videoTitle: String!
+  videoThumbUrl: String!
 }
 
 input UpdateTestingInput {
@@ -193,6 +197,8 @@ input UpdateTestingInput {
   durationType: String
   ori: String
   varis: [String!]
+  videoTitle: String
+  videoThumbUrl: String
   id: Int!
 }
 

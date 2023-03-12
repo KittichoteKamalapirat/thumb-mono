@@ -4,6 +4,7 @@ import { HiOutlineExternalLink } from "react-icons/hi";
 import { useParams } from "react-router-dom";
 import LabelAndData from "../components/LabelAndData";
 import Layout from "../components/layouts/Layout";
+import TestingItem from "../components/TestingItem";
 import PageHeading from "../components/typography/PageHeading";
 import { ChannelContext } from "../contexts/ChannelContext";
 import { useStatsQuery, useTestingQuery } from "../generated/graphql";
@@ -99,33 +100,7 @@ const MyTesting = ({}: Props) => {
         <PageHeading heading="AB Test Status" />
       </div>
 
-      <h1>vid id: {testing.videoId}</h1>
-      <div className="flex gap-1">
-        <HiOutlineExternalLink color={primaryColor} />
-        <a href={`https://www.youtube.com/watch?v=${testing.videoId}`}>
-          Watch on Youtube
-        </a>
-      </div>
-
-      <LabelAndData label="Duration" data={String(testing?.duration)} />
-      <LabelAndData
-        label="Duration Type"
-        data={String(testing?.durationType)}
-      />
-      <LabelAndData label="Status" data={String(testing?.status)} />
-      <LabelAndData
-        label="Start Date"
-        data={dayjs(testing?.startDate).format("MMMM D, YYYY")}
-      />
-
-      {testing.type === "thumb" && (
-        <div className="grid grid-cols-2 gap-2">
-          <img src={testing.ori} className="w-full col-span-1" />
-          {testing.varis.map((vari) => (
-            <img src={vari} className="w-full  col-span-1" />
-          ))}
-        </div>
-      )}
+      <TestingItem testing={testing} />
 
       <div data-note="table">
         <div className="grid grid-cols-6">

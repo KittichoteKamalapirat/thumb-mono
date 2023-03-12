@@ -1,33 +1,19 @@
-import React from "react";
+import { AnchorHTMLAttributes, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import Button, { ButtonTypes } from "./Button";
 
-interface Props {
-  label: string;
-  pathname?: string;
-  href?: any;
-  leftIcon?: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
-  extraClass?: string;
-  type?: ButtonTypes;
+interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  href: any;
+  className?: string;
+  children: ReactNode; // button
 }
 
-const LinkButton = ({
-  label,
-  href,
-  pathname,
-  leftIcon,
-  extraClass,
-  type = ButtonTypes.PRIMARY,
-}: Props) => {
+const LinkButton = ({ href, className = "", children, ...rest }: Props) => {
   return (
-    <Link to={href || { pathname }}>
-      <Button
-        label={label}
-        startIcon={leftIcon}
-        type={type}
-        extraClass={`${extraClass}`}
-      />
-    </Link>
+    <div className={className}>
+      <Link to={href} {...rest}>
+        {children}
+      </Link>
+    </div>
   );
 };
 

@@ -146,12 +146,16 @@ const CreateTest = ({}: Props) => {
             return {
               ...form,
               channelId: channelUid,
+              videoTitle: selectedVideo?.title as string,
+              videoThumbUrl: selectedVideo?.thumbUrl as string,
               varis: fileUploads.map((file) => file.url),
             };
           case "title":
             return {
               ...form,
               channelId: channelUid,
+              videoTitle: selectedVideo?.title as string,
+              videoThumbUrl: selectedVideo?.thumbUrl as string,
               varis: form.varis.map((vari) => vari.value),
             };
         }

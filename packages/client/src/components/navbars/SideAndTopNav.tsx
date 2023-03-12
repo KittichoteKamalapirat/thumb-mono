@@ -4,7 +4,7 @@ import { FiLogOut } from "react-icons/fi";
 import { MdAccountCircle } from "react-icons/md";
 import { RiCopperDiamondLine } from "react-icons/ri";
 import { TbTestPipe } from "react-icons/tb";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { brandName, ICON_SIZE } from "../../constants";
 import { ChannelContext } from "../../contexts/ChannelContext";
 import { UserContext } from "../../contexts/UserContext";
@@ -15,10 +15,11 @@ import {
 } from "../../generated/graphql";
 import { urlResolver } from "../../lib/UrlResolver";
 import { PRODUCT_NAME } from "../../types/ProductName.type";
-import Button from "../Buttons/Button";
+
 import { Error } from "../skeletons/Error";
 import { Loading } from "../skeletons/Loading";
 import Badge from "../Badge";
+import Button from "../../design-system/lib/Button/Button";
 
 interface Props {
   children: ReactNode;
@@ -28,6 +29,8 @@ const SideAndTopNav = ({ children }: Props) => {
   const { pathname } = useLocation();
   const { setChannel } = useContext(ChannelContext);
   const { user, setUser } = useContext(UserContext);
+
+  const navigate = useNavigate();
 
   const { data, loading, error } = useMeUserQuery();
 
@@ -178,9 +181,9 @@ const SideAndTopNav = ({ children }: Props) => {
           <ul className="space-y-2">
             <li>
               <Button
-                startIcon={<BiPlus size={ICON_SIZE + 5} />}
+                leftIcon={BiPlus}
                 label="Create AB Tests"
-                href="/create-test"
+                onClick={() => navigate(urlResolver.createTest())}
               />
             </li>
             {/* <li>
