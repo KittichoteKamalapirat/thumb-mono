@@ -5,7 +5,7 @@ interface Props {
 }
 const Table = ({ children, ...props }: Props) => {
   return (
-    <table {...props} className="w-full text-md text-left text-gray-700 ">
+    <table {...props} className="w-full text-md text-left text-grey-700 ">
       {children}
     </table>
   );

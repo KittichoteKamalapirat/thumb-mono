@@ -24,7 +24,7 @@ const LoggedInNav = () => {
       </a>
 
       <div className="w-full xl:w-auto" id="navbar-default">
-        <ul className="flex justify-between items-center p-4 mt-4 rounded-lg border-gray-100 xl:flex-row xl:space-x-8 xl:mt-0 xl:font-medium xl:border-0 xl:bg-white text-grey-400">
+        <ul className="flex justify-between items-center p-4 mt-4 rounded-lg border-grey-100 xl:flex-row xl:space-x-8 xl:mt-0 xl:font-medium xl:border-0 xl:bg-white text-grey-400">
           <NavItem
             currentPath={pathname}
             to={PathObj.HOME}

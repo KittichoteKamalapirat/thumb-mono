@@ -54,7 +54,7 @@ const useClassNames = (
 
   const commonInputClass = `${styles.input} ${disabledStyles} w-full appearance-none focus:outline-none`;
 
-  const commonInputDivClass = `flex justify-between items-center appearance-none border rounded w-full ${disabledStyles} text-gray-700 text-xxs focus:outline-none ${extraClass}`;
+  const commonInputDivClass = `flex justify-between items-center appearance-none border rounded w-full ${disabledStyles} text-grey-700 text-xxs focus:outline-none ${extraClass}`;
 
   switch (type) {
     case TextAreaFieldTypes.OUTLINED:

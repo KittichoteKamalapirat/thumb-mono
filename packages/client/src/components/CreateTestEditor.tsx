@@ -277,14 +277,14 @@ const CreateTestEditor = ({
                       <div className="flex items-center gap-2 mb-4">
                         <label
                           htmlFor={`${FormNames.VARIS}.${index}.value`}
-                          className="block mb-2 text-sm font-medium text-gray-900 "
+                          className="block mb-2 text-sm font-medium text-grey-900 "
                         >
                           {index + 1}.
                         </label>
                         <input
                           type="text"
                           id={`${FormNames.VARIS}.${index}.value`}
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                          className="bg-grey-50 border border-grey-300 text-grey-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                           placeholder="John"
                           required
                           {...register(`${FormNames.VARIS}.${index}.value`, {

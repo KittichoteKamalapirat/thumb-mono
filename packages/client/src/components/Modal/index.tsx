@@ -62,7 +62,7 @@ const Modal = ({
             tabIndex={0}
             role="heading"
             aria-label="Login to your account"
-            className="text-2xl font-extrabold leading-6 text-gray-800"
+            className="text-2xl font-extrabold leading-6 text-grey-800"
           >
             {heading}
           </p>

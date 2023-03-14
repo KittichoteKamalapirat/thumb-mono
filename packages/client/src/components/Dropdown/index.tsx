@@ -43,10 +43,10 @@ const Dropdown = ({ children, items, isOpen, onClick }: Props) => {
         id="dropdown"
         className={`${
           isOpen ? "block" : "hidden"
-        } absolute z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow`}
+        } absolute z-10 w-44 bg-white rounded divide-y divide-grey-100 shadow`}
       >
         <ul
-          className="py-1 text-sm text-gray-700"
+          className="py-1 text-sm text-grey-700"
           aria-labelledby="dropdownDefault"
         >
           {items.map((item) => (
@@ -54,7 +54,7 @@ const Dropdown = ({ children, items, isOpen, onClick }: Props) => {
               <a
                 href={item.href || undefined}
                 onClick={item.itemOnClick || undefined}
-                className="block py-2 px-4 hover:bg-gray-100"
+                className="block py-2 px-4 hover:bg-grey-100"
               >
                 {item.label}
               </a>

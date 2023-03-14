@@ -61,7 +61,7 @@ const SideAndTopNav = ({ children }: Props) => {
 
   return (
     <div>
-      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <nav className="fixed top-0 z-50 w-full bg-white border-b border-grey-200 dark:bg-grey-800 dark:border-grey-700">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start">
@@ -70,7 +70,7 @@ const SideAndTopNav = ({ children }: Props) => {
                 data-drawer-toggle="logo-sidebar"
                 aria-controls="logo-sidebar"
                 type="button"
-                className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                className="inline-flex items-center p-2 text-sm text-grey-500 rounded-lg md:hidden hover:bg-grey-100 focus:outline-none focus:ring-2 focus:ring-grey-200 dark:text-grey-400 dark:hover:bg-grey-700 dark:focus:ring-grey-600"
               >
                 <span className="sr-only">Open sidebar</span>
                 <svg
@@ -103,7 +103,7 @@ const SideAndTopNav = ({ children }: Props) => {
                 <div>
                   <button
                     type="button"
-                    className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    className="flex text-sm bg-grey-800 rounded-full focus:ring-4 focus:ring-grey-300 dark:focus:ring-grey-600"
                     aria-expanded="false"
                     data-dropdown-toggle="dropdown-user"
                   >
@@ -119,18 +119,18 @@ const SideAndTopNav = ({ children }: Props) => {
                   </button>
                 </div>
                 <div
-                  className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+                  className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-grey-100 rounded shadow dark:bg-grey-700 dark:divide-grey-600"
                   id="dropdown-user"
                 >
                   <div className="px-4 py-3" role="none">
                     <p
-                      className="text-sm text-gray-900 dark:text-white"
+                      className="text-sm text-grey-900 dark:text-white"
                       role="none"
                     >
                       Neil Sims
                     </p>
                     <p
-                      className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
+                      className="text-sm font-medium text-grey-900 truncate dark:text-grey-300"
                       role="none"
                     >
                       neil.sims@flowbite.com
@@ -140,7 +140,7 @@ const SideAndTopNav = ({ children }: Props) => {
                     <li>
                       <a
                         href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                        className="block px-4 py-2 text-sm text-grey-700 hover:bg-grey-100 dark:text-grey-300 dark:hover:bg-grey-600 dark:hover:text-white"
                         role="menuitem"
                       >
                         Dashboard
@@ -149,7 +149,7 @@ const SideAndTopNav = ({ children }: Props) => {
                     <li>
                       <a
                         href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                        className="block px-4 py-2 text-sm text-grey-700 hover:bg-grey-100 dark:text-grey-300 dark:hover:bg-grey-600 dark:hover:text-white"
                         role="menuitem"
                       >
                         Settings
@@ -158,7 +158,7 @@ const SideAndTopNav = ({ children }: Props) => {
                     <li>
                       <a
                         href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                        className="block px-4 py-2 text-sm text-grey-700 hover:bg-grey-100 dark:text-grey-300 dark:hover:bg-grey-600 dark:hover:text-white"
                         role="menuitem"
                       >
                         Earnings
@@ -174,10 +174,10 @@ const SideAndTopNav = ({ children }: Props) => {
 
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-grey-200 sm:translate-x-0 dark:bg-grey-800 dark:border-grey-700"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800 flex flex-col justify-between">
+        <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-grey-800 flex flex-col justify-between">
           <ul className="space-y-2">
             <li>
               <Button
@@ -189,7 +189,7 @@ const SideAndTopNav = ({ children }: Props) => {
             {/* <li>
               <a
                 href="#"
-                className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex items-center p-2 text-base font-normal text-grey-900 rounded-lg dark:text-white hover:bg-grey-100 dark:hover:bg-grey-700"
               >
                 <MdOutlineSpaceDashboard size={ICON_SIZE + 5} />
                 <span className="ml-3">Dashboard</span>
@@ -198,7 +198,7 @@ const SideAndTopNav = ({ children }: Props) => {
             <li>
               <Link
                 to={urlResolver.index()}
-                className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex items-center p-2 text-base font-normal text-grey-900 rounded-lg dark:text-white hover:bg-grey-100 dark:hover:bg-grey-700"
               >
                 <TbTestPipe size={ICON_SIZE + 5} />
                 <span className="flex-1 ml-3 whitespace-nowrap">
@@ -209,7 +209,7 @@ const SideAndTopNav = ({ children }: Props) => {
             {/* <li>
               <a
                 href="#"
-                className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex items-center p-2 text-base font-normal text-grey-900 rounded-lg dark:text-white hover:bg-grey-100 dark:hover:bg-grey-700"
               >
                 <MdOutlineNotificationsNone size={ICON_SIZE + 6} />
                 <span className="flex-1 ml-3 whitespace-nowrap">
@@ -222,16 +222,16 @@ const SideAndTopNav = ({ children }: Props) => {
             </li> */}
           </ul>
 
-          <ul className="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
+          <ul className="pt-4 mt-4 space-y-2 border-t border-grey-200 dark:border-grey-700">
             {user?.membership === "basic" && (
               <li>
                 <a
                   href="#"
-                  className="flex items-center p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
+                  className="flex items-center p-2 text-base font-normal text-grey-900 transition duration-75 rounded-lg hover:bg-grey-100 dark:hover:bg-grey-700 dark:text-white group"
                 >
                   <RiCopperDiamondLine size={ICON_SIZE + 6} />
                   <span className="ml-4">Upgrade to Pro</span>
-                  <span className="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                  <span className="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-grey-800 bg-grey-200 rounded-full dark:bg-grey-700 dark:text-grey-300">
                     Pro
                   </span>
                 </a>
@@ -241,7 +241,7 @@ const SideAndTopNav = ({ children }: Props) => {
             <li>
               <Link
                 to={urlResolver.myAccount()}
-                className="flex items-center p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
+                className="flex items-center p-2 text-base font-normal text-grey-900 transition duration-75 rounded-lg hover:bg-grey-100 dark:hover:bg-grey-700 dark:text-white group"
               >
                 <MdAccountCircle size={ICON_SIZE + 5} />
                 <span className="ml-3">My Account</span>
@@ -250,7 +250,7 @@ const SideAndTopNav = ({ children }: Props) => {
             <li>
               <div
                 onClick={handleLogout}
-                className="flex items-center p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
+                className="flex items-center p-2 text-base font-normal text-grey-900 transition duration-75 rounded-lg hover:bg-grey-100 dark:hover:bg-grey-700 dark:text-white group"
               >
                 <FiLogOut size={ICON_SIZE + 5} />
 

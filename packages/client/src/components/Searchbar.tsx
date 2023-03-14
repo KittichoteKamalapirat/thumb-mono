@@ -14,10 +14,10 @@ const Searchbar = ({
   return (
     <div className="flex gap-2">
       <div id="left" className="flex w-full">
-        <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 rounded-l-md border border-r-0 border-gray-300 ">
+        <span className="inline-flex items-center px-3 text-sm text-grey-900 bg-grey-200 rounded-l-md border border-r-0 border-grey-300 ">
           <svg
             aria-hidden="true"
-            className="w-5 h-5 text-gray-500"
+            className="w-5 h-5 text-grey-500"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -34,7 +34,7 @@ const Searchbar = ({
         <input
           type="search"
           id="default-search"
-          className="block p-2 pl-4 w-full text-gray-900 bg-gray-50 rounded-r-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+          className="block p-2 pl-4 w-full text-grey-900 bg-grey-50 rounded-r-lg border border-grey-300 focus:ring-blue-500 focus:border-blue-500"
           placeholder={placehodler}
           onChange={(e) => onChange(e.target.value)}
           value={query}

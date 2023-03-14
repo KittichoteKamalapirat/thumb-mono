@@ -7,7 +7,7 @@ interface Props {
 const Spinner = ({
   size = "w-8 h-8",
   shortColor = "fill-primary-primary",
-  longColor = "text-gray-200",
+  longColor = "text-grey-200",
 }: Props) => {
   return (
     <div role="status">
